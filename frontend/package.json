@@ -21,7 +21,6 @@
     "react-query": "^3.34.19"
   },
   "devDependencies": {
-    "@arkweid/lefthook": "^0.7.7",
     "@types/node": "17.0.23",
     "@types/react": "17.0.43",
     "@types/react-dom": "17.0.14",

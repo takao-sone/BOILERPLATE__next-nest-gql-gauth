@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  boilerplate-frontend-lefthook:
+    container_name: boilerplate-frontend-lefthook
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.vscode
+    volumes:
+      - ./frontend:/opt/project
+      - boilerplate-frontend-lefthook-node-modules-volume:/opt/project/node_modules
+  boilerplate-backend-lefthook:
+    container_name: boilerplate-backend-lefthook
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.vscode
+    volumes:
+      - ./backend:/opt/project
+      - boilerplate-backend-lefthook-node-modules-volume:/opt/project/node_modules
+
+volumes:
+  boilerplate-frontend-lefthook-node-modules-volume:
+  boilerplate-backend-lefthook-node-modules-volume:

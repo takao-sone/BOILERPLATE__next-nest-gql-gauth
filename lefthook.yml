@@ -1,0 +1,11 @@
+pre-push:
+  parallel: true
+  commands:
+    frontend-eslint:
+      run: docker compose -f docker-compose.lefthook.yml run --rm wotadx-frontend-lefthook npm run lint:fix
+    frontend-prettier:
+      run: docker compose -f docker-compose.lefthook.yml run --rm wotadx-frontend-lefthook npm run format
+    backend-eslint:
+      run: docker compose -f docker-compose.lefthook.yml run --rm wotadx-backend-lefthook npm run lint:fix
+    backend-prettier:
+      run: docker compose -f docker-compose.lefthook.yml run --rm wotadx-backend-lefthook npm run format
