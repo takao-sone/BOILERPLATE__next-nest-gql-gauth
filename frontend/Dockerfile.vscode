@@ -8,4 +8,4 @@ RUN npm ci
 
 COPY . .
 
-EXPOSE 43000
+EXPOSE 13000

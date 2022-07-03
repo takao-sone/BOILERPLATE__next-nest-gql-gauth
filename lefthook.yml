@@ -3,7 +3,7 @@ pre-push:
   commands:
     frontend-eslint:
       run: docker compose -f docker-compose.lefthook.yml run --rm boilerplate-frontend-lefthook npm run lint:fix
-    frontend-prettier:
+    ontend-prettier:
       run: docker compose -f docker-compose.lefthook.yml run --rm boilerplate-frontend-lefthook npm run format
     backend-eslint:
       run: docker compose -f docker-compose.lefthook.yml run --rm boilerplate-backend-lefthook npm run lint:fix

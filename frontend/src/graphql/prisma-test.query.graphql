@@ -1,0 +1,8 @@
+query PrismaTest {
+  prismaTest {
+    displayedId
+    name
+    createdAt
+    updatedAt
+  }
+}
