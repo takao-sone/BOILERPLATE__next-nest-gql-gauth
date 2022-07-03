@@ -1,0 +1,100 @@
+version: '3.9'
+
+services:
+  boilerplate-mysql:
+    container_name: boilerplate-mysql
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: boilerplate
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: password
+      TZ: Asia/Tokyo
+    ports:
+      - '53306:3306'
+    healthcheck:
+      test: mysqladmin ping --host=localhost --port=53306 --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD
+      interval: 5s
+      timeout: 30s
+      start_period: 10s
+    volumes:
+      - boilerplate-mysql-volume:/var/lib/mysql
+    networks:
+      - boilerplate-network
+  boilerplate-redis:
+    container_name: boilerplate-redis
+    image: redis:6.2
+    ports:
+      - '56379:6379'
+    healthcheck:
+      test: redis-cli ping
+      interval: 5s
+      timeout: 30s
+      start_period: 10s
+    volumes:
+      - boilerplate-redis-volume:/data
+    networks:
+      - boilerplate-network
+  boilerplate-backend:
+    container_name: boilerplate-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.vscode
+    ports:
+      - '23000:23000'
+    command:
+      - /bin/bash
+      - -c
+      - |
+        npm prisma generate
+        npm run prisma:migrate:dev
+        npm run start:dev
+    healthcheck:
+      test: curl localhost:23000
+      interval: 10s
+      timeout: 30s
+      start_period: 30s
+    depends_on:
+      boilerplate-mysql:
+        condition: service_healthy
+      boilerplate-redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/opt/project
+      - boilerplate-backend-node-modules-volume:/opt/project/node_modules
+    networks:
+      - boilerplate-network
+  boilerplate-frontend:
+    container_name: boilerplate-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.vscode
+    ports:
+      - '13000:13000'
+    command:
+      - /bin/bash
+      - -c
+      - |
+        npm run codegen
+        npm run dev
+    depends_on:
+      boilerplate-backend:
+        condition: service_healthy
+    volumes:
+      - ./frontend:/opt/project
+      - boilerplate-frontend-node-modules-volume:/opt/project/node_modules
+      - boilerplate-frontend-next-volume:/opt/project/.next
+    networks:
+      - boilerplate-network
+
+volumes:
+  boilerplate-mysql-volume:
+  boilerplate-redis-volume:
+  boilerplate-backend-node-modules-volume:
+  boilerplate-frontend-node-modules-volume:
+  boilerplate-frontend-next-volume:
+
+networks:
+  boilerplate-network:
+    name: boilerplate-network
+    driver: bridge

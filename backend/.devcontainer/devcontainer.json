@@ -1,0 +1,6 @@
+{
+  "name": "boilerplate-backend",
+  "dockerComposeFile": ["../../docker-compose.vscode.yml"],
+  "service": "boilerplate-backend",
+  "workspaceFolder": "/opt/project"
+}

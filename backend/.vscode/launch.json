@@ -6,7 +6,7 @@
       "request": "attach",
       "name": "Attach debugger",
       "address": "localhost",
-      "port": 63001,
+      "port": 23001,
       "restart": true
     }
   ]
