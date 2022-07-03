@@ -9,7 +9,7 @@ type Props = {};
 const Sample: FC<Props> = () => {
   let graphQLClient = new GraphQLClient(GRAPHQL_ENDPOINT, {});
   console.log(GRAPHQL_ENDPOINT);
-  
+
   const { data } = usePrismaTestQuery(graphQLClient, {});
   graphQLClient = new GraphQLClient(GRAPHQL_ENDPOINT, {});
   const { isLoading, data: data2 } = useSampleArgsQuery(graphQLClient, { name: 'FooBar' });
