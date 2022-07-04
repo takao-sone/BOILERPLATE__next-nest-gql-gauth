@@ -1,8 +1,8 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { BaseModel } from '../../../common/models/base.model';
+import { SampleBaseModel } from '../../../common/models/sample-base.model';
 
 @ObjectType({ description: 'サンプル用GraphQLモデル' })
-export class Sample extends BaseModel {
+export class Sample extends SampleBaseModel {
   @Field(() => String, {
     description: '名前',
   })
