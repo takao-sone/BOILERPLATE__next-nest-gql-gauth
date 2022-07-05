@@ -6,6 +6,7 @@ module.exports = {
     'plugin:import/warnings',
   ],
   rules: {
+    'no-unused-vars': ['error', { ignoreRestSiblings: true }],
     'import/order': [
       'error',
       {

@@ -14,7 +14,7 @@ const Sample: FC<Props> = () => {
 
   return (
     <div>
-      <span>sone</span>
+      <span>foo</span>
       {isLoading && <div>Loading...</div>}
       {data && <div>{JSON.stringify(data)}</div>}
       <br />
