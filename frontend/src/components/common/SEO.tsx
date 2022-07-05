@@ -26,10 +26,13 @@ const SEO: FC<Props> = ({
 
   const title = pageTitle ? `${pageTitle} | ${defaultTitle}` : defaultTitle;
   const description = pageDescription ? pageDescription : defaultDescription;
+  // TODO
+  /* eslint-disable */
   const url = pagePath;
   const imgUrl = pageImg;
   const imgWidth = pageImgWidth ? pageImgWidth : 1280;
   const imgHeight = pageImgHeight ? pageImgHeight : 640;
+  /* eslint-enable */
 
   return (
     <Head>
