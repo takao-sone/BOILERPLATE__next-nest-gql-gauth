@@ -35,10 +35,6 @@ type Mutation {
 type Query {
   getAuthenticatedUser: Auth!
   getUsers: [User!]!
-  prismaTest: [Sample!]!
-  sample: Sample!
-  sampleArgs(name: String!): [Sample!]!
-  samplesInput(data: SamplesInput!): [Sample!]!
 }
 
 type Role {
@@ -53,25 +49,6 @@ type Role {
 
   """DBへのデータ更新時間"""
   updatedAt: DateTime!
-}
-
-"""サンプル用GraphQLモデル"""
-type Sample {
-  """データ作成時間"""
-  createdAt: DateTime!
-
-  """クライアントアプリケーション側へ表示しても良いID"""
-  displayedId: ID!
-
-  """名前"""
-  name: String!
-
-  """データ更新時間"""
-  updatedAt: DateTime!
-}
-
-input SamplesInput {
-  name: String!
 }
 
 input UpdateUserEmailInput {
