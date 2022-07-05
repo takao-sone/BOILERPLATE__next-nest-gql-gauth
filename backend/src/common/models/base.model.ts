@@ -1,19 +1,17 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, HideField, ObjectType } from '@nestjs/graphql';
 
 @ObjectType({ isAbstract: true })
-export abstract class BaseModel {
-  @Field(() => ID, {
-    description: 'クライアントアプリケーション側へ表示しても良いID',
-  })
-  displayedId!: string;
+export abstract class Base {
+  @HideField()
+  id!: number;
 
   @Field({
-    description: 'データ作成時間',
+    description: 'DBへのデータ作成時間',
   })
   createdAt!: Date;
 
   @Field({
-    description: 'データ更新時間',
+    description: 'DBへのデータ更新時間',
   })
   updatedAt!: Date;
 }

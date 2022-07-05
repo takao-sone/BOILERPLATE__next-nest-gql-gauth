@@ -2,16 +2,57 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Auth {
+  """ログインしているユーザーの情報"""
+  authenticatedUser: User!
+}
+
+input CreateUserInput {
+  confirmationPassword: String!
+  email: String!
+  password: String!
+  roleDisplayedId: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
 
+input LogInInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  createUser(data: CreateUserInput!): User!
+  logIn(data: LogInInput!): Auth!
+  logOut: String!
+  updateUserEmail(data: UpdateUserEmailInput!): User!
+  updateUserRole(data: UpdateUserRoleInput!): User!
+}
+
 type Query {
+  getAuthenticatedUser: Auth!
+  getUsers: [User!]!
   prismaTest: [Sample!]!
   sample: Sample!
   sampleArgs(name: String!): [Sample!]!
   samplesInput(data: SamplesInput!): [Sample!]!
+}
+
+type Role {
+  """DBへのデータ作成時間"""
+  createdAt: DateTime!
+
+  """クライアントアプリケーション側へ表示するID"""
+  displayedId: String!
+
+  """ロールの名前"""
+  name: String!
+
+  """DBへのデータ更新時間"""
+  updatedAt: DateTime!
 }
 
 """サンプル用GraphQLモデル"""
@@ -31,4 +72,41 @@ type Sample {
 
 input SamplesInput {
   name: String!
+}
+
+input UpdateUserEmailInput {
+  newEmail: String!
+}
+
+input UpdateUserRoleInput {
+  newRoleDisplayedId: String!
+  updateTargetUserDisplayedId: String!
+}
+
+type User {
+  """DBへのデータ作成時間"""
+  createdAt: DateTime!
+
+  """クライアントアプリケーション側へ表示するID"""
+  displayedId: String!
+
+  """DBへのデータ更新時間"""
+  updatedAt: DateTime!
+
+  """ユーザー認証情報"""
+  userCredential: UserCredential!
+
+  """ユーザー認証情報"""
+  userRole: Role!
+}
+
+type UserCredential {
+  """DBへのデータ作成時間"""
+  createdAt: DateTime!
+
+  """メールアドレス"""
+  email: String!
+
+  """DBへのデータ更新時間"""
+  updatedAt: DateTime!
 }

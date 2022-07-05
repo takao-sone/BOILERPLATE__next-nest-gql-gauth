@@ -11,11 +11,63 @@ datasource db {
 }
 
 model Sample {
-  id Int @db.UnsignedInt @id @default(autoincrement())
-  name String
-  displayedId String @map("displayed_id")
+  id          Int      @id @default(autoincrement()) @db.UnsignedInt
+  name        String
+  displayedId String   @map("displayed_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("sample")
+}
+
+model User {
+  id             Int             @id @default(autoincrement()) @db.UnsignedInt
+  displayedId    String          @unique @default(dbgenerated("(UUID())")) @map("displayed_id")
+  userCredential UserCredential?
+  userRoles      UsersRoles[]
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model UserCredential {
+  id        Int      @id @default(autoincrement()) @db.UnsignedInt
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @unique @map("user_id") @db.UnsignedInt
+  email     String   @unique
+  password  String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map("sample")
+  @@map("user_credentials")
+}
+
+model Role {
+  id          Int          @id @default(autoincrement()) @db.UnsignedInt
+  displayedId String       @unique @default(dbgenerated("(UUID())")) @map("displayed_id")
+  name        RoleName     @unique @default(USER)
+  users       UsersRoles[]
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  @@map("roles")
+}
+
+enum RoleName {
+  USER
+  ADMIN
+}
+
+// MEMO: 現時点での想定は「ユーザー1人につき1つのロール割当」
+model UsersRoles {
+  id        Int      @id @default(autoincrement()) @db.UnsignedInt
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @unique @map("user_id") @db.UnsignedInt
+  role      Role     @relation(fields: [roleId], references: [id])
+  roleId    Int      @map("role_id") @db.UnsignedInt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users_roles")
 }

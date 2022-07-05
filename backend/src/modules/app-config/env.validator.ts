@@ -28,6 +28,26 @@ export class EnvValidator {
 
   @IsNotEmpty()
   @IsString()
+  REDIS_HOST!: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  REDIS_PORT!: number;
+
+  @IsNotEmpty()
+  @IsString()
+  SESSION_SECRET!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  SESSION_NAME!: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  SESSION_MAX_AGE!: number;
+
+  @IsNotEmpty()
+  @IsString()
   DATABASE_URL!: string;
 }
 

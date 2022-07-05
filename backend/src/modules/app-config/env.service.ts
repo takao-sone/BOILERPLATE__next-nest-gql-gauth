@@ -8,39 +8,69 @@ interface EnvVariables {
   // APP
   APP_HOST: string;
   APP_PORT: number;
+  // Redis
+  REDIS_HOST: string;
+  REDIS_PORT: number;
+  SESSION_SECRET: string;
+  SESSION_NAME: string;
+  SESSION_MAX_AGE: number;
   // Prisma
   DATABASE_URL: string;
 }
 
 @Injectable()
 export class EnvService {
-  constructor(private readonly configService: ConfigService<EnvVariables, true>) {}
+  constructor(private configService: ConfigService<EnvVariables, true>) {}
 
   getNodeEnv() {
     return this.configService.get('NODE_ENV', { infer: true });
   }
 
-  getAppEnv(): string {
-    return this.configService.get<string>('APP_ENV', { infer: true });
+  getAppEnv() {
+    return this.configService.get('APP_ENV', { infer: true });
   }
 
-  getHost(): string {
-    return this.configService.get<string>('APP_HOST', { infer: true });
+  getAppHost() {
+    return this.configService.get('APP_HOST', { infer: true });
   }
 
-  getPort(): number {
-    return this.configService.get<number>('APP_PORT', { infer: true });
+  getAppPort() {
+    return this.configService.get('APP_PORT', { infer: true });
   }
 
-  isProduction(): boolean {
+  getRedisHost() {
+    return this.configService.get('REDIS_HOST', { infer: true });
+  }
+
+  getRedisPort() {
+    return this.configService.get('REDIS_PORT', { infer: true });
+  }
+
+  getSessionSecret() {
+    return this.configService.get('SESSION_SECRET', { infer: true });
+  }
+
+  getSessionName() {
+    return this.configService.get('SESSION_NAME', { infer: true });
+  }
+
+  getSessionMaxAge() {
+    return this.configService.get('SESSION_MAX_AGE', { infer: true });
+  }
+
+  isProduction() {
     return this.getAppEnv() === Env.Production;
   }
 
-  isStaging(): boolean {
+  isStaging() {
     return this.getAppEnv() === Env.Staging;
   }
 
-  isDevelopment(): boolean {
+  isDevelopment() {
     return this.getAppEnv() === Env.Development;
+  }
+
+  isTest() {
+    return this.getAppEnv() === Env.Test;
   }
 }
