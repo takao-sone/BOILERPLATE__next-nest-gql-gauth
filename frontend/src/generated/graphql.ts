@@ -1,18 +1,13 @@
 import { GraphQLClient } from 'graphql-request';
 import { RequestInit } from 'graphql-request/dist/types.dom';
-import { useQuery, UseQueryOptions } from 'react-query';
+import { useQuery, useMutation, UseQueryOptions, UseMutationOptions } from 'react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 
-function fetcher<TData, TVariables>(
-  client: GraphQLClient,
-  query: string,
-  variables?: TVariables,
-  headers?: RequestInit['headers'],
-) {
+function fetcher<TData, TVariables>(client: GraphQLClient, query: string, variables?: TVariables, headers?: RequestInit['headers']) {
   return async (): Promise<TData> => client.request<TData, TVariables>(query, variables, headers);
 }
 /** All built-in and custom scalars, mapped to their actual values */
@@ -52,17 +47,21 @@ export type Mutation = {
   updateUserRole: User;
 };
 
+
 export type MutationCreateUserArgs = {
   data: CreateUserInput;
 };
+
 
 export type MutationLogInArgs = {
   data: LogInInput;
 };
 
+
 export type MutationUpdateUserEmailArgs = {
   data: UpdateUserEmailInput;
 };
+
 
 export type MutationUpdateUserRoleArgs = {
   data: UpdateUserRoleInput;
@@ -72,18 +71,6 @@ export type Query = {
   __typename?: 'Query';
   getAuthenticatedUser: Auth;
   getUsers: Array<User>;
-  prismaTest: Array<Sample>;
-  sample: Sample;
-  sampleArgs: Array<Sample>;
-  samplesInput: Array<Sample>;
-};
-
-export type QuerySampleArgsArgs = {
-  name: Scalars['String'];
-};
-
-export type QuerySamplesInputArgs = {
-  data: SamplesInput;
 };
 
 export type Role = {
@@ -96,23 +83,6 @@ export type Role = {
   name: Scalars['String'];
   /** DBへのデータ更新時間 */
   updatedAt: Scalars['DateTime'];
-};
-
-/** サンプル用GraphQLモデル */
-export type Sample = {
-  __typename?: 'Sample';
-  /** データ作成時間 */
-  createdAt: Scalars['DateTime'];
-  /** クライアントアプリケーション側へ表示しても良いID */
-  displayedId: Scalars['ID'];
-  /** 名前 */
-  name: Scalars['String'];
-  /** データ更新時間 */
-  updatedAt: Scalars['DateTime'];
-};
-
-export type SamplesInput = {
-  name: Scalars['String'];
 };
 
 export type UpdateUserEmailInput = {
@@ -148,83 +118,75 @@ export type UserCredential = {
   updatedAt: Scalars['DateTime'];
 };
 
-export type PrismaTestQueryVariables = Exact<{ [key: string]: never }>;
+export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type PrismaTestQuery = {
-  __typename?: 'Query';
-  prismaTest: Array<{
-    __typename?: 'Sample';
-    displayedId: string;
-    name: string;
-    createdAt: any;
-    updatedAt: any;
-  }>;
-};
 
-export type SampleArgsQueryVariables = Exact<{
-  name: Scalars['String'];
+export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', displayedId: string, userCredential: { __typename?: 'UserCredential', email: string }, userRole: { __typename?: 'Role', name: string, displayedId: string } }> };
+
+export type LogInMutationVariables = Exact<{
+  data: LogInInput;
 }>;
 
-export type SampleArgsQuery = {
-  __typename?: 'Query';
-  sampleArgs: Array<{
-    __typename?: 'Sample';
-    displayedId: string;
-    name: string;
-    createdAt: any;
-    updatedAt: any;
-  }>;
-};
 
-export const PrismaTestDocument = `
-    query PrismaTest {
-  prismaTest {
+export type LogInMutation = { __typename?: 'Mutation', logIn: { __typename?: 'Auth', authenticatedUser: { __typename?: 'User', createdAt: any, displayedId: string, updatedAt: any, userCredential: { __typename?: 'UserCredential', email: string }, userRole: { __typename?: 'Role', name: string, displayedId: string } } } };
+
+
+export const GetUsersDocument = `
+    query GetUsers {
+  getUsers {
     displayedId
-    name
-    createdAt
-    updatedAt
+    userCredential {
+      email
+    }
+    userRole {
+      name
+      displayedId
+    }
   }
 }
     `;
-export const usePrismaTestQuery = <TData = PrismaTestQuery, TError = unknown>(
-  client: GraphQLClient,
-  variables?: PrismaTestQueryVariables,
-  options?: UseQueryOptions<PrismaTestQuery, TError, TData>,
-  headers?: RequestInit['headers'],
-) =>
-  useQuery<PrismaTestQuery, TError, TData>(
-    variables === undefined ? ['PrismaTest'] : ['PrismaTest', variables],
-    fetcher<PrismaTestQuery, PrismaTestQueryVariables>(
-      client,
-      PrismaTestDocument,
-      variables,
-      headers,
-    ),
-    options,
-  );
-export const SampleArgsDocument = `
-    query SampleArgs($name: String!) {
-  sampleArgs(name: $name) {
-    displayedId
-    name
-    createdAt
-    updatedAt
+export const useGetUsersQuery = <
+      TData = GetUsersQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables?: GetUsersQueryVariables,
+      options?: UseQueryOptions<GetUsersQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<GetUsersQuery, TError, TData>(
+      variables === undefined ? ['GetUsers'] : ['GetUsers', variables],
+      fetcher<GetUsersQuery, GetUsersQueryVariables>(client, GetUsersDocument, variables, headers),
+      options
+    );
+export const LogInDocument = `
+    mutation LogIn($data: LogInInput!) {
+  logIn(data: $data) {
+    authenticatedUser {
+      createdAt
+      displayedId
+      updatedAt
+      userCredential {
+        email
+      }
+      userRole {
+        name
+        displayedId
+      }
+    }
   }
 }
     `;
-export const useSampleArgsQuery = <TData = SampleArgsQuery, TError = unknown>(
-  client: GraphQLClient,
-  variables: SampleArgsQueryVariables,
-  options?: UseQueryOptions<SampleArgsQuery, TError, TData>,
-  headers?: RequestInit['headers'],
-) =>
-  useQuery<SampleArgsQuery, TError, TData>(
-    ['SampleArgs', variables],
-    fetcher<SampleArgsQuery, SampleArgsQueryVariables>(
-      client,
-      SampleArgsDocument,
-      variables,
-      headers,
-    ),
-    options,
-  );
+export const useLogInMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<LogInMutation, TError, LogInMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<LogInMutation, TError, LogInMutationVariables, TContext>(
+      ['LogIn'],
+      (variables?: LogInMutationVariables) => fetcher<LogInMutation, LogInMutationVariables>(client, LogInDocument, variables, headers)(),
+      options
+    );

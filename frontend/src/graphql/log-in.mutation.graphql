@@ -1,0 +1,16 @@
+mutation LogIn($data: LogInInput!) {
+  logIn(data: $data) {
+    authenticatedUser {
+      createdAt
+      displayedId
+      updatedAt
+      userCredential {
+        email
+      }
+      userRole {
+        name
+        displayedId
+      }
+    }
+  }
+}
