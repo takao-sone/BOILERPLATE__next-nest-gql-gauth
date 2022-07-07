@@ -27,6 +27,10 @@ export class EnvValidator {
   APP_PORT!: number;
 
   @IsNotEmpty()
+  @IsNumber()
+  APP_FRONTEND_PORT!: number;
+
+  @IsNotEmpty()
   @IsString()
   REDIS_HOST!: string;
 

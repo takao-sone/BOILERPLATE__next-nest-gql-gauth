@@ -7,7 +7,7 @@ const BASE_GRAPHQL_ENDPOINT =
     ? process.env.NEXT_PUBLIC_DEV_GRAPHQL_ENDPOINT!
     : process.env.NEXT_PUBLIC_PROD_GRAPHQL_ENDPOINT!;
 
-const BASE_GRAPHQL_CLIENT_OPTIONS: RequestInit = {};
+const BASE_GRAPHQL_CLIENT_OPTIONS: RequestInit = { credentials: 'include' };
 
 export const useGetUsers = () => {
   const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT, BASE_GRAPHQL_CLIENT_OPTIONS);

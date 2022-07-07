@@ -9,11 +9,6 @@ const ReactQuerySample: FC<Props> = () => {
   // MEMO: GraphQLリクエスト例
   const { isLoading, data: getUsersData } = useGetUsers();
 
-  // eslint-disable-next-line no-unused-vars
-  // useLogIn({
-  //   data: { email: '1@example.com', password: 'password' },
-  // });
-
   if (isLoading)
     return (
       <div>
@@ -30,7 +25,7 @@ const ReactQuerySample: FC<Props> = () => {
           <div>no users</div>
         ) : (
           getUsersData.getUsers.map((user) => {
-            <div>{JSON.stringify(user)}</div>;
+            return <div key={user.displayedId}>{JSON.stringify(user)}</div>;
           })
         )}
       </section>

@@ -17,6 +17,15 @@ export class GraphqlConfigService implements GqlOptionsFactory {
       sortSchema: true,
       debug: true,
       playground: true,
+      // CORS
+      cors: {
+        origin: [
+          `http://localhost:${this.envService.getAppFrontendPort()}`,
+          // Apollo StudioでCookieを用いるためのCORS設定
+          'https://studio.apollographql.com',
+        ],
+        credentials: true,
+      },
     };
 
     // For Staging
