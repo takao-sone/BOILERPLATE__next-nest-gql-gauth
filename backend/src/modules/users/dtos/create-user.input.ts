@@ -4,19 +4,19 @@ import { Match } from 'src/common/decorators/match.decorator';
 
 @InputType()
 export class CreateUserInput {
-  @Field(() => String)
+  @Field(() => String, { description: 'メールアドレス' })
   @IsNotEmpty()
   @IsEmail()
   @MaxLength(128)
   email!: string;
 
-  @Field(() => String)
+  @Field(() => String, { description: 'パスワード（8~64文字）' })
   @IsNotEmpty()
   @MinLength(8)
   @MaxLength(64)
   password!: string;
 
-  @Field(() => String)
+  @Field(() => String, { description: '確認用パスワード' })
   @IsNotEmpty()
   @MinLength(8)
   @MaxLength(64)
@@ -25,7 +25,7 @@ export class CreateUserInput {
   })
   confirmationPassword!: string;
 
-  @Field(() => String)
+  @Field(() => String, { description: 'ユーザーに付与する権限のdisplayedId' })
   @IsNotEmpty()
   @IsUUID()
   roleDisplayedId!: string;

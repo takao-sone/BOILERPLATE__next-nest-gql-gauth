@@ -16,7 +16,7 @@ export class User extends Base {
   userCredential?: UserCredential;
 
   @Field(() => Role, {
-    description: 'ユーザー認証情報',
+    description: 'ユーザー権限',
   })
   userRole?: Role;
 }

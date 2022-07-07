@@ -27,23 +27,66 @@ export type Auth = {
 };
 
 export type CreateUserInput = {
+  /** 確認用パスワード */
   confirmationPassword: Scalars['String'];
+  /** メールアドレス */
   email: Scalars['String'];
+  /** パスワード（8~64文字） */
   password: Scalars['String'];
+  /** ユーザーに付与する権限のdisplayedId */
   roleDisplayedId: Scalars['String'];
 };
 
 export type LogInInput = {
+  /** 登録したメールアドレス */
   email: Scalars['String'];
+  /** 登録したパスワード */
   password: Scalars['String'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /**
+   *
+   *       権限: ADMIN
+   *
+   *       ユーザーを作成するオペレーション
+   *
+   */
   createUser: User;
+  /**
+   *
+   *       権限: ALL
+   *
+   *       ログイン用オペレーション
+   *
+   */
   logIn: Auth;
+  /**
+   *
+   *       権限: ログイン
+   *
+   *       ログアウト用オペレーション
+   *
+   */
   logOut: Scalars['String'];
+  /**
+   *
+   *       権限: ログイン
+   *
+   *       ユーザーのメールアドレスを更新するオペレーション
+   *
+   */
   updateUserEmail: User;
+  /**
+   *
+   *       権限: ADMIN
+   *
+   *       ユーザーの権限を更新するオペレーション
+   *
+   *       自分自身の権限は更新できない
+   *
+   */
   updateUserRole: User;
 };
 
@@ -69,7 +112,22 @@ export type MutationUpdateUserRoleArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  /**
+   *
+   *       権限: ログイン
+   *
+   *       ログイン中のユーザー情報を取得するオペレーション
+   *
+   */
   getAuthenticatedUser: Auth;
+  /**
+   *
+   *       権限: ADMIN
+   *
+   *       すべてのユーザーを取得するオペレーション
+   *
+   *
+   */
   getUsers: Array<User>;
 };
 
@@ -86,11 +144,14 @@ export type Role = {
 };
 
 export type UpdateUserEmailInput = {
+  /** 新しいメールアドレス */
   newEmail: Scalars['String'];
 };
 
 export type UpdateUserRoleInput = {
+  /** 更新対象ユーザーの新しい権限のdisplaydId */
   newRoleDisplayedId: Scalars['String'];
+  /** 更新対象ユーザーのdisplayedId */
   updateTargetUserDisplayedId: Scalars['String'];
 };
 
@@ -104,7 +165,7 @@ export type User = {
   updatedAt: Scalars['DateTime'];
   /** ユーザー認証情報 */
   userCredential: UserCredential;
-  /** ユーザー認証情報 */
+  /** ユーザー権限 */
   userRole: Role;
 };
 

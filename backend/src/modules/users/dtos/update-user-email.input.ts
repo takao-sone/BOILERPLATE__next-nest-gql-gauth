@@ -3,7 +3,7 @@ import { IsEmail, IsNotEmpty, MaxLength } from 'class-validator';
 
 @InputType()
 export class UpdateUserEmailInput {
-  @Field(() => String)
+  @Field(() => String, { description: '新しいメールアドレス' })
   @IsNotEmpty()
   @IsEmail()
   @MaxLength(128)

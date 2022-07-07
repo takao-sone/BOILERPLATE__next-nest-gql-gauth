@@ -18,7 +18,12 @@ export class UsersResolver {
   constructor(private usersService: UsersService) {}
 
   @UseGuards(RoleGuard(RoleName.ADMIN))
-  @Mutation(() => User)
+  @Mutation(() => User, {
+    description: `
+      権限: ADMIN \n
+      ユーザーを作成するオペレーション
+    `,
+  })
   async createUser(@Args('data') input: CreateUserInput) {
     const { email, password, roleDisplayedId } = input;
 
@@ -26,7 +31,12 @@ export class UsersResolver {
   }
 
   @UseGuards(LoggedInGuard)
-  @Mutation(() => User)
+  @Mutation(() => User, {
+    description: `
+      権限: ログイン \n
+      ユーザーのメールアドレスを更新するオペレーション
+    `,
+  })
   async updateUserEmail(
     @Args('data') input: UpdateUserEmailInput,
     @CurrentReq() req: Request,
@@ -36,7 +46,13 @@ export class UsersResolver {
   }
 
   @UseGuards(RoleGuard(RoleName.ADMIN))
-  @Mutation(() => User)
+  @Mutation(() => User, {
+    description: `
+      権限: ADMIN \n
+      ユーザーの権限を更新するオペレーション \n
+      自分自身の権限は更新できない
+    `,
+  })
   async updateUserRole(
     @Args('data') input: UpdateUserRoleInput,
     @CurrentSessionUser() currentSessionUser: SessionUser,
@@ -50,7 +66,12 @@ export class UsersResolver {
 
   // TODO: ページネーション付与
   @UseGuards(RoleGuard(RoleName.ADMIN))
-  @Query(() => [User])
+  @Query(() => [User], {
+    description: `
+      権限: ADMIN \n
+      すべてのユーザーを取得するオペレーション \n
+    `,
+  })
   async getUsers() {
     return await this.usersService.getAll();
   }
