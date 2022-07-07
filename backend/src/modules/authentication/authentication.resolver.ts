@@ -15,7 +15,12 @@ export class AuthenticationResolver {
   constructor(private authenticationService: AuthenticationService) {}
 
   @UseGuards(LocalGuard)
-  @Mutation(() => Auth)
+  @Mutation(() => Auth, {
+    description: `
+      権限: ALL \n
+      ログイン用オペレーション
+    `,
+  })
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async logIn(@Args('data') input: LogInInput) {
     const auth: Auth = {};
@@ -24,7 +29,12 @@ export class AuthenticationResolver {
   }
 
   @UseGuards(LoggedInGuard)
-  @Mutation(() => String)
+  @Mutation(() => String, {
+    description: `
+      権限: ログイン \n
+      ログアウト用オペレーション
+    `,
+  })
   async logOut(@CurrentReq() req: Request) {
     this.authenticationService.logOut(req);
 
@@ -32,7 +42,12 @@ export class AuthenticationResolver {
   }
 
   @UseGuards(LoggedInGuard)
-  @Query(() => Auth)
+  @Query(() => Auth, {
+    description: `
+      権限: ログイン \n
+      ログイン中のユーザー情報を取得するオペレーション
+    `,
+  })
   async getAuthenticatedUser() {
     const auth: Auth = {};
 

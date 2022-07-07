@@ -3,12 +3,12 @@ import { IsNotEmpty, IsUUID } from 'class-validator';
 
 @InputType()
 export class UpdateUserRoleInput {
-  @Field(() => String)
+  @Field(() => String, { description: '更新対象ユーザーのdisplayedId' })
   @IsNotEmpty()
   @IsUUID()
   updateTargetUserDisplayedId!: string;
 
-  @Field(() => String)
+  @Field(() => String, { description: '更新対象ユーザーの新しい権限のdisplaydId' })
   @IsNotEmpty()
   @IsUUID()
   newRoleDisplayedId!: string;

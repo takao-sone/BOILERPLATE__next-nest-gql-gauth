@@ -1,0 +1,12 @@
+query GetUsers {
+  getUsers {
+    displayedId
+    userCredential {
+      email
+    }
+    userRole {
+      name
+      displayedId
+    }
+  }
+}

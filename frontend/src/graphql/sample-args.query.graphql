@@ -1,8 +1,0 @@
-query SampleArgs($name: String!) {
-  sampleArgs(name: $name) {
-    displayedId
-    name
-    createdAt
-    updatedAt
-  }
-}

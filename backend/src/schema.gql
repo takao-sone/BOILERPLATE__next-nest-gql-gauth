@@ -8,9 +8,16 @@ type Auth {
 }
 
 input CreateUserInput {
+  """確認用パスワード"""
   confirmationPassword: String!
+
+  """メールアドレス"""
   email: String!
+
+  """パスワード（8~64文字）"""
   password: String!
+
+  """ユーザーに付与する権限のdisplayedId"""
   roleDisplayedId: String!
 }
 
@@ -20,25 +27,36 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 input LogInInput {
+  """登録したメールアドレス"""
   email: String!
+
+  """登録したパスワード"""
   password: String!
 }
 
 type Mutation {
+  "\n      権限: ADMIN \n\n      ユーザーを作成するオペレーション\n    "
   createUser(data: CreateUserInput!): User!
+
+  "\n      権限: ALL \n\n      ログイン用オペレーション\n    "
   logIn(data: LogInInput!): Auth!
+
+  "\n      権限: ログイン \n\n      ログアウト用オペレーション\n    "
   logOut: String!
+
+  "\n      権限: ログイン \n\n      ユーザーのメールアドレスを更新するオペレーション\n    "
   updateUserEmail(data: UpdateUserEmailInput!): User!
+
+  "\n      権限: ADMIN \n\n      ユーザーの権限を更新するオペレーション \n\n      自分自身の権限は更新できない\n    "
   updateUserRole(data: UpdateUserRoleInput!): User!
 }
 
 type Query {
+  "\n      権限: ログイン \n\n      ログイン中のユーザー情報を取得するオペレーション\n    "
   getAuthenticatedUser: Auth!
+
+  "\n      権限: ADMIN \n\n      すべてのユーザーを取得するオペレーション \n\n    "
   getUsers: [User!]!
-  prismaTest: [Sample!]!
-  sample: Sample!
-  sampleArgs(name: String!): [Sample!]!
-  samplesInput(data: SamplesInput!): [Sample!]!
 }
 
 type Role {
@@ -55,31 +73,16 @@ type Role {
   updatedAt: DateTime!
 }
 
-"""サンプル用GraphQLモデル"""
-type Sample {
-  """データ作成時間"""
-  createdAt: DateTime!
-
-  """クライアントアプリケーション側へ表示しても良いID"""
-  displayedId: ID!
-
-  """名前"""
-  name: String!
-
-  """データ更新時間"""
-  updatedAt: DateTime!
-}
-
-input SamplesInput {
-  name: String!
-}
-
 input UpdateUserEmailInput {
+  """新しいメールアドレス"""
   newEmail: String!
 }
 
 input UpdateUserRoleInput {
+  """更新対象ユーザーの新しい権限のdisplaydId"""
   newRoleDisplayedId: String!
+
+  """更新対象ユーザーのdisplayedId"""
   updateTargetUserDisplayedId: String!
 }
 
@@ -96,7 +99,7 @@ type User {
   """ユーザー認証情報"""
   userCredential: UserCredential!
 
-  """ユーザー認証情報"""
+  """ユーザー権限"""
   userRole: Role!
 }
 

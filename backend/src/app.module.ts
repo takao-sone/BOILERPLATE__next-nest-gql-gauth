@@ -9,7 +9,6 @@ import { PrismaConfigService } from './modules/app-config/prisma-config.service'
 import { AuthenticationModule } from './modules/authentication/authentication.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
 import { RolesModule } from './modules/roles/roles.module';
-import { SampleModule } from './modules/sample/sample.module';
 import { SessionModule } from './modules/session/session.module';
 import { UsersModule } from './modules/users/users.module';
 
@@ -24,8 +23,6 @@ import { UsersModule } from './modules/users/users.module';
       driver: ApolloDriver,
       useClass: GraphqlConfigService,
     }),
-    // TODO: サンプルです、本番運用の際に削除してください。
-    SampleModule,
     UsersModule,
     AuthenticationModule,
     RolesModule,

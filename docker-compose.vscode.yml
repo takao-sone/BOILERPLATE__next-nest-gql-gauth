@@ -42,6 +42,7 @@ services:
       dockerfile: Dockerfile.vscode
     ports:
       - '23000:23000'
+      - '443:443'
     command:
       - /bin/bash
       - -c
@@ -50,7 +51,7 @@ services:
         npm run prisma:migrate:dev
         npm run start:dev
     healthcheck:
-      test: curl localhost:23000
+      test: ["CMD", "curl", "-f", "http://localhost:23000"]
       interval: 10s
       timeout: 30s
       start_period: 30s

@@ -1,24 +1,17 @@
-import { GraphQLClient } from 'graphql-request';
 import { FC } from 'react';
-import { usePrismaTestQuery, useSampleArgsQuery } from '../generated/graphql';
-
-const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_DEV_GRAPHQL_ENDPOINT!;
+import { useLogIn } from 'fetchers';
 
 type Props = {};
 
 const Sample: FC<Props> = () => {
-  let graphQLClient = new GraphQLClient(GRAPHQL_ENDPOINT, {});
-  const { data } = usePrismaTestQuery(graphQLClient, {});
-  graphQLClient = new GraphQLClient(GRAPHQL_ENDPOINT, {});
-  const { isLoading, data: data2 } = useSampleArgsQuery(graphQLClient, { name: 'FooBar' });
+  const foo = useLogIn({
+    data: { email: '1@example.com', password: 'password' },
+  });
 
   return (
     <div>
       <span>foo</span>
-      {isLoading && <div>Loading...</div>}
-      {data && <div>{JSON.stringify(data)}</div>}
-      <br />
-      {data2 && <div>{JSON.stringify(data2)}</div>}
+      <div>{JSON.stringify(foo)}</div>
     </div>
   );
 };
