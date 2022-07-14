@@ -10,6 +10,7 @@ import { RoleGuard } from '../authentication/role.guard';
 import { CreateUserInput } from './dtos/create-user.input';
 import { UpdateUserEmailInput } from './dtos/update-user-email.input';
 import { UpdateUserRoleInput } from './dtos/update-user-role.input';
+import { UserConnection } from './models/user-connection.model';
 import { User } from './models/user.model';
 import { UsersService } from './users.service';
 
@@ -74,6 +75,18 @@ export class UsersResolver {
   })
   async getUsers() {
     return await this.usersService.getAll();
+  }
+
+  // TODO: ページネーション付与
+  // @UseGuards(RoleGuard(RoleName.ADMIN))
+  @Query(() => UserConnection, {
+    description: `
+      権限: ADMIN \n
+      すべてのユーザーを取得するオペレーション \n
+    `,
+  })
+  async getUserConnection() {
+    return await this.usersService.getAllConnection();
   }
 
   @ResolveField('userCredential')

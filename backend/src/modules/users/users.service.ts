@@ -1,3 +1,4 @@
+import { findManyCursorConnection } from '@devoxa/prisma-relay-cursor-connection';
 import {
   ConflictException,
   ForbiddenException,
@@ -253,6 +254,25 @@ export class UsersService {
    */
   async getAll(): Promise<User[]> {
     return await this.prismaService.user.findMany();
+  }
+
+  // TODO
+  async getAllConnection() {
+    return findManyCursorConnection(
+      (args) => {
+        console.log('---');
+        console.log(args);
+
+        return this.prismaService.user.findMany();
+      },
+      () => this.prismaService.user.count(),
+      { first: 1 },
+      {
+        getCursor: (record) => ({
+          id: record.displayedId,
+        }),
+      },
+    );
   }
 
   /**

@@ -51,9 +51,19 @@ type Mutation {
   updateUserRole(data: UpdateUserRoleInput!): User!
 }
 
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
 type Query {
   "\n      権限: ログイン \n\n      ログイン中のユーザー情報を取得するオペレーション\n    "
   getAuthenticatedUser: Auth!
+
+  "\n      権限: ADMIN \n\n      すべてのユーザーを取得するオペレーション \n\n    "
+  getUserConnection: UserConnection!
 
   "\n      権限: ADMIN \n\n      すべてのユーザーを取得するオペレーション \n\n    "
   getUsers: [User!]!
@@ -103,6 +113,12 @@ type User {
   userRole: Role!
 }
 
+type UserConnection {
+  edges: [UserEdge!]
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
 type UserCredential {
   """DBへのデータ作成時間"""
   createdAt: DateTime!
@@ -112,4 +128,9 @@ type UserCredential {
 
   """DBへのデータ更新時間"""
   updatedAt: DateTime!
+}
+
+type UserEdge {
+  cursor: String!
+  node: User!
 }

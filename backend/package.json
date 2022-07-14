@@ -27,6 +27,7 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
+    "@devoxa/prisma-relay-cursor-connection": "^2.2.2",
     "@nestjs/apollo": "^10.0.8",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.0.0",
