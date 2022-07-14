@@ -1,5 +1,5 @@
 pre-push:
-  parallel: false
+  parallel: true
   commands:
     frontend-eslint:
       run: docker compose -f docker-compose.lefthook.yml run --rm boilerplate-frontend-lefthook npm run lint:fix
