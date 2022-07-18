@@ -1,12 +1,14 @@
 overwrite: true
-schema: "http://boilerplate-backend:23000/graphql"
-documents: "./src/**/*.graphql"
+schema: 'http://boilerplate-backend:23000/graphql'
+documents: './src/**/*.graphql'
 generates:
   src/generated/graphql.ts:
     plugins:
-      - "typescript"
-      - "typescript-operations"
-      - "typescript-react-query"
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-query'
     config:
       fetcher: graphql-request
       isReactHook: true
+      namingConvention: keep
+      enumsAsConst: true

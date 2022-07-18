@@ -15,8 +15,8 @@ const ReactQuerySample: FC<Props> = () => {
       skip: 0,
     },
     sort: {
-      direction: SortDirection.Asc,
-      field: UserSortField.Id,
+      direction: SortDirection.ASC,
+      field: UserSortField.ID,
     },
   };
   const { isLoading, data } = useGetUserConnection(getUserConnectionQueryVariables);

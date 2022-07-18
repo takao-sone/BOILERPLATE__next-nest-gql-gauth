@@ -91,22 +91,22 @@ export type Mutation = {
 };
 
 
-export type MutationCreateUserArgs = {
+export type MutationcreateUserArgs = {
   data: CreateUserInput;
 };
 
 
-export type MutationLogInArgs = {
+export type MutationlogInArgs = {
   data: LogInInput;
 };
 
 
-export type MutationUpdateUserEmailArgs = {
+export type MutationupdateUserEmailArgs = {
   data: UpdateUserEmailInput;
 };
 
 
-export type MutationUpdateUserRoleArgs = {
+export type MutationupdateUserRoleArgs = {
   data: UpdateUserRoleInput;
 };
 
@@ -157,7 +157,7 @@ export type Query = {
 };
 
 
-export type QueryGetUserConnectionArgs = {
+export type QuerygetUserConnectionArgs = {
   pagination?: InputMaybe<PaginationInput>;
   sort?: InputMaybe<UserSortInput>;
 };
@@ -175,11 +175,12 @@ export type Role = {
 };
 
 /** Possible directions in which to order a list of items when provided an `orderBy` argument. */
-export enum SortDirection {
-  Asc = 'ASC',
-  Desc = 'DESC'
-}
+export const SortDirection = {
+  ASC: 'ASC',
+  DESC: 'DESC'
+} as const;
 
+export type SortDirection = typeof SortDirection[keyof typeof SortDirection];
 export type UpdateUserEmailInput = {
   /** 新しいメールアドレス */
   newEmail: Scalars['String'];
@@ -235,11 +236,12 @@ export type UserEdge = {
 };
 
 /** Properties by which user connections can be ordered. */
-export enum UserSortField {
-  CreatedAt = 'CREATED_AT',
-  Id = 'ID'
-}
+export const UserSortField = {
+  CREATED_AT: 'CREATED_AT',
+  ID: 'ID'
+} as const;
 
+export type UserSortField = typeof UserSortField[keyof typeof UserSortField];
 export type UserSortInput = {
   /** ソートする方向 */
   direction?: InputMaybe<SortDirection>;
