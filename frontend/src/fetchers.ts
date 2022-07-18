@@ -1,6 +1,11 @@
 import { GraphQLClient } from 'graphql-request';
 import { RequestInit } from 'graphql-request/dist/types.dom';
-import { LogInMutationVariables, useGetUsersQuery, useLogInMutation } from 'generated/graphql';
+import {
+  GetUserConnectionQueryVariables,
+  LogInMutationVariables,
+  useGetUserConnectionQuery,
+  useLogInMutation,
+} from 'generated/graphql';
 
 const BASE_GRAPHQL_ENDPOINT =
   process.env.NEXT_PUBLIC_APP_ENV === 'development'
@@ -9,10 +14,10 @@ const BASE_GRAPHQL_ENDPOINT =
 
 const BASE_GRAPHQL_CLIENT_OPTIONS: RequestInit = { credentials: 'include' };
 
-export const useGetUsers = () => {
+export const useGetUserConnection = (variables?: GetUserConnectionQueryVariables) => {
   const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT, BASE_GRAPHQL_CLIENT_OPTIONS);
 
-  return useGetUsersQuery(graphqlClient);
+  return useGetUserConnectionQuery(graphqlClient, variables);
 };
 
 export const useLogIn = async (variables: LogInMutationVariables) => {
