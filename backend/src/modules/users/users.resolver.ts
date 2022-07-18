@@ -4,6 +4,8 @@ import { RoleName } from '@prisma/client';
 import { Request } from 'express';
 import { CurrentReq } from 'src/common/decorators/current-req.decorator';
 import { CurrentSessionUser } from 'src/common/decorators/current-session-user.decorator';
+import { DEFAULT_PAGINATION_INPUT, PaginationInput } from 'src/common/pagination/pagination.input';
+import { DEFAULT_USER_SORT_INPUT, UserSortInput } from 'src/common/pagination/user-order.model';
 import { SessionUser } from '../authentication/dtos/session-user.dto';
 import { LoggedInGuard } from '../authentication/logged-in.guard';
 import { RoleGuard } from '../authentication/role.guard';
@@ -65,28 +67,20 @@ export class UsersResolver {
     );
   }
 
-  // TODO: ページネーション付与
   @UseGuards(RoleGuard(RoleName.ADMIN))
-  @Query(() => [User], {
-    description: `
-      権限: ADMIN \n
-      すべてのユーザーを取得するオペレーション \n
-    `,
-  })
-  async getUsers() {
-    return await this.usersService.getAll();
-  }
-
-  // TODO: ページネーション付与
-  // @UseGuards(RoleGuard(RoleName.ADMIN))
   @Query(() => UserConnection, {
     description: `
       権限: ADMIN \n
-      すべてのユーザーを取得するオペレーション \n
+      ページネーションによりユーザーを取得するオペレーション \n
     `,
   })
-  async getUserConnection() {
-    return await this.usersService.getAllConnection();
+  async getUsers(
+    @Args({ name: 'pagination', nullable: true, defaultValue: DEFAULT_PAGINATION_INPUT })
+    paginationInput: PaginationInput,
+    @Args({ name: 'sort', nullable: true, defaultValue: DEFAULT_USER_SORT_INPUT })
+    userSortInput: UserSortInput,
+  ) {
+    return await this.usersService.getUserConnection(paginationInput, userSortInput);
   }
 
   @ResolveField('userCredential')

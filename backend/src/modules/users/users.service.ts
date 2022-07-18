@@ -1,4 +1,4 @@
-import { findManyCursorConnection } from '@devoxa/prisma-relay-cursor-connection';
+import { Connection, findManyCursorConnection } from '@devoxa/prisma-relay-cursor-connection';
 import {
   ConflictException,
   ForbiddenException,
@@ -7,13 +7,22 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma, Role, User, UserCredential } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { hash } from 'bcrypt';
 import { Request } from 'express';
+import { PaginationInput } from 'src/common/pagination/pagination.input';
+import { UserSortInput } from 'src/common/pagination/user-order.model';
+import {
+  AppCursor,
+  appFindManyCursorConnectionOptions,
+  createFindManyArgs,
+} from 'src/common/pagination/utils';
 import { isUserWithRolesAndCredential } from '../prisma/custom-type-guards';
 import { UserWithRolesAndNullableCredential } from '../prisma/custom-types';
 import { PrismaService } from '../prisma/prisma.service';
+import { Role } from '../roles/models/role.model';
 import { SessionService } from '../session/session.service';
+import { UserCredential } from './models/user-credential.model';
 
 @Injectable()
 export class UsersService {
@@ -248,30 +257,32 @@ export class UsersService {
   }
 
   /**
-   * TODO: ページネーション付与
-   * 登録されたユーザーをすべて取得する
-   * @returns 取得したPrismaのUser[]
+   * ページネーション&ソートによってユーザーを取得
+   * @param paginationInput ページネーションオブジェクト
+   * @param sortInput ソートオブジェクト
+   * @returns RelayStyleページネーションな取得したPrismaのUser型オブジェクト
    */
-  async getAll(): Promise<User[]> {
-    return await this.prismaService.user.findMany();
-  }
+  async getUserConnection(
+    paginationInput: PaginationInput,
+    sortInput: UserSortInput,
+  ): Promise<Connection<User>> {
+    const { skip, ...connectionArguments } = paginationInput;
 
-  // TODO
-  async getAllConnection() {
-    return findManyCursorConnection(
-      (args) => {
-        console.log('---');
-        console.log(args);
+    return findManyCursorConnection<User, AppCursor>(
+      () => {
+        const findManyArgs = createFindManyArgs(paginationInput);
+        const { field, direction } = sortInput;
 
-        return this.prismaService.user.findMany();
+        return this.prismaService.user.findMany({
+          ...findManyArgs,
+          orderBy: {
+            [field]: direction,
+          },
+        });
       },
       () => this.prismaService.user.count(),
-      { first: 1 },
-      {
-        getCursor: (record) => ({
-          id: record.displayedId,
-        }),
-      },
+      connectionArguments,
+      appFindManyCursorConnectionOptions,
     );
   }
 

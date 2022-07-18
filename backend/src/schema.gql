@@ -52,21 +52,42 @@ type Mutation {
 }
 
 type PageInfo {
+  """最後に取得したデータのカーソル"""
   endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
+
+  """次のページの可否"""
+  hasNextPage: Boolean
+
+  """前のページの可否"""
+  hasPreviousPage: Boolean
+
+  """最初に取得したデータのカーソル"""
   startCursor: String
+}
+
+input PaginationInput {
+  """起点となるカーソル(カーソル以降の値取得時)"""
+  after: String
+
+  """起点となるカーソル(カーソル以前の値取得時)"""
+  before: String
+
+  """値の取得数(カーソル以降の値取得時)"""
+  first: Int
+
+  """値の取得数(カーソル以前の値取得時)"""
+  last: Int
+
+  """カーソルを含めた取得する値のスキップ数"""
+  skip: Int
 }
 
 type Query {
   "\n      権限: ログイン \n\n      ログイン中のユーザー情報を取得するオペレーション\n    "
   getAuthenticatedUser: Auth!
 
-  "\n      権限: ADMIN \n\n      すべてのユーザーを取得するオペレーション \n\n    "
-  getUserConnection: UserConnection!
-
-  "\n      権限: ADMIN \n\n      すべてのユーザーを取得するオペレーション \n\n    "
-  getUsers: [User!]!
+  "\n      権限: ADMIN \n\n      ページネーションによりユーザーを取得するオペレーション \n\n    "
+  getUsers(pagination: PaginationInput = {first: 1, skip: 1}, sort: UserSortInput = {direction: ASC, field: ID}): UserConnection!
 }
 
 type Role {
@@ -81,6 +102,14 @@ type Role {
 
   """DBへのデータ更新時間"""
   updatedAt: DateTime!
+}
+
+"""
+Possible directions in which to order a list of items when provided an `orderBy` argument.
+"""
+enum SortDirection {
+  ASC
+  DESC
 }
 
 input UpdateUserEmailInput {
@@ -114,8 +143,13 @@ type User {
 }
 
 type UserConnection {
+  """edgeオブジェクト配列"""
   edges: [UserEdge!]
+
+  """ページネーションに関する情報"""
   pageInfo: PageInfo!
+
+  """指定した条件で取得できる最大データ数"""
   totalCount: Int!
 }
 
@@ -131,6 +165,23 @@ type UserCredential {
 }
 
 type UserEdge {
+  """現在のnodeのカーソル"""
   cursor: String!
+
+  """nodeオブジェクト"""
   node: User!
+}
+
+"""Properties by which user connections can be ordered."""
+enum UserSortField {
+  CREATED_AT
+  ID
+}
+
+input UserSortInput {
+  """ソートする方向"""
+  direction: SortDirection = ASC
+
+  """ユーザー取得する際にソート対象にしたいフィールド"""
+  field: UserSortField = ID
 }

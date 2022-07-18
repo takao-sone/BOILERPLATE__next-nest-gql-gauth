@@ -110,6 +110,14 @@ export type MutationUpdateUserRoleArgs = {
   data: UpdateUserRoleInput;
 };
 
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  endCursor?: Maybe<Scalars['String']>;
+  hasNextPage?: Maybe<Scalars['Boolean']>;
+  hasPreviousPage?: Maybe<Scalars['Boolean']>;
+  startCursor?: Maybe<Scalars['String']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   /**
@@ -128,7 +136,25 @@ export type Query = {
    *
    *
    */
+  getUserConnection: UserConnection;
+  /**
+   *
+   *       権限: ADMIN
+   *
+   *       すべてのユーザーを取得するオペレーション
+   *
+   *
+   */
   getUsers: Array<User>;
+};
+
+
+export type QueryGetUserConnectionArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
 };
 
 export type Role = {
@@ -169,6 +195,13 @@ export type User = {
   userRole: Role;
 };
 
+export type UserConnection = {
+  __typename?: 'UserConnection';
+  edges?: Maybe<Array<UserEdge>>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
 export type UserCredential = {
   __typename?: 'UserCredential';
   /** DBへのデータ作成時間 */
@@ -177,6 +210,12 @@ export type UserCredential = {
   email: Scalars['String'];
   /** DBへのデータ更新時間 */
   updatedAt: Scalars['DateTime'];
+};
+
+export type UserEdge = {
+  __typename?: 'UserEdge';
+  cursor: Scalars['String'];
+  node: User;
 };
 
 export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;

@@ -2,47 +2,44 @@ import { Type } from '@nestjs/common';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { PageInfo } from './page-info.model';
 
-export type EdgeTypeInterface<T> = {
+interface IEdgeType<T> {
   cursor: string;
   node: T;
-};
+}
 
-export type PaginatedTypeInterface<EdgeType> = {
-  new (): PaginatedTypeInterface<EdgeType>;
-  edges: Array<EdgeType>;
+export interface IPaginatedType<T> {
+  edges: IEdgeType<T>[];
+  // If you need nodes, comment the codes in.
+  // nodes: T[];
   pageInfo: PageInfo;
   totalCount: number;
-};
+}
 
-export function Paginated<TItem>(
-  TItemClass: Type<TItem>,
-): PaginatedTypeInterface<EdgeTypeInterface<TItem>> {
-  @ObjectType(`${TItemClass.name}Edge`)
+export function Paginated<T>(classRef: Type<T>): Type<IPaginatedType<T>> {
+  @ObjectType(`${classRef.name}Edge`)
   abstract class EdgeType {
-    @Field(() => String)
+    @Field(() => String, { description: '現在のnodeのカーソル' })
     cursor!: string;
 
-    @Field(() => TItemClass)
-    node!: TItem;
+    @Field(() => classRef, { description: 'nodeオブジェクト' })
+    node!: T;
   }
 
-  // `isAbstract` decorator option is mandatory to prevent registering in schema
   @ObjectType({ isAbstract: true })
-  abstract class PaginatedType {
-    @Field(() => [EdgeType], { nullable: true })
-    edges!: Array<EdgeType>;
+  abstract class PaginatedType implements IPaginatedType<T> {
+    @Field(() => [EdgeType], { nullable: true, description: 'edgeオブジェクト配列' })
+    edges!: EdgeType[];
 
-    // @Field((type) => [TItemClass], { nullable: true })
-    // nodes: Array<TItem>;
+    // If you need nodes, comment the codes in.
+    // @Field(() => [classRef], { nullable: true })
+    // nodes: T[];
 
-    @Field(() => PageInfo)
+    @Field(() => PageInfo, { description: 'ページネーションに関する情報' })
     pageInfo!: PageInfo;
 
-    @Field(() => Int)
+    @Field(() => Int, { description: '指定した条件で取得できる最大データ数' })
     totalCount!: number;
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  return PaginatedType;
+  return PaginatedType as Type<IPaginatedType<T>>;
 }
