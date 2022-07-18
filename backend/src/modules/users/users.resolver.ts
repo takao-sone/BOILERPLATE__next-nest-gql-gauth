@@ -74,7 +74,7 @@ export class UsersResolver {
       ページネーションによりユーザーを取得するオペレーション \n
     `,
   })
-  async getUsers(
+  async getUserConnection(
     @Args({ name: 'pagination', nullable: true, defaultValue: DEFAULT_PAGINATION_INPUT })
     paginationInput: PaginationInput,
     @Args({ name: 'sort', nullable: true, defaultValue: DEFAULT_USER_SORT_INPUT })

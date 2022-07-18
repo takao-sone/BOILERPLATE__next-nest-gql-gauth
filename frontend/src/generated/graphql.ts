@@ -112,10 +112,27 @@ export type MutationUpdateUserRoleArgs = {
 
 export type PageInfo = {
   __typename?: 'PageInfo';
+  /** 最後に取得したデータのカーソル */
   endCursor?: Maybe<Scalars['String']>;
+  /** 次のページの可否 */
   hasNextPage?: Maybe<Scalars['Boolean']>;
+  /** 前のページの可否 */
   hasPreviousPage?: Maybe<Scalars['Boolean']>;
+  /** 最初に取得したデータのカーソル */
   startCursor?: Maybe<Scalars['String']>;
+};
+
+export type PaginationInput = {
+  /** 起点となるカーソル(カーソル以降の値取得時) */
+  after?: InputMaybe<Scalars['String']>;
+  /** 起点となるカーソル(カーソル以前の値取得時) */
+  before?: InputMaybe<Scalars['String']>;
+  /** 値の取得数(カーソル以降の値取得時) */
+  first?: InputMaybe<Scalars['Int']>;
+  /** 値の取得数(カーソル以前の値取得時) */
+  last?: InputMaybe<Scalars['Int']>;
+  /** カーソルを含めた取得する値のスキップ数 */
+  skip?: InputMaybe<Scalars['Int']>;
 };
 
 export type Query = {
@@ -132,29 +149,17 @@ export type Query = {
    *
    *       権限: ADMIN
    *
-   *       すべてのユーザーを取得するオペレーション
+   *       ページネーションによりユーザーを取得するオペレーション
    *
    *
    */
   getUserConnection: UserConnection;
-  /**
-   *
-   *       権限: ADMIN
-   *
-   *       すべてのユーザーを取得するオペレーション
-   *
-   *
-   */
-  getUsers: Array<User>;
 };
 
 
 export type QueryGetUserConnectionArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
+  pagination?: InputMaybe<PaginationInput>;
+  sort?: InputMaybe<UserSortInput>;
 };
 
 export type Role = {
@@ -168,6 +173,12 @@ export type Role = {
   /** DBへのデータ更新時間 */
   updatedAt: Scalars['DateTime'];
 };
+
+/** Possible directions in which to order a list of items when provided an `orderBy` argument. */
+export enum SortDirection {
+  Asc = 'ASC',
+  Desc = 'DESC'
+}
 
 export type UpdateUserEmailInput = {
   /** 新しいメールアドレス */
@@ -197,8 +208,11 @@ export type User = {
 
 export type UserConnection = {
   __typename?: 'UserConnection';
+  /** edgeオブジェクト配列 */
   edges?: Maybe<Array<UserEdge>>;
+  /** ページネーションに関する情報 */
   pageInfo: PageInfo;
+  /** 指定した条件で取得できる最大データ数 */
   totalCount: Scalars['Int'];
 };
 
@@ -214,14 +228,32 @@ export type UserCredential = {
 
 export type UserEdge = {
   __typename?: 'UserEdge';
+  /** 現在のnodeのカーソル */
   cursor: Scalars['String'];
+  /** nodeオブジェクト */
   node: User;
 };
 
-export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
+/** Properties by which user connections can be ordered. */
+export enum UserSortField {
+  CreatedAt = 'CREATED_AT',
+  Id = 'ID'
+}
+
+export type UserSortInput = {
+  /** ソートする方向 */
+  direction?: InputMaybe<SortDirection>;
+  /** ユーザー取得する際にソート対象にしたいフィールド */
+  field?: InputMaybe<UserSortField>;
+};
+
+export type GetUserConnectionQueryVariables = Exact<{
+  sort?: InputMaybe<UserSortInput>;
+  pagination?: InputMaybe<PaginationInput>;
+}>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', getUsers: Array<{ __typename?: 'User', displayedId: string, userCredential: { __typename?: 'UserCredential', email: string }, userRole: { __typename?: 'Role', name: string, displayedId: string } }> };
+export type GetUserConnectionQuery = { __typename?: 'Query', getUserConnection: { __typename?: 'UserConnection', totalCount: number, edges?: Array<{ __typename?: 'UserEdge', node: { __typename?: 'User', displayedId: string, userCredential: { __typename?: 'UserCredential', email: string }, userRole: { __typename?: 'Role', name: string } } }> | null, pageInfo: { __typename?: 'PageInfo', startCursor?: string | null, endCursor?: string | null, hasNextPage?: boolean | null, hasPreviousPage?: boolean | null } } };
 
 export type LogInMutationVariables = Exact<{
   data: LogInInput;
@@ -231,32 +263,42 @@ export type LogInMutationVariables = Exact<{
 export type LogInMutation = { __typename?: 'Mutation', logIn: { __typename?: 'Auth', authenticatedUser: { __typename?: 'User', createdAt: any, displayedId: string, updatedAt: any, userCredential: { __typename?: 'UserCredential', email: string }, userRole: { __typename?: 'Role', name: string, displayedId: string } } } };
 
 
-export const GetUsersDocument = `
-    query GetUsers {
-  getUsers {
-    displayedId
-    userCredential {
-      email
+export const GetUserConnectionDocument = `
+    query GetUserConnection($sort: UserSortInput, $pagination: PaginationInput) {
+  getUserConnection(sort: $sort, pagination: $pagination) {
+    edges {
+      node {
+        displayedId
+        userCredential {
+          email
+        }
+        userRole {
+          name
+        }
+      }
     }
-    userRole {
-      name
-      displayedId
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
     }
+    totalCount
   }
 }
     `;
-export const useGetUsersQuery = <
-      TData = GetUsersQuery,
+export const useGetUserConnectionQuery = <
+      TData = GetUserConnectionQuery,
       TError = unknown
     >(
       client: GraphQLClient,
-      variables?: GetUsersQueryVariables,
-      options?: UseQueryOptions<GetUsersQuery, TError, TData>,
+      variables?: GetUserConnectionQueryVariables,
+      options?: UseQueryOptions<GetUserConnectionQuery, TError, TData>,
       headers?: RequestInit['headers']
     ) =>
-    useQuery<GetUsersQuery, TError, TData>(
-      variables === undefined ? ['GetUsers'] : ['GetUsers', variables],
-      fetcher<GetUsersQuery, GetUsersQueryVariables>(client, GetUsersDocument, variables, headers),
+    useQuery<GetUserConnectionQuery, TError, TData>(
+      variables === undefined ? ['GetUserConnection'] : ['GetUserConnection', variables],
+      fetcher<GetUserConnectionQuery, GetUserConnectionQueryVariables>(client, GetUserConnectionDocument, variables, headers),
       options
     );
 export const LogInDocument = `
