@@ -2,7 +2,6 @@ import { GraphQLClient } from 'graphql-request';
 import { RequestInit } from 'graphql-request/dist/types.dom';
 import {
   GetUserConnectionQueryVariables,
-  LogInMutationVariables,
   useGetUserConnectionQuery,
   useLogInMutation,
 } from 'generated/graphql';
@@ -20,19 +19,8 @@ export const useGetUserConnection = (variables?: GetUserConnectionQueryVariables
   return useGetUserConnectionQuery(graphqlClient, variables);
 };
 
-export const useLogIn = async (variables: LogInMutationVariables) => {
+export const useLogIn = () => {
   const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT, BASE_GRAPHQL_CLIENT_OPTIONS);
 
-  const { mutateAsync } = useLogInMutation(graphqlClient, {
-    useErrorBoundary: true,
-  });
-
-  try {
-    return await mutateAsync(variables);
-  } catch (err) {
-    // onError処理
-    throw err;
-  } finally {
-    // onSettled処理
-  }
+  return useLogInMutation(graphqlClient);
 };
