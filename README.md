@@ -8,6 +8,10 @@ pwd
 
 # lefthook自体のインストール
 brew install lefthook
+
+# git-secretsの設定
+git secrets --install
+git secrets --register-aws
 ```
 
 ### Backend
@@ -21,6 +25,10 @@ brew install lefthook
 - Next.js
 - MUI
 - React Query
+
+### Infrastructure
+
+- Terraform
 
 ### Other
 

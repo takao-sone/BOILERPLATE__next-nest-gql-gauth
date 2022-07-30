@@ -1,17 +1,50 @@
+import { Button } from '@mui/material';
 import { FC } from 'react';
+import AppErrorBoundary from 'components/common/AppErrorBoundary';
 import { useLogIn } from 'fetchers';
+import { LogInMutationVariables } from 'generated/graphql';
 
 type Props = {};
 
-const Sample: FC<Props> = () => {
-  const foo = useLogIn({
+const Sample2: FC<Props> = () => {
+  const variables: LogInMutationVariables = {
     data: { email: '1@example.com', password: 'password' },
-  });
+  };
+
+  const mutation = useLogIn();
+
+  if (mutation.isLoading) {
+    return <div>loading ...</div>;
+  }
+
+  if (mutation.isError) {
+    throw mutation.error;
+  }
 
   return (
     <div>
       <span>foo</span>
-      <div>{JSON.stringify(foo)}</div>
+      <Button></Button>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => {
+          mutation.mutate(variables);
+        }}
+      >
+        LogIn
+      </Button>
+      <div>{JSON.stringify(mutation.data)}</div>
+    </div>
+  );
+};
+
+const Sample: FC = () => {
+  return (
+    <div>
+      <AppErrorBoundary>
+        <Sample2 />
+      </AppErrorBoundary>
     </div>
   );
 };
