@@ -29,6 +29,12 @@ resource "aws_resourcegroups_group" "resource_group" {
               var.project_name,
             ]
           },
+          {
+            Key = "Stage"
+            Values = [
+              var.project_stg,
+            ]
+          },
         ]
       }
     )
@@ -47,5 +53,6 @@ module "amplify" {
   github_account_name            = var.github_account_name
   github_repository_name_amplify = var.github_repository_name_amplify
   github_access_token_amplify    = var.github_access_token_amplify
+  amplify_github_branch_name_dev = var.amplify_github_branch_name_dev
   amplify_domain_name            = var.amplify_domain_name
 }

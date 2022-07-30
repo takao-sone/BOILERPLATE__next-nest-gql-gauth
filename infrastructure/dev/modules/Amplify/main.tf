@@ -15,7 +15,7 @@ resource "aws_amplify_app" "frontend" {
 
 resource "aws_amplify_branch" "develop" {
   app_id      = aws_amplify_app.frontend.id
-  branch_name = "feature/amplify-settings"
+  branch_name = var.amplify_github_branch_name_dev
   stage       = "DEVELOPMENT"
 
   enable_auto_build = true

@@ -39,6 +39,10 @@ variable "amplify_domain_name" {
   type = string
 }
 
+variable "amplify_github_branch_name_dev" {
+  type = string
+}
+
 # Networking ===========================
 # variable "vpc_cidr" {
 #   type = string

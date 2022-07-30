@@ -20,7 +20,7 @@ variable "github_access_token_amplify" {
   type = string
 }
 
-variable "github_branch_name" {
+variable "amplify_github_branch_name_dev" {
   type    = string
   default = "develop"
 }
