@@ -13,32 +13,32 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
-# resource "aws_resourcegroups_group" "resource_group" {
-#   name = "${var.project_name}-resource-group"
+resource "aws_resourcegroups_group" "resource_group" {
+  name = "${var.project_name}-resource-group"
 
-#   resource_query {
-#     query = jsonencode(
-#       {
-#         ResourceTypeFilters = [
-#           "AWS::AllSupported",
-#         ]
-#         TagFilters = [
-#           {
-#             Key = "Project"
-#             Values = [
-#               var.project_name,
-#             ]
-#           },
-#         ]
-#       }
-#     )
-#     type = "TAG_FILTERS_1_0"
-#   }
+  resource_query {
+    query = jsonencode(
+      {
+        ResourceTypeFilters = [
+          "AWS::AllSupported",
+        ]
+        TagFilters = [
+          {
+            Key = "Project"
+            Values = [
+              var.project_name,
+            ]
+          },
+        ]
+      }
+    )
+    type = "TAG_FILTERS_1_0"
+  }
 
-#   tags = {
-#     Name = "${var.project_name}-${var.project_stg}-resource-group"
-#   }
-# }
+  tags = {
+    Name = "${var.project_name}-${var.project_stg}-resource-group"
+  }
+}
 
 module "amplify" {
   source                         = "./modules/Amplify"
@@ -47,4 +47,5 @@ module "amplify" {
   github_account_name            = var.github_account_name
   github_repository_name_amplify = var.github_repository_name_amplify
   github_access_token_amplify    = var.github_access_token_amplify
+  amplify_domain_name            = var.amplify_domain_name
 }

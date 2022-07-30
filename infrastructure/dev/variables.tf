@@ -34,6 +34,11 @@ variable "github_access_token_amplify" {
   type = string
 }
 
+# Amplify ===========================
+variable "amplify_domain_name" {
+  type = string
+}
+
 # Networking ===========================
 # variable "vpc_cidr" {
 #   type = string

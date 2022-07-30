@@ -29,3 +29,13 @@ resource "aws_amplify_branch" "develop" {
     Name = "${var.project_name}-${var.project_stg}-amplify-branch"
   }
 }
+
+resource "aws_amplify_domain_association" "branch_develop" {
+  app_id      = aws_amplify_app.frontend.id
+  domain_name = var.amplify_domain_name
+
+  sub_domain {
+    branch_name = aws_amplify_branch.develop.branch_name
+    prefix      = ""
+  }
+}
