@@ -13,37 +13,10 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
-resource "aws_resourcegroups_group" "resource_group" {
-  name = "${var.project_name}-resource-group"
-
-  resource_query {
-    query = jsonencode(
-      {
-        ResourceTypeFilters = [
-          "AWS::AllSupported",
-        ]
-        TagFilters = [
-          {
-            Key = "Project"
-            Values = [
-              var.project_name,
-            ]
-          },
-          {
-            Key = "Stage"
-            Values = [
-              var.project_stg,
-            ]
-          },
-        ]
-      }
-    )
-    type = "TAG_FILTERS_1_0"
-  }
-
-  tags = {
-    Name = "${var.project_name}-${var.project_stg}-resource-group"
-  }
+module "resource_groups" {
+  source       = "./modules/ResourceGroups"
+  project_name = var.project_name
+  project_stg  = var.project_stg
 }
 
 module "amplify" {
@@ -55,4 +28,8 @@ module "amplify" {
   github_access_token_amplify    = var.github_access_token_amplify
   amplify_github_branch_name_dev = var.amplify_github_branch_name_dev
   amplify_domain_name            = var.amplify_domain_name
+
+  # App Environment Variables
+  next_public_app_env          = var.next_public_app_env
+  next_public_graphql_endpoint = var.next_public_graphql_endpoint
 }

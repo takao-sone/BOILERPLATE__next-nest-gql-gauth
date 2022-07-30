@@ -8,6 +8,10 @@ resource "aws_amplify_app" "frontend" {
   repository   = "https://github.com/${var.github_account_name}/${var.github_repository_name_amplify}"
   access_token = var.github_access_token_amplify
 
+  lifecycle {
+    ignore_changes = [basic_auth_credentials]
+  }
+
   tags = {
     Name = "${var.project_name}-${var.project_stg}-amplify-app"
   }

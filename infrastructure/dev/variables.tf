@@ -43,6 +43,14 @@ variable "amplify_github_branch_name_dev" {
   type = string
 }
 
+variable "next_public_app_env" {
+  type = string
+}
+
+variable "next_public_graphql_endpoint" {
+  type = string
+}
+
 # Networking ===========================
 # variable "vpc_cidr" {
 #   type = string

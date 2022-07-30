@@ -21,8 +21,7 @@ variable "github_access_token_amplify" {
 }
 
 variable "amplify_github_branch_name_dev" {
-  type    = string
-  default = "develop"
+  type = string
 }
 
 # Amplify ===========================
@@ -32,11 +31,9 @@ variable "amplify_domain_name" {
 
 # App ===========================
 variable "next_public_app_env" {
-  type    = string
-  default = "development"
+  type = string
 }
 
 variable "next_public_graphql_endpoint" {
-  type    = string
-  default = ""
+  type = string
 }
