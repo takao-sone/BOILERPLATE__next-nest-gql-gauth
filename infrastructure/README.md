@@ -16,7 +16,10 @@ terraform apply
 ### Main Resources
 
 #### Other
-1. Resource Group
+1. Resource Groups
+
+#### Amplify
+1. Amplify Hosting (develop branch)
 
 #### Networking
 1. VPC

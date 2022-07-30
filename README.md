@@ -26,6 +26,10 @@ git secrets --register-aws
 - MUI
 - React Query
 
+### Infrastructure
+
+- Terraform
+
 ### Other
 
 - Redis (for Session)
