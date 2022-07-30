@@ -9,11 +9,28 @@ variable "project_name" {
   }
 }
 
+variable "project_stg" {
+  type = string
+}
+
 variable "aws_profile" {
   type = string
 }
 
 variable "aws_region" {
+  type = string
+}
+
+# Github ===========================
+variable "github_account_name" {
+  type = string
+}
+
+variable "github_repository_name_amplify" {
+  type = string
+}
+
+variable "github_access_token_amplify" {
   type = string
 }
 
