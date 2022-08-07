@@ -7,7 +7,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { SessionService } from '../session/session.service';
 
 @Injectable()
-export class AuthenticationService {
+export class CookieAuthenticationService {
   constructor(private prismaService: PrismaService, private sessionService: SessionService) {}
 
   /**
