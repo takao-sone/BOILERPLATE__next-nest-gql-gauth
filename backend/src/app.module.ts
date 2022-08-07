@@ -6,7 +6,7 @@ import { AppService } from './app.service';
 import { AppConfigModule } from './modules/app-config/app-config.module';
 import { GraphqlConfigService } from './modules/app-config/graphql-config.service';
 import { PrismaConfigService } from './modules/app-config/prisma-config.service';
-import { AuthenticationModule } from './modules/authentication/authentication.module';
+import { CookieAuthenticationModule } from './modules/cookie-authentication/cookie-authentication.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { SessionModule } from './modules/session/session.module';
@@ -24,7 +24,7 @@ import { UsersModule } from './modules/users/users.module';
       useClass: GraphqlConfigService,
     }),
     UsersModule,
-    AuthenticationModule,
+    CookieAuthenticationModule,
     RolesModule,
     SessionModule,
   ],

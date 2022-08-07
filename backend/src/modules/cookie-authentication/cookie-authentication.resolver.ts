@@ -3,7 +3,7 @@ import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/g
 import { Request } from 'express';
 import { CurrentReq } from 'src/common/decorators/current-req.decorator';
 import { CurrentSessionUser } from 'src/common/decorators/current-session-user.decorator';
-import { AuthenticationService } from './authentication.service';
+import { CookieAuthenticationService } from './cookie-authentication.service';
 import { LogInInput } from './dtos/log-in.input';
 import { SessionUser } from './dtos/session-user.dto';
 import { LocalGuard } from './local.guard';
@@ -11,8 +11,8 @@ import { LoggedInGuard } from './logged-in.guard';
 import { Auth } from './models/auth.model';
 
 @Resolver(() => Auth)
-export class AuthenticationResolver {
-  constructor(private authenticationService: AuthenticationService) {}
+export class CookieAuthenticationResolver {
+  constructor(private authenticationService: CookieAuthenticationService) {}
 
   @UseGuards(LocalGuard)
   @Mutation(() => Auth, {
