@@ -11,6 +11,7 @@ import { PrismaModule } from './modules/prisma/prisma.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { SessionModule } from './modules/session/session.module';
 import { UsersModule } from './modules/users/users.module';
+import { TokenAuthenticationModule } from './modules/token-authentication/token-authentication.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { UsersModule } from './modules/users/users.module';
     CookieAuthenticationModule,
     RolesModule,
     SessionModule,
+    TokenAuthenticationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
