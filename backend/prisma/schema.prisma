@@ -11,12 +11,13 @@ datasource db {
 }
 
 model User {
-  id             Int             @id @default(autoincrement()) @db.UnsignedInt
-  displayedId    String          @unique @default(dbgenerated("(UUID())")) @map("displayed_id")
-  userCredential UserCredential?
-  userRoles      UsersRoles[]
-  createdAt      DateTime        @default(now()) @map("created_at")
-  updatedAt      DateTime        @updatedAt @map("updated_at")
+  id                    Int                     @id @default(autoincrement()) @db.UnsignedInt
+  displayedId           String                  @unique @default(dbgenerated("(UUID())")) @map("displayed_id")
+  userCredential        UserCredential?
+  userRoles             UsersRoles[]
+  createdAt             DateTime                @default(now()) @map("created_at")
+  updatedAt             DateTime                @updatedAt @map("updated_at")
+  RefreshTokenRotations RefreshTokenRotations[]
 
   @@map("users")
 }
@@ -60,4 +61,15 @@ model UsersRoles {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("users_roles")
+}
+
+model RefreshTokenRotations {
+  id           Int      @id @default(autoincrement()) @db.UnsignedInt
+  user         User     @relation(fields: [userId], references: [id])
+  userId       Int      @map("user_id") @db.UnsignedInt
+  refreshToken String   @map("refresh_token") @db.Text
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("refresh_token_rotations")
 }

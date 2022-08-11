@@ -1,5 +1,11 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
+import { Prisma } from '@prisma/client';
 import { compare } from 'bcrypt';
 import { EnvService } from '../app-config/env.service';
 import { UserWithRolesAndCredential } from '../prisma/custom-types';
@@ -57,19 +63,81 @@ export class TokenAuthenticationService {
 
   /**
    * ユーザーのログインを処理するメソッド
-   * 認証されたユーザーからaccessTokenとrefreshTokenを生成
+   * 認証されたユーザーからaccessTokenとrefreshTokenを生成して返却
    * @param authenticatedUser
    * @returns Object including accessToken & refreshToken
    */
-  logIn(authenticatedUser: UserWithRolesAndCredential) {
+  async logIn(authenticatedUser: UserWithRolesAndCredential) {
     const accessToken = this.generateAccessToken(authenticatedUser);
     const refreshToken = this.generateRefreshToken(authenticatedUser);
+
+    // Refresh Token Rotation対応
+    try {
+      await this.prismaService.refreshTokenRotations.create({
+        data: {
+          refreshToken,
+          user: {
+            connect: {
+              id: authenticatedUser.id,
+            },
+          },
+        },
+      });
+    } catch (err) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        switch (err.code) {
+          default:
+            Logger.error(`Prisma Error Code: ${err.code}, ${err.message}`);
+            throw new InternalServerErrorException();
+        }
+      }
+
+      if (err instanceof Error) {
+        Logger.error(err.message);
+        throw new InternalServerErrorException();
+      }
+
+      throw err;
+    }
 
     return {
       accessToken,
       refreshToken,
     };
   }
+
+  // private async updateRefreshToken(refreshToken: string) {
+  //   const hashedRefreshToken = await hash(refreshToken, this.ENCRYPTION_SALT_ROUNDS);
+  //   try {
+  //     this.prismaService.refreshTokenRotations.create({
+  //       data: {
+  //         hashedRefreshToken,
+  //         user: {
+  //           connect: {
+  //             id: authenticatedUser.id,
+  //           },
+  //         },
+  //       },
+  //     });
+  //   } catch (err) {
+  //     if (err instanceof Prisma.PrismaClientKnownRequestError) {
+  //       switch (err.code) {
+  //         case 'P2002':
+  //           throw new ConflictException(`Email ${email} already used.`);
+  //         default:
+  //           Logger.error(`Prisma Error Code: ${err.code}, ${err.message}`);
+  //           throw new InternalServerErrorException();
+  //       }
+  //     }
+
+  //     if (err instanceof Error) {
+  //       Logger.error(err.message);
+  //       throw new InternalServerErrorException();
+  //     }
+
+  //     throw err;
+  //   }
+  // }
 
   /**
    * アクセストークンを生成するメソッド
@@ -79,7 +147,7 @@ export class TokenAuthenticationService {
   private generateAccessToken(authenticatedUser: UserWithRolesAndCredential) {
     const payload: AppAccessTokenPayload = {
       sub: authenticatedUser.displayedId,
-      scope: authenticatedUser.userRoles.join(' '),
+      scope: authenticatedUser.userRoles.map((userRole) => userRole.role.name).join(' '),
     };
     const jwtSignOptions: JwtSignOptions = {
       secret: this.envService.getAccessTokenSecret(),
