@@ -3,6 +3,7 @@ CREATE TABLE `refresh_token_rotations` (
     `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
     `user_id` INTEGER UNSIGNED NOT NULL,
     `refresh_token` TEXT NOT NULL,
+    `refresh_token_exp` INTEGER UNSIGNED NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 

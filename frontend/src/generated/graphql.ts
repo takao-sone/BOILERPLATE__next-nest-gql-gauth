@@ -80,6 +80,14 @@ export type Mutation = {
   tokenLogIn: TokenAuth;
   /**
    *
+   *       権限: ALL
+   *
+   *       ログアウト用オペレーション
+   *
+   */
+  tokenLogOut?: Maybe<Scalars['String']>;
+  /**
+   *
    *       権限: ログイン
    *
    *       ユーザーのメールアドレスを更新するオペレーション
@@ -111,6 +119,11 @@ export type MutationlogInArgs = {
 
 export type MutationtokenLogInArgs = {
   data: TokenLogInInput;
+};
+
+
+export type MutationtokenLogOutArgs = {
+  data: TokenLogOutInput;
 };
 
 
@@ -207,6 +220,11 @@ export type TokenLogInInput = {
   email: Scalars['String'];
   /** 登録したパスワード */
   password: Scalars['String'];
+};
+
+export type TokenLogOutInput = {
+  /** リフレッシュトークン */
+  refreshToken: Scalars['String'];
 };
 
 export type UpdateUserEmailInput = {

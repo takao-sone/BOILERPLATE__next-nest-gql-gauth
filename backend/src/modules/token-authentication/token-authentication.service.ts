@@ -10,7 +10,12 @@ import { compare } from 'bcrypt';
 import { EnvService } from '../app-config/env.service';
 import { UserWithRolesAndCredential } from '../prisma/custom-types';
 import { PrismaService } from '../prisma/prisma.service';
-import { AppAccessTokenPayload, AppRefreshTokenPayload } from './custom-types';
+import {
+  AppRefreshTokenPayload,
+  AppUserInputAccessTokenPayload,
+  AppUserInputRefreshTokenPayload,
+} from './custom-types';
+import { TokenAuth } from './models/auth.model';
 
 @Injectable()
 export class TokenAuthenticationService {
@@ -63,19 +68,29 @@ export class TokenAuthenticationService {
 
   /**
    * ユーザーのログインを処理するメソッド
-   * 認証されたユーザーからaccessTokenとrefreshTokenを生成して返却
+   * 認証されたユーザーからaccessTokenとrefreshTokenを生成し返却
+   * 返却前にrefreshTokenの情報をrefresh_token_rotationsテーブルへ保存
    * @param authenticatedUser
    * @returns Object including accessToken & refreshToken
    */
-  async logIn(authenticatedUser: UserWithRolesAndCredential) {
+  async logIn(authenticatedUser: UserWithRolesAndCredential): Promise<TokenAuth> {
     const accessToken = this.generateAccessToken(authenticatedUser);
     const refreshToken = this.generateRefreshToken(authenticatedUser);
+    const decodedRefreshTokenPayload = this.jwtService.decode(
+      refreshToken,
+    ) as AppRefreshTokenPayload | null;
+
+    if (!decodedRefreshTokenPayload) {
+      Logger.error(`JWT Decode Error: ${refreshToken}`);
+      throw new InternalServerErrorException();
+    }
 
     // Refresh Token Rotation対応
     try {
-      await this.prismaService.refreshTokenRotations.create({
+      await this.prismaService.refreshTokenRotation.create({
         data: {
           refreshToken,
+          refreshTokenExp: decodedRefreshTokenPayload.exp,
           user: {
             connect: {
               id: authenticatedUser.id,
@@ -106,46 +121,95 @@ export class TokenAuthenticationService {
     };
   }
 
-  // private async updateRefreshToken(refreshToken: string) {
-  //   const hashedRefreshToken = await hash(refreshToken, this.ENCRYPTION_SALT_ROUNDS);
-  //   try {
-  //     this.prismaService.refreshTokenRotations.create({
-  //       data: {
-  //         hashedRefreshToken,
-  //         user: {
-  //           connect: {
-  //             id: authenticatedUser.id,
-  //           },
-  //         },
-  //       },
-  //     });
-  //   } catch (err) {
-  //     if (err instanceof Prisma.PrismaClientKnownRequestError) {
-  //       switch (err.code) {
-  //         case 'P2002':
-  //           throw new ConflictException(`Email ${email} already used.`);
-  //         default:
-  //           Logger.error(`Prisma Error Code: ${err.code}, ${err.message}`);
-  //           throw new InternalServerErrorException();
-  //       }
-  //     }
+  async logOut(reqRefreshToken: string): Promise<void> {
+    let appRefreshTokenPayload: AppRefreshTokenPayload;
 
-  //     if (err instanceof Error) {
-  //       Logger.error(err.message);
-  //       throw new InternalServerErrorException();
-  //     }
+    // RefreshTokenの検証
+    try {
+      appRefreshTokenPayload = this.jwtService.verify<AppRefreshTokenPayload>(reqRefreshToken, {
+        secret: this.envService.getRefreshTokenSecret(),
+      });
+    } catch (err) {
+      if (err instanceof Error) {
+        Logger.error(`Refresh Token Error: ${err.message}, ${reqRefreshToken} `);
+        throw new UnauthorizedException();
+      }
 
-  //     throw err;
-  //   }
-  // }
+      throw err;
+    }
+
+    const userWithRelatedRefreshTokens = await this.prismaService.user.findUnique({
+      where: {
+        displayedId: appRefreshTokenPayload.sub,
+      },
+      include: {
+        refreshTokenRotations: true,
+      },
+    });
+
+    if (!userWithRelatedRefreshTokens) {
+      Logger.error(`Refresh Token Reuse: No user found.`);
+      throw new InternalServerErrorException();
+    }
+
+    const refreshTokenRotationHavingReqRefreshToken =
+      userWithRelatedRefreshTokens.refreshTokenRotations.find(
+        (refreshTokenRotation) => refreshTokenRotation.refreshToken === reqRefreshToken,
+      );
+
+    // Refresh Token Reuse detected
+    if (!refreshTokenRotationHavingReqRefreshToken) {
+      try {
+        await this.prismaService.refreshTokenRotation.deleteMany({
+          where: {
+            user: {
+              id: userWithRelatedRefreshTokens.id,
+            },
+          },
+        });
+      } catch (err) {
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+          switch (err.code) {
+            default:
+              Logger.error(`logOut: deleteMany, ${err.code}, ${err.message}`);
+              throw new InternalServerErrorException();
+          }
+        }
+
+        throw err;
+      }
+
+      Logger.error(`Refresh Token Reuse: No refreshToken from request in DB.`);
+      throw new UnauthorizedException();
+    }
+
+    // Delete existing (DB stored) refresh token from request.
+    try {
+      await this.prismaService.refreshTokenRotation.delete({
+        where: {
+          id: refreshTokenRotationHavingReqRefreshToken.id,
+        },
+      });
+    } catch (err) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        switch (err.code) {
+          default:
+            Logger.error(`logOut: deleteMany, ${err.code}, ${err.message}`);
+            throw new InternalServerErrorException();
+        }
+      }
+
+      throw err;
+    }
+  }
 
   /**
    * アクセストークンを生成するメソッド
    * @param authenticatedUser
    * @returns accessToken
    */
-  private generateAccessToken(authenticatedUser: UserWithRolesAndCredential) {
-    const payload: AppAccessTokenPayload = {
+  private generateAccessToken(authenticatedUser: UserWithRolesAndCredential): string {
+    const payload: AppUserInputAccessTokenPayload = {
       sub: authenticatedUser.displayedId,
       scope: authenticatedUser.userRoles.map((userRole) => userRole.role.name).join(' '),
     };
@@ -163,8 +227,8 @@ export class TokenAuthenticationService {
    * @param authenticatedUser
    * @returns refreshToken
    */
-  private generateRefreshToken(authenticatedUser: UserWithRolesAndCredential) {
-    const payload: AppRefreshTokenPayload = {
+  private generateRefreshToken(authenticatedUser: UserWithRolesAndCredential): string {
+    const payload: AppUserInputRefreshTokenPayload = {
       sub: authenticatedUser.displayedId,
     };
     const jwtSignOptions: JwtSignOptions = {

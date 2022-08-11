@@ -47,6 +47,9 @@ type Mutation {
   "\n      権限: ALL \n\n      ログイン用オペレーション\n    "
   tokenLogIn(data: TokenLogInInput!): TokenAuth!
 
+  "\n      権限: ALL \n\n      ログアウト用オペレーション\n    "
+  tokenLogOut(data: TokenLogOutInput!): String
+
   "\n      権限: ログイン \n\n      ユーザーのメールアドレスを更新するオペレーション\n    "
   updateUserEmail(data: UpdateUserEmailInput!): User!
 
@@ -129,6 +132,11 @@ input TokenLogInInput {
 
   """登録したパスワード"""
   password: String!
+}
+
+input TokenLogOutInput {
+  """リフレッシュトークン"""
+  refreshToken: String!
 }
 
 input UpdateUserEmailInput {
