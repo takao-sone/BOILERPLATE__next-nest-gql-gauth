@@ -20,7 +20,7 @@ import { UsersService } from './users.service';
 export class UsersResolver {
   constructor(private usersService: UsersService) {}
 
-  // @UseGuards(RoleGuard(RoleName.ADMIN))
+  @UseGuards(RoleGuard(RoleName.ADMIN))
   @Mutation(() => User, {
     description: `
       権限: ADMIN \n
