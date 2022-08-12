@@ -4,6 +4,7 @@ import { UserWithRolesAndCredential } from '../prisma/custom-types';
 import { CurrentAuthenticatedUser } from './decorators/current-authenticated-user.decorator';
 import { TokenLogInInput } from './dtos/log-in.input';
 import { TokenLogOutInput } from './dtos/log-out.input';
+import { RefreshTokensInput } from './dtos/refresh-tokens.input';
 import { LocalGuard } from './local.guard';
 import { TokenAuth } from './models/auth.model';
 import { TokenAuthenticationService } from './token-authentication.service';
@@ -42,5 +43,17 @@ export class TokenAuthenticationResolver {
     await this.tokenAuthenticationService.logOut(refreshToken);
 
     return 'Logged out';
+  }
+
+  @Mutation(() => TokenAuth, {
+    description: `
+      権限: ALL \n
+      トークン更新用オペレーション
+    `,
+  })
+  async refreshTokens(@Args('data') input: RefreshTokensInput) {
+    const { refreshToken } = input;
+
+    return await this.tokenAuthenticationService.refreshTokens(refreshToken);
   }
 }
