@@ -93,14 +93,14 @@ export class TokenAuthenticationService {
     const appRefreshTokenPayload = this.verifyRefreshToken(reqRefreshToken);
 
     // Inspec if refresh token reuse is attempted or not
-    const refreshTokenRotationHavingReqRefreshToken = await this.inspectRefreshTokenReuse(
+    const refreshTokenRotationsHavingReqRefreshToken = await this.inspectRefreshTokenReuse(
       appRefreshTokenPayload.sub,
       reqRefreshToken,
     );
 
     // Delete existing (DB stored) refresh token
-    await this.deleteExistingDbStoredRefreshTokenRotation(
-      refreshTokenRotationHavingReqRefreshToken.id,
+    await this.deleteExistingDbStoredRefreshTokenRotations(
+      refreshTokenRotationsHavingReqRefreshToken.map((e) => e.id),
     );
   }
 
@@ -109,14 +109,14 @@ export class TokenAuthenticationService {
     const appRefreshTokenPayload = this.verifyRefreshToken(reqRefreshToken);
 
     // Inspec if refresh token reuse is attempted or not
-    const refreshTokenRotationHavingReqRefreshToken = await this.inspectRefreshTokenReuse(
+    const refreshTokenRotationsHavingReqRefreshToken = await this.inspectRefreshTokenReuse(
       appRefreshTokenPayload.sub,
       reqRefreshToken,
     );
 
     // Delete existing (DB stored) refresh token
-    await this.deleteExistingDbStoredRefreshTokenRotation(
-      refreshTokenRotationHavingReqRefreshToken.id,
+    await this.deleteExistingDbStoredRefreshTokenRotations(
+      refreshTokenRotationsHavingReqRefreshToken.map((e) => e.id),
     );
 
     // Generate new access & refresh tokens
@@ -257,12 +257,12 @@ export class TokenAuthenticationService {
    * 再利用が検出されなければリクエストされたリフレッシュトークンを含むRefreshTokenRotationオブジェクトを返却
    * @param subFromRefreshTokenPayload sub from a requested refresh token
    * @param reqRefreshToken a requested refresh token
-   * @returns RefreshTokenRotation object having a requested refresh token (if refresh token reuse is not detected)
+   * @returns array of RefreshTokenRotation objects having the same requested refresh token (if refresh token reuse is not detected)
    */
   async inspectRefreshTokenReuse(
     subFromRefreshTokenPayload: string,
     reqRefreshToken: string,
-  ): Promise<RefreshTokenRotation> {
+  ): Promise<RefreshTokenRotation[]> {
     const userWithRelatedRefreshTokens = await this.prismaService.user.findUnique({
       where: {
         displayedId: subFromRefreshTokenPayload,
@@ -277,13 +277,13 @@ export class TokenAuthenticationService {
       throw new InternalServerErrorException();
     }
 
-    const refreshTokenRotationHavingReqRefreshToken =
-      userWithRelatedRefreshTokens.refreshTokenRotations.find(
+    const refreshTokenRotationsHavingReqRefreshToken =
+      userWithRelatedRefreshTokens.refreshTokenRotations.filter(
         (refreshTokenRotation) => refreshTokenRotation.refreshToken === reqRefreshToken,
       );
 
     // Detect Refresh Token Reuse
-    if (!refreshTokenRotationHavingReqRefreshToken) {
+    if (refreshTokenRotationsHavingReqRefreshToken.length === 0) {
       try {
         await this.prismaService.refreshTokenRotation.deleteMany({
           where: {
@@ -309,28 +309,30 @@ export class TokenAuthenticationService {
     }
 
     // NO Refresh Token Reuse
-    return refreshTokenRotationHavingReqRefreshToken;
+    return refreshTokenRotationsHavingReqRefreshToken;
   }
 
   /**
-   * DBに保存されているリフレッシュトークンを1つ削除するメソッド
+   * DBに保存されているリフレッシュトークンを削除するメソッド（1つだけとは限らない）
    * 削除する実態はrefresh_token_rotationsテーブルのレコード
-   * @param deletingRefreshTokenRotationId deleting refresh token rotation's id
+   * @param deletingRefreshTokenRotationIds deleting refresh token rotation's id
    */
-  async deleteExistingDbStoredRefreshTokenRotation(
-    deletingRefreshTokenRotationId: number,
+  async deleteExistingDbStoredRefreshTokenRotations(
+    deletingRefreshTokenRotationIds: number[],
   ): Promise<void> {
     try {
-      await this.prismaService.refreshTokenRotation.delete({
+      await this.prismaService.refreshTokenRotation.deleteMany({
         where: {
-          id: deletingRefreshTokenRotationId,
+          id: {
+            in: deletingRefreshTokenRotationIds,
+          },
         },
       });
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         switch (err.code) {
           default:
-            Logger.error(`logOut: deleteMany, ${err.code}, ${err.message}`);
+            Logger.error(`deleteExistingDbStoredRefreshTokenRotation: ${err.code}, ${err.message}`);
             throw new InternalServerErrorException();
         }
       }
