@@ -17,6 +17,9 @@ interface EnvVariables {
   SESSION_MAX_AGE: number;
   // Prisma
   DATABASE_URL: string;
+  // Token
+  ACCESS_TOKEN_SECRET: string;
+  REFRESH_TOKEN_SECRET: string;
 }
 
 @Injectable()
@@ -61,6 +64,14 @@ export class EnvService {
 
   getSessionMaxAge() {
     return this.configService.get('SESSION_MAX_AGE', { infer: true });
+  }
+
+  getAccessTokenSecret() {
+    return this.configService.get('ACCESS_TOKEN_SECRET', { infer: true });
+  }
+
+  getRefreshTokenSecret() {
+    return this.configService.get('REFRESH_TOKEN_SECRET', { infer: true });
   }
 
   isProduction() {

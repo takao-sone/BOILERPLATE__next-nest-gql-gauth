@@ -53,6 +53,14 @@ export class EnvValidator {
   @IsNotEmpty()
   @IsString()
   DATABASE_URL!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  ACCESS_TOKEN_SECRET!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  REFRESH_TOKEN_SECRET!: string;
 }
 
 export const customValidate = (config: Record<string, unknown>) => {

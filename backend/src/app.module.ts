@@ -10,6 +10,7 @@ import { CookieAuthenticationModule } from './modules/cookie-authentication/cook
 import { PrismaModule } from './modules/prisma/prisma.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { SessionModule } from './modules/session/session.module';
+import { TokenAuthenticationModule } from './modules/token-authentication/token-authentication.module';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
@@ -24,9 +25,10 @@ import { UsersModule } from './modules/users/users.module';
       useClass: GraphqlConfigService,
     }),
     UsersModule,
-    CookieAuthenticationModule,
     RolesModule,
+    CookieAuthenticationModule,
     SessionModule,
+    TokenAuthenticationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -3,9 +3,9 @@ import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/g
 import { RoleName } from '@prisma/client';
 import { Request } from 'express';
 import { CurrentReq } from 'src/common/decorators/current-req.decorator';
-import { CurrentSessionUser } from 'src/common/decorators/current-session-user.decorator';
 import { DEFAULT_PAGINATION_INPUT, PaginationInput } from 'src/common/pagination/pagination.input';
 import { DEFAULT_USER_SORT_INPUT, UserSortInput } from 'src/common/pagination/user-order.model';
+import { CurrentSessionUser } from '../cookie-authentication/decorators/current-session-user.decorator';
 import { SessionUser } from '../cookie-authentication/dtos/session-user.dto';
 import { LoggedInGuard } from '../cookie-authentication/logged-in.guard';
 import { RoleGuard } from '../cookie-authentication/role.guard';

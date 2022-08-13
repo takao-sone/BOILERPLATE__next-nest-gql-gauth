@@ -44,6 +44,15 @@ type Mutation {
   "\n      権限: ログイン \n\n      ログアウト用オペレーション\n    "
   logOut: String!
 
+  "\n      権限: ALL \n\n      トークン更新用オペレーション\n    "
+  refreshTokens(data: RefreshTokensInput!): TokenAuth!
+
+  "\n      権限: ALL \n\n      ログイン用オペレーション\n    "
+  tokenLogIn(data: TokenLogInInput!): TokenAuth!
+
+  "\n      権限: ALL \n\n      ログアウト用オペレーション\n    "
+  tokenLogOut(data: TokenLogOutInput!): String
+
   "\n      権限: ログイン \n\n      ユーザーのメールアドレスを更新するオペレーション\n    "
   updateUserEmail(data: UpdateUserEmailInput!): User!
 
@@ -90,6 +99,11 @@ type Query {
   getUserConnection(pagination: PaginationInput = {first: 1, skip: 1}, sort: UserSortInput = {direction: ASC, field: ID}): UserConnection!
 }
 
+input RefreshTokensInput {
+  """リフレッシュトークン"""
+  refreshToken: String!
+}
+
 type Role {
   """DBへのデータ作成時間"""
   createdAt: DateTime!
@@ -110,6 +124,27 @@ Possible directions in which to order a list of items when provided an `orderBy`
 enum SortDirection {
   ASC
   DESC
+}
+
+type TokenAuth {
+  """アクセストークン"""
+  accessToken: String!
+
+  """リフレッシュトークン"""
+  refreshToken: String!
+}
+
+input TokenLogInInput {
+  """登録したメールアドレス"""
+  email: String!
+
+  """登録したパスワード"""
+  password: String!
+}
+
+input TokenLogOutInput {
+  """リフレッシュトークン"""
+  refreshToken: String!
 }
 
 input UpdateUserEmailInput {

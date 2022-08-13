@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { Prisma, PrismaClient, Role, RoleName, User } from '@prisma/client';
+import { hash } from 'bcrypt';
 
 const prisma = new PrismaClient();
 
@@ -16,8 +17,25 @@ const userCreationData: Prisma.UserCreateInput[] = [
   {
     userCredential: {
       create: {
-        email: '0@example.com',
-        password: 'password',
+        email: '1@example.com',
+        password: '',
+      },
+    },
+    userRoles: {
+      create: {
+        role: {
+          connect: {
+            id: 1,
+          },
+        },
+      },
+    },
+  },
+  {
+    userCredential: {
+      create: {
+        email: '2@example.com',
+        password: '',
       },
     },
     userRoles: {
@@ -45,7 +63,10 @@ const doSeedRoles = async (createInputs: Prisma.RoleCreateInput[]) => {
 
 const doSeedUsers = async (createInputs: Prisma.UserCreateInput[]) => {
   const users: Prisma.Prisma__UserClient<User>[] = [];
+  const hashedPassword = await hash('password', 10);
   for (const input of createInputs) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    input.userCredential!.create!.password = hashedPassword;
     const createUser = prisma.user.create({
       data: input,
     });
