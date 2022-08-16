@@ -2,11 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Auth {
-  """ログインしているユーザーの情報"""
-  authenticatedUser: User!
-}
-
 input CreateUserInput {
   """確認用パスワード"""
   confirmationPassword: String!
@@ -26,23 +21,9 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-input LogInInput {
-  """登録したメールアドレス"""
-  email: String!
-
-  """登録したパスワード"""
-  password: String!
-}
-
 type Mutation {
   "\n      権限: ADMIN \n\n      ユーザーを作成するオペレーション\n    "
   createUser(data: CreateUserInput!): User!
-
-  "\n      権限: ALL \n\n      ログイン用オペレーション\n    "
-  logIn(data: LogInInput!): Auth!
-
-  "\n      権限: ログイン \n\n      ログアウト用オペレーション\n    "
-  logOut: String!
 
   "\n      権限: ALL \n\n      トークン更新用オペレーション\n    "
   refreshTokens(data: RefreshTokensInput!): TokenAuth!
@@ -92,11 +73,6 @@ input PaginationInput {
 }
 
 type Query {
-  foo: String!
-
-  "\n      権限: ログイン \n\n      ログイン中のユーザー情報を取得するオペレーション\n    "
-  getAuthenticatedUser: Auth!
-
   "\n      権限: ADMIN \n\n      ページネーションによりユーザーを取得するオペレーション \n\n    "
   getUserConnection(pagination: PaginationInput = {first: 1, skip: 1}, sort: UserSortInput = {direction: ASC, field: ID}): UserConnection!
 }

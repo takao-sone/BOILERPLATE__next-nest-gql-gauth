@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { User } from '@prisma/client';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { EnvService } from '../app-config/env.service';
 import { AppAccessTokenPayload } from './custom-types';
+import { SessionUser } from './dtos/session-user';
 
 @Injectable()
 export class AccessJwtTokenStrategy extends PassportStrategy(Strategy) {
@@ -16,7 +16,7 @@ export class AccessJwtTokenStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: AppAccessTokenPayload) {
-    const partialUser: Pick<User, 'displayedId'> = { displayedId: payload.sub };
+    const partialUser: SessionUser = { displayedId: payload.sub, roleNames: payload.roleNames };
 
     return partialUser;
   }

@@ -158,6 +158,7 @@ export class TokenAuthenticationService {
     const payload: AppUserInputAccessTokenPayload = {
       sub: userDisplayedId,
       scope: roles.map((userRole) => userRole.name).join(' '),
+      roleNames: roles.map((role) => role.name),
     };
     const jwtSignOptions: JwtSignOptions = {
       secret: this.envService.getAccessTokenSecret(),
