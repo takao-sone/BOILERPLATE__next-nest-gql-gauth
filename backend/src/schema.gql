@@ -92,6 +92,8 @@ input PaginationInput {
 }
 
 type Query {
+  foo: String!
+
   "\n      権限: ログイン \n\n      ログイン中のユーザー情報を取得するオペレーション\n    "
   getAuthenticatedUser: Auth!
 

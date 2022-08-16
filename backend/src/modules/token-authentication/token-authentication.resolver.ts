@@ -1,11 +1,12 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserWithRolesAndCredential } from '../prisma/custom-types';
 import { CurrentAuthenticatedUser } from './decorators/current-authenticated-user.decorator';
 import { TokenLogInInput } from './dtos/log-in.input';
 import { TokenLogOutInput } from './dtos/log-out.input';
 import { RefreshTokensInput } from './dtos/refresh-tokens.input';
 import { LocalGuard } from './local.guard';
+import { LoggedInGuard } from './logged-in.guard';
 import { TokenAuth } from './models/auth.model';
 import { TokenAuthenticationService } from './token-authentication.service';
 
@@ -55,5 +56,11 @@ export class TokenAuthenticationResolver {
     const { refreshToken } = input;
 
     return await this.tokenAuthenticationService.refreshTokens(refreshToken);
+  }
+
+  @UseGuards(LoggedInGuard)
+  @Query(() => String)
+  foo() {
+    return 'roo';
   }
 }
