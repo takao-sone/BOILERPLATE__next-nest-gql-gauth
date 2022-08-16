@@ -25,14 +25,14 @@ type Mutation {
   "\n      権限: ADMIN \n\n      ユーザーを作成するオペレーション\n    "
   createUser(data: CreateUserInput!): User!
 
-  "\n      権限: ALL \n\n      トークン更新用オペレーション\n    "
-  refreshTokens(data: RefreshTokensInput!): TokenAuth!
-
   "\n      権限: ALL \n\n      ログイン用オペレーション\n    "
-  tokenLogIn(data: TokenLogInInput!): TokenAuth!
+  logIn(data: TokenLogInInput!): TokenAuth!
 
   "\n      権限: ALL \n\n      ログアウト用オペレーション\n    "
-  tokenLogOut(data: TokenLogOutInput!): String
+  logOut(data: TokenLogOutInput!): String
+
+  "\n      権限: ALL \n\n      トークン更新用オペレーション\n    "
+  refreshTokens(data: RefreshTokensInput!): TokenAuth!
 
   "\n      権限: ログイン \n\n      ユーザーのメールアドレスを更新するオペレーション\n    "
   updateUserEmail(data: UpdateUserEmailInput!): User!
