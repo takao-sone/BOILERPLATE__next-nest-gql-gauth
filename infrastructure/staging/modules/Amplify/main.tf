@@ -3,7 +3,7 @@ resource "aws_amplify_app" "frontend" {
   platform = "WEB"
 
   enable_basic_auth      = true
-  basic_auth_credentials = base64encode("username:password")
+  basic_auth_credentials = base64encode("${var.amplify_staging_basic_auth_username}:${var.amplify_staging_basic_auth_password}")
 
   repository   = "https://github.com/${var.github_account_name}/${var.github_repository_name_amplify}"
   access_token = var.github_access_token_amplify

@@ -29,6 +29,14 @@ variable "amplify_domain_name" {
   type = string
 }
 
+variable "amplify_staging_basic_auth_username" {
+  type = string
+}
+
+variable "amplify_staging_basic_auth_password" {
+  type = string
+}
+
 # App ===========================
 variable "next_public_app_env" {
   type = string

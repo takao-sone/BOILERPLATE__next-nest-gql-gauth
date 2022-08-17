@@ -6,12 +6,17 @@
 
 ```shell
 cd infrastructure/{environment}
-touch terraform.tfvars
+touch terraform.tfvars # tfvarsの各項目入力
 terraform init
 terraform get
 terraform plan
 terraform apply
 ```
+
+**Amplify**
+1. AWSコンソールのAmplifyへアクセス
+2. 作成したappにアクセス
+3. `Run Build` をクリックしてデプロイ
 
 ### Main Resources
 
