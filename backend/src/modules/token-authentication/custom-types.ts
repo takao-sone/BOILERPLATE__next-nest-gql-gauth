@@ -1,3 +1,5 @@
+import { RoleName } from '@prisma/client';
+
 type AppBaseTokenPayload = {
   iat: number;
   exp: number;
@@ -7,6 +9,7 @@ type AppBaseTokenPayload = {
 export type AppUserInputAccessTokenPayload = {
   sub: string;
   scope: string;
+  roleNames: RoleName[];
 };
 
 // User Input Refresh Token Payload

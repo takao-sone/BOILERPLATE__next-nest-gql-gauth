@@ -7,8 +7,8 @@ import { DEFAULT_PAGINATION_INPUT, PaginationInput } from 'src/common/pagination
 import { DEFAULT_USER_SORT_INPUT, UserSortInput } from 'src/common/pagination/user-order.model';
 import { CurrentSessionUser } from '../cookie-authentication/decorators/current-session-user.decorator';
 import { SessionUser } from '../cookie-authentication/dtos/session-user.dto';
-import { LoggedInGuard } from '../cookie-authentication/logged-in.guard';
-import { RoleGuard } from '../cookie-authentication/role.guard';
+import { LoggedInGuard } from '../token-authentication/logged-in.guard';
+import { RoleGuard } from '../token-authentication/role.guard';
 import { CreateUserInput } from './dtos/create-user.input';
 import { UpdateUserEmailInput } from './dtos/update-user-email.input';
 import { UpdateUserRoleInput } from './dtos/update-user-role.input';

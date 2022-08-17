@@ -9,8 +9,6 @@ import { LocalGuard } from './local.guard';
 import { TokenAuth } from './models/auth.model';
 import { TokenAuthenticationService } from './token-authentication.service';
 
-// TODO
-// authGuardの対応したらオペレーションネームを変更する
 @Resolver(() => TokenAuth)
 export class TokenAuthenticationResolver {
   constructor(private tokenAuthenticationService: TokenAuthenticationService) {}
@@ -22,7 +20,7 @@ export class TokenAuthenticationResolver {
       ログイン用オペレーション
     `,
   })
-  async tokenLogIn(
+  async logIn(
     @Args('data') input: TokenLogInInput,
     @CurrentAuthenticatedUser() authenticatedUser: UserWithRolesAndCredential,
   ) {
@@ -38,7 +36,7 @@ export class TokenAuthenticationResolver {
       ログアウト用オペレーション
     `,
   })
-  async tokenLogOut(@Args('data') input: TokenLogOutInput) {
+  async logOut(@Args('data') input: TokenLogOutInput) {
     const { refreshToken } = input;
     await this.tokenAuthenticationService.logOut(refreshToken);
 
