@@ -51,6 +51,14 @@ variable "next_public_graphql_endpoint" {
   type = string
 }
 
+variable "amplify_staging_basic_auth_username" {
+  type = string
+}
+
+variable "amplify_staging_basic_auth_password" {
+  type = string
+}
+
 # Networking ===========================
 # variable "vpc_cidr" {
 #   type = string

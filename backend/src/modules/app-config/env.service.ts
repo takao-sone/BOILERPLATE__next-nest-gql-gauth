@@ -20,6 +20,11 @@ interface EnvVariables {
   // Token
   ACCESS_TOKEN_SECRET: string;
   REFRESH_TOKEN_SECRET: string;
+  JWT_ISSUER: string;
+  JWT_AUDIENCE_WEB: string;
+  JWT_HASH_ALGORITHM: 'HS256' | 'HS512';
+  ACCESS_TOKEN_EXPIRES_IN: string;
+  REFRESH_TOKEN_EXPIRES_IN: string;
 }
 
 @Injectable()
@@ -72,6 +77,26 @@ export class EnvService {
 
   getRefreshTokenSecret() {
     return this.configService.get('REFRESH_TOKEN_SECRET', { infer: true });
+  }
+
+  getJwtIssuer() {
+    return this.configService.get('JWT_ISSUER', { infer: true });
+  }
+
+  getJwtAudienceWeb() {
+    return this.configService.get('JWT_AUDIENCE_WEB', { infer: true });
+  }
+
+  getJwtHashAlgorithm() {
+    return this.configService.get('JWT_HASH_ALGORITHM', { infer: true });
+  }
+
+  getAccessTokenExpiresIn() {
+    return this.configService.get('ACCESS_TOKEN_EXPIRES_IN', { infer: true });
+  }
+
+  getRefreshTokenExpiresIn() {
+    return this.configService.get('REFRESH_TOKEN_EXPIRES_IN', { infer: true });
   }
 
   isProduction() {
