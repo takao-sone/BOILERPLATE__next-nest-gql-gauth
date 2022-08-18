@@ -1,5 +1,13 @@
 import { plainToClass } from 'class-transformer';
-import { IsIn, IsNotEmpty, IsNumber, IsString, validateSync } from 'class-validator';
+import {
+  IsByteLength,
+  IsIn,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsUrl,
+  validateSync,
+} from 'class-validator';
 
 export const Env = {
   Production: 'production',
@@ -56,11 +64,33 @@ export class EnvValidator {
 
   @IsNotEmpty()
   @IsString()
+  @IsByteLength(32)
   ACCESS_TOKEN_SECRET!: string;
 
   @IsNotEmpty()
   @IsString()
+  @IsByteLength(32)
   REFRESH_TOKEN_SECRET!: string;
+
+  @IsNotEmpty()
+  @IsUrl()
+  JWT_ISSUER!: string;
+
+  @IsNotEmpty()
+  @IsUrl()
+  JWT_AUDIENCE!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  JWT_HASH_ALGORITHM!: 'HS256' | 'HS512';
+
+  @IsNotEmpty()
+  @IsString()
+  ACCESS_TOKEN_EXPIRES_IN!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  REFRESH_TOKEN_EXPIRES_IN!: string;
 }
 
 export const customValidate = (config: Record<string, unknown>) => {
