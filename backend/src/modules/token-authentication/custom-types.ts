@@ -8,7 +8,7 @@ type AppBaseTokenPayload = {
 // User Input Access Token Payload
 export type AppUserInputAccessTokenPayload = {
   iss: string;
-  aud: string;
+  aud: string[];
   sub: string;
   scope: string;
   roleNames: RoleName[];
@@ -17,7 +17,7 @@ export type AppUserInputAccessTokenPayload = {
 // User Input Refresh Token Payload
 export type AppUserInputRefreshTokenPayload = {
   iss: string;
-  aud: string;
+  aud: string[];
   sub: string;
 };
 

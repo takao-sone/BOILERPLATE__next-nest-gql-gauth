@@ -157,7 +157,7 @@ export class TokenAuthenticationService {
   private generateAccessToken(userDisplayedId: string, roles: Role[]): string {
     const payload: AppUserInputAccessTokenPayload = {
       iss: this.envService.getJwtIssuer(),
-      aud: this.envService.getJwtAudience(),
+      aud: [this.envService.getJwtAudienceWeb(), 'hoge'],
       sub: userDisplayedId,
       scope: roles.map((userRole) => userRole.name).join(' '),
       roleNames: roles.map((role) => role.name),
@@ -179,7 +179,7 @@ export class TokenAuthenticationService {
   private generateRefreshToken(userDisplayedId: string): string {
     const payload: AppUserInputRefreshTokenPayload = {
       iss: this.envService.getJwtIssuer(),
-      aud: this.envService.getJwtAudience(),
+      aud: [this.envService.getJwtAudienceWeb()],
       sub: userDisplayedId,
     };
     const jwtSignOptions: JwtSignOptions = {
@@ -244,7 +244,11 @@ export class TokenAuthenticationService {
   private verifyRefreshToken(verifiedRefreshToken: string): AppRefreshTokenPayload {
     try {
       return this.jwtService.verify<AppRefreshTokenPayload>(verifiedRefreshToken, {
+        algorithms: [this.envService.getJwtHashAlgorithm()],
+        issuer: this.envService.getJwtIssuer(),
+        audience: [this.envService.getJwtAudienceWeb()],
         secret: this.envService.getRefreshTokenSecret(),
+        ignoreExpiration: false,
       });
     } catch (err) {
       if (err instanceof Error) {

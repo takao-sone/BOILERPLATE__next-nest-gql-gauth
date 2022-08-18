@@ -78,7 +78,7 @@ export class EnvValidator {
 
   @IsNotEmpty()
   @IsUrl()
-  JWT_AUDIENCE!: string;
+  JWT_AUDIENCE_WEB!: string;
 
   @IsNotEmpty()
   @IsString()

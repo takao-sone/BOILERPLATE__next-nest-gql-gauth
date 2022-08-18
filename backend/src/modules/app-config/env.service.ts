@@ -21,7 +21,7 @@ interface EnvVariables {
   ACCESS_TOKEN_SECRET: string;
   REFRESH_TOKEN_SECRET: string;
   JWT_ISSUER: string;
-  JWT_AUDIENCE: string;
+  JWT_AUDIENCE_WEB: string;
   JWT_HASH_ALGORITHM: 'HS256' | 'HS512';
   ACCESS_TOKEN_EXPIRES_IN: string;
   REFRESH_TOKEN_EXPIRES_IN: string;
@@ -83,8 +83,8 @@ export class EnvService {
     return this.configService.get('JWT_ISSUER', { infer: true });
   }
 
-  getJwtAudience() {
-    return this.configService.get('JWT_AUDIENCE', { infer: true });
+  getJwtAudienceWeb() {
+    return this.configService.get('JWT_AUDIENCE_WEB', { infer: true });
   }
 
   getJwtHashAlgorithm() {
