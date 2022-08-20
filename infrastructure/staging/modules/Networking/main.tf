@@ -114,3 +114,36 @@ resource "aws_eip" "eip_public_nats" {
 
   depends_on = [aws_internet_gateway.igw]
 }
+
+# Security Group ==============================================
+resource "aws_security_group" "app_runner_vpc_connector_sg" {
+  vpc_id = aws_vpc.vpc.id
+  name   = "${local.resource_prefix}-apprunner-vpc-connector-sg"
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${local.resource_prefix}-apprunner-vpc-connector-sg"
+  }
+}
+
+resource "aws_security_group" "rds_sg" {
+  vpc_id = aws_vpc.vpc.id
+  name   = "${local.resource_prefix}-rds-sg"
+
+  ingress {
+    protocol        = "tcp"
+    from_port       = 3306
+    to_port         = 3306
+    security_groups = [aws_security_group.app_runner_vpc_connector_sg.id]
+  }
+
+  tags = {
+    Name = "${local.resource_prefix}-rds-sg"
+  }
+}
