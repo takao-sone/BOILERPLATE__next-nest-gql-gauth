@@ -19,6 +19,16 @@ module "resource_groups" {
   project_stg  = var.project_stg
 }
 
+module "networking" {
+  source                      = "./modules/Networking"
+  project_name                = var.project_name
+  project_stg                 = var.project_stg
+  vpc_cidr                    = var.vpc_cidr
+  public_subnet_general_cidrs = var.public_subnet_general_cidrs
+  private_subnet_rds_cidrs    = var.private_subnet_rds_cidrs
+  count_of_public_nats        = var.count_of_public_nats
+}
+
 module "amplify" {
   source                              = "./modules/Amplify"
   project_name                        = var.project_name

@@ -27,6 +27,6 @@ resource "aws_resourcegroups_group" "resource_group" {
   }
 
   tags = {
-    Name = "${var.project_name}-${var.project_stg}-resource-group"
+    Name = "${local.resource_prefix}-resource-group"
   }
 }

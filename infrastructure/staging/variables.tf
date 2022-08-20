@@ -60,21 +60,21 @@ variable "amplify_staging_basic_auth_password" {
 }
 
 # Networking ===========================
-# variable "vpc_cidr" {
-#   type = string
-# }
+variable "vpc_cidr" {
+  type = string
+}
 
-# variable "public_subnet_cidrs" {
-#   type = list(string)
-# }
+variable "public_subnet_general_cidrs" {
+  type = list(string)
+}
 
-# variable "private_subnet_container_cidrs" {
-#   type = list(string)
-# }
+variable "private_subnet_rds_cidrs" {
+  type = list(string)
+}
 
-# variable "private_subnet_db_cidrs" {
-#   type = list(string)
-# }
+variable "count_of_public_nats" {
+  type = number
+}
 
 # variable "private_subnet_redis_cidrs" {
 #   type = list(string)
