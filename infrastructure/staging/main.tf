@@ -29,6 +29,19 @@ module "networking" {
   count_of_public_nats        = var.count_of_public_nats
 }
 
+module "rds" {
+  source                              = "./modules/RDS"
+  project_name                        = var.project_name
+  project_stg                         = var.project_stg
+  rds_subnet_group_subnet_ids         = module.networking.rds_subnet_group_subnet_ids
+  rds_security_group_ids              = module.networking.rds_security_group_ids
+  rds_vpc_connector_sg_id             = module.networking.rds_vpc_connector_sg_id
+  rds_cluster_parameter_group_name    = var.rds_cluster_parameter_group_name
+  rds_enabled_cloudwatch_logs_exports = var.rds_enabled_cloudwatch_logs_exports
+  rds_master_username                 = var.rds_master_username
+  rds_master_password                 = var.rds_master_password
+}
+
 module "amplify" {
   source                              = "./modules/Amplify"
   project_name                        = var.project_name

@@ -76,28 +76,19 @@ variable "count_of_public_nats" {
   type = number
 }
 
-# variable "private_subnet_redis_cidrs" {
-#   type = list(string)
-# }
+# RDS ===========================
+variable "rds_cluster_parameter_group_name" {
+  type = string
+}
 
-# variable "private_subnet_endpoint_cidrs" {
-#   type = list(string)
-# }
+variable "rds_enabled_cloudwatch_logs_exports" {
+  type = list(string)
+}
 
-# DB ===========================
-# variable "rds_master_username" {
-#   type = string
-# }
+variable "rds_master_username" {
+  type = string
+}
 
-# variable "rds_master_password" {
-#   type = string
-# }
-
-# Deploy
-# variable "github_account_name" {
-#   type = string
-# }
-
-# variable "github_repository_name" {
-#   type = string
-# }
+variable "rds_master_password" {
+  type = string
+}

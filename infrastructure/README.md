@@ -18,6 +18,21 @@ terraform apply
 2. 作成したappにアクセス
 3. `Run Build` をクリックしてデプロイ
 
+### Import
+
+```shell
+# import a resource into module
+terraform import module.rds.aws_rds_cluster.rds_cluster boilerplate-staging-rds-cluster
+# show tfstate
+terraform state show module.rds.aws_rds_cluster.rds_cluster
+# delete {Error: Value for unconfigurable attribute} values
+terraform plan -target=module.rds.aws_rds_cluster.rds_cluster
+# validation
+terraform validate
+# check plan
+terraform plan -target=module.rds.aws_rds_cluster.rds_cluster
+```
+
 ### Main Resources
 
 #### Other

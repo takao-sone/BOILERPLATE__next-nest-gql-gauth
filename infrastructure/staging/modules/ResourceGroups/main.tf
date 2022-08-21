@@ -1,5 +1,5 @@
 resource "aws_resourcegroups_group" "resource_group" {
-  name = "${var.project_name}-resource-group"
+  name = "${local.resource_prefix}-resource-group"
 
   resource_query {
     query = jsonencode(
