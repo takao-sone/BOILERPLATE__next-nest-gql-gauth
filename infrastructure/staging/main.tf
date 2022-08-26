@@ -29,6 +29,12 @@ module "networking" {
   count_of_public_nats        = var.count_of_public_nats
 }
 
+module "ecs" {
+  source       = "./modules/ECS"
+  project_name = var.project_name
+  project_stg  = var.project_stg
+}
+
 module "rds" {
   source                              = "./modules/RDS"
   project_name                        = var.project_name
@@ -40,6 +46,12 @@ module "rds" {
   rds_enabled_cloudwatch_logs_exports = var.rds_enabled_cloudwatch_logs_exports
   rds_master_username                 = var.rds_master_username
   rds_master_password                 = var.rds_master_password
+}
+
+module "apprunner" {
+  source       = "./modules/AppRunner"
+  project_name = var.project_name
+  project_stg  = var.project_stg
 }
 
 module "amplify" {

@@ -74,7 +74,7 @@ resource "aws_route_table" "public_nat_rts" {
   }
 }
 
-resource "aws_route_table_association" "private_subnet_rdb_rt_association" {
+resource "aws_route_table_association" "private_subnet_rds_rt_association" {
   count          = length(aws_subnet.private_subnets_rds)
   route_table_id = aws_route_table.public_nat_rts[count.index].id
   subnet_id      = aws_subnet.private_subnets_rds[count.index].id
