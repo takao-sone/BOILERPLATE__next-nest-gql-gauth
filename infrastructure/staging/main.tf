@@ -49,9 +49,31 @@ module "rds" {
 }
 
 module "apprunner" {
-  source       = "./modules/AppRunner"
-  project_name = var.project_name
-  project_stg  = var.project_stg
+  source                             = "./modules/AppRunner"
+  project_name                       = var.project_name
+  project_stg                        = var.project_stg
+  ar_vpc_connector_sg_ids            = [module.networking.app_runner_vpc_connector_sg_id]
+  ar_vpc_connector_target_subnet_ids = module.networking.app_runner_vpc_connector_target_subnet_ids
+  ar_observability_enabled           = var.ar_observability_enabled
+  # AppRunner App Env Variables ===========================
+  ecr_repository_url_apprunner = module.ecs.ecr_repository_url_apprunner
+  ar_node_env                  = var.ar_node_env
+  ar_app_env                   = var.ar_app_env
+  ar_access_token_expires_in   = var.ar_access_token_expires_in
+  ar_access_token_secret       = var.ar_access_token_secret
+  ar_app_host                  = var.ar_app_host
+  ar_app_port                  = var.ar_app_port
+  ar_database_url              = var.ar_database_url
+  ar_jwt_audience_web          = var.ar_jwt_audience_web
+  ar_jwt_hash_algorithm        = var.ar_jwt_hash_algorithm
+  ar_jwt_issuer                = var.ar_jwt_issuer
+  ar_redis_host                = var.ar_redis_host
+  ar_redis_port                = var.ar_redis_port
+  ar_refresh_token_expires_in  = var.ar_refresh_token_expires_in
+  ar_refresh_token_secret      = var.ar_refresh_token_secret
+  ar_session_max_age           = var.ar_session_max_age
+  ar_session_name              = var.ar_session_name
+  ar_session_secret            = var.ar_session_secret
 }
 
 module "amplify" {

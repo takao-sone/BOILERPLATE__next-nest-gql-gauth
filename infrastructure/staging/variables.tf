@@ -34,6 +34,23 @@ variable "github_access_token_amplify" {
   type = string
 }
 
+# Networking ===========================
+variable "vpc_cidr" {
+  type = string
+}
+
+variable "public_subnet_general_cidrs" {
+  type = list(string)
+}
+
+variable "private_subnet_rds_cidrs" {
+  type = list(string)
+}
+
+variable "count_of_public_nats" {
+  type = number
+}
+
 # Amplify ===========================
 variable "amplify_domain_name" {
   type = string
@@ -59,21 +76,78 @@ variable "amplify_staging_basic_auth_password" {
   type = string
 }
 
-# Networking ===========================
-variable "vpc_cidr" {
+# AppRunner ===========================
+variable "ar_observability_enabled" {
+  type = bool
+}
+
+# AppRunner App Env Variables ===========================
+variable "ar_access_token_expires_in" {
   type = string
 }
 
-variable "public_subnet_general_cidrs" {
-  type = list(string)
+variable "ar_access_token_secret" {
+  type = string
 }
 
-variable "private_subnet_rds_cidrs" {
-  type = list(string)
+variable "ar_app_env" {
+  type = string
 }
 
-variable "count_of_public_nats" {
-  type = number
+variable "ar_app_host" {
+  type = string
+}
+
+variable "ar_app_port" {
+  type = string
+}
+
+variable "ar_database_url" {
+  type = string
+}
+
+variable "ar_jwt_audience_web" {
+  type = string
+}
+
+variable "ar_jwt_hash_algorithm" {
+  type = string
+}
+
+variable "ar_jwt_issuer" {
+  type = string
+}
+
+variable "ar_node_env" {
+  type = string
+}
+
+variable "ar_redis_host" {
+  type = string
+}
+
+variable "ar_redis_port" {
+  type = string
+}
+
+variable "ar_refresh_token_expires_in" {
+  type = string
+}
+
+variable "ar_refresh_token_secret" {
+  type = string
+}
+
+variable "ar_session_max_age" {
+  type = string
+}
+
+variable "ar_session_name" {
+  type = string
+}
+
+variable "ar_session_secret" {
+  type = string
 }
 
 # RDS ===========================
@@ -92,3 +166,4 @@ variable "rds_master_username" {
 variable "rds_master_password" {
   type = string
 }
+
