@@ -64,10 +64,6 @@ resource "aws_apprunner_service" "app" {
     }
   }
 
-  lifecycle {
-    ignore_changes = [instance_configuration, observability_configuration]
-  }
-
   tags = {
     "Name" = "${local.resource_prefix}-apprunner-service"
   }
