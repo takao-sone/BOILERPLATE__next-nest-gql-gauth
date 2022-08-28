@@ -52,6 +52,7 @@ module "apprunner" {
   source                             = "./modules/AppRunner"
   project_name                       = var.project_name
   project_stg                        = var.project_stg
+  ar_domain_name                     = var.ar_domain_name
   ar_vpc_connector_sg_ids            = [module.networking.app_runner_vpc_connector_sg_id]
   ar_vpc_connector_target_subnet_ids = module.networking.app_runner_vpc_connector_target_subnet_ids
   ar_observability_enabled           = var.ar_observability_enabled

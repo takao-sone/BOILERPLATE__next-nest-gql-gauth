@@ -81,6 +81,10 @@ variable "ar_observability_enabled" {
   type = bool
 }
 
+variable "ar_domain_name" {
+  type = string
+}
+
 # AppRunner App Env Variables ===========================
 variable "ar_access_token_expires_in" {
   type = string

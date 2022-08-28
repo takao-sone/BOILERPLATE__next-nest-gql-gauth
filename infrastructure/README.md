@@ -9,7 +9,10 @@ cd infrastructure/{environment}
 touch terraform.tfvars # tfvarsの各項目入力
 terraform init
 terraform get
+# module 'apprunner' をコメントアウト
 terraform plan
+terraform apply
+# module.apprunner.aws_route53_record.api & module.apprunner.aws_route53_record.certificate_validations をコメントアウト
 terraform apply
 ```
 

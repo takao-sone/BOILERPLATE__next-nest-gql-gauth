@@ -69,6 +69,35 @@ resource "aws_apprunner_service" "app" {
   }
 }
 
+resource "aws_apprunner_custom_domain_association" "api" {
+  service_arn          = aws_apprunner_service.app.arn
+  domain_name          = "api.${data.aws_route53_zone.apprunner_domain.name}"
+  enable_www_subdomain = false
+}
+
+resource "aws_route53_record" "api" {
+  zone_id = data.aws_route53_zone.apprunner_domain.zone_id
+  name    = aws_apprunner_custom_domain_association.api.domain_name
+  type    = "CNAME"
+  ttl     = 5
+  records = [aws_apprunner_custom_domain_association.api.dns_target]
+}
+
+resource "aws_route53_record" "certificate_validations" {
+  for_each = {
+    for record in aws_apprunner_custom_domain_association.api.certificate_validation_records : record.name => {
+      name   = record.name
+      record = record.value
+    }
+  }
+
+  zone_id = data.aws_route53_zone.apprunner_domain.zone_id
+  name    = each.value.name
+  type    = "CNAME"
+  ttl     = 5
+  records = [each.value.record]
+}
+
 resource "aws_apprunner_observability_configuration" "app" {
   observability_configuration_name = "${local.resource_prefix}-obs-config"
 
@@ -104,6 +133,19 @@ resource "aws_iam_role" "apprunner_ecr_access" {
   }
 }
 
+resource "aws_iam_role" "apprunner_instance" {
+  name               = "${local.resource_prefix}-apprunner-instance"
+  path               = "/"
+  assume_role_policy = data.aws_iam_policy_document.apprunner_instance.json
+  managed_policy_arns = [
+    "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess"
+  ]
+
+  tags = {
+    "Name" = "${local.resource_prefix}-apprunner-instance"
+  }
+}
+
 data "aws_iam_policy_document" "apprunner_ecr_access" {
   statement {
     actions = [
@@ -116,19 +158,6 @@ data "aws_iam_policy_document" "apprunner_ecr_access" {
         "build.apprunner.amazonaws.com"
       ]
     }
-  }
-}
-
-resource "aws_iam_role" "apprunner_instance" {
-  name               = "${local.resource_prefix}-apprunner-instance"
-  path               = "/"
-  assume_role_policy = data.aws_iam_policy_document.apprunner_instance.json
-  managed_policy_arns = [
-    "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess"
-  ]
-
-  tags = {
-    "Name" = "${local.resource_prefix}-apprunner-instance"
   }
 }
 
@@ -145,4 +174,8 @@ data "aws_iam_policy_document" "apprunner_instance" {
       ]
     }
   }
+}
+
+data "aws_route53_zone" "apprunner_domain" {
+  name = var.ar_domain_name
 }

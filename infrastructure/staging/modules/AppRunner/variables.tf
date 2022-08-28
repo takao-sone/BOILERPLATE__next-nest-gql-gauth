@@ -14,6 +14,10 @@ variable "ecr_repository_url_apprunner" {
   type = string
 }
 
+variable "ar_domain_name" {
+  type = string
+}
+
 variable "ar_vpc_connector_sg_ids" {
   type = list(string)
 }
