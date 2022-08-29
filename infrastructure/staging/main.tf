@@ -19,6 +19,9 @@ module "resource_groups" {
   project_stg  = var.project_stg
 }
 
+# MEMO:
+# デフォルトではVPCはインターネットアクセスを許可してない
+# NAT等を有効にしたい場合はモジュール内のコメントアウトしたリソースをコメントインすること
 module "networking" {
   source                      = "./modules/Networking"
   project_name                = var.project_name
