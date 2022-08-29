@@ -48,6 +48,7 @@ resource "aws_apprunner_service" "app" {
           "ACCESS_TOKEN_SECRET"      = var.ar_access_token_secret
           "APP_HOST"                 = var.ar_app_host
           "APP_PORT"                 = var.ar_app_port
+          "APP_FRONTEND_ORIGIN"      = var.ar_app_frontend_origin
           "DATABASE_URL"             = var.ar_database_url
           "JWT_AUDIENCE_WEB"         = var.ar_jwt_audience_web
           "JWT_HASH_ALGORITHM"       = var.ar_jwt_hash_algorithm

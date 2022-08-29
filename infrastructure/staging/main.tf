@@ -64,6 +64,7 @@ module "apprunner" {
   ar_access_token_secret       = var.ar_access_token_secret
   ar_app_host                  = var.ar_app_host
   ar_app_port                  = var.ar_app_port
+  ar_app_frontend_origin       = var.ar_app_frontend_origin
   ar_database_url              = var.ar_database_url
   ar_jwt_audience_web          = var.ar_jwt_audience_web
   ar_jwt_hash_algorithm        = var.ar_jwt_hash_algorithm

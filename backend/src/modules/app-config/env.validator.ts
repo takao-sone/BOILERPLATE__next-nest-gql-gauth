@@ -35,8 +35,8 @@ export class EnvValidator {
   APP_PORT!: number;
 
   @IsNotEmpty()
-  @IsNumber()
-  APP_FRONTEND_PORT!: number;
+  @IsString()
+  APP_FRONTEND_ORIGIN!: string;
 
   @IsNotEmpty()
   @IsString()

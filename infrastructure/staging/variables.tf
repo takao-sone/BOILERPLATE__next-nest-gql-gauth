@@ -106,6 +106,10 @@ variable "ar_app_port" {
   type = string
 }
 
+variable "ar_app_frontend_origin" {
+  type = string
+}
+
 variable "ar_database_url" {
   type = string
 }
