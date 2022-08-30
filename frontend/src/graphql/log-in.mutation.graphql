@@ -1,16 +1,6 @@
-mutation LogIn($data: LogInInput!) {
+mutation LogIn($data: TokenLogInInput!) {
   logIn(data: $data) {
-    authenticatedUser {
-      createdAt
-      displayedId
-      updatedAt
-      userCredential {
-        email
-      }
-      userRole {
-        name
-        displayedId
-      }
-    }
+    accessToken
+    refreshToken
   }
 }
