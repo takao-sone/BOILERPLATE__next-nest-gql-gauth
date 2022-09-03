@@ -1,3 +1,12 @@
+# SetUp ===========================
+variable "STEP_2" {
+  type = bool
+}
+
+variable "STEP_3" {
+  type = bool
+}
+
 # Base ========================
 variable "project_name" {
   type = string
@@ -107,10 +116,6 @@ variable "ar_app_port" {
 }
 
 variable "ar_app_frontend_origin" {
-  type = string
-}
-
-variable "ar_database_url" {
   type = string
 }
 

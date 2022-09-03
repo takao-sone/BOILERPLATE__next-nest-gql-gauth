@@ -49,7 +49,7 @@ resource "aws_apprunner_service" "app" {
           "APP_HOST"                 = var.ar_app_host
           "APP_PORT"                 = var.ar_app_port
           "APP_FRONTEND_ORIGIN"      = var.ar_app_frontend_origin
-          "DATABASE_URL"             = var.ar_database_url
+          "DATABASE_URL"             = local.database_url
           "JWT_AUDIENCE_WEB"         = var.ar_jwt_audience_web
           "JWT_HASH_ALGORITHM"       = var.ar_jwt_hash_algorithm
           "JWT_ISSUER"               = var.ar_jwt_issuer
@@ -65,9 +65,22 @@ resource "aws_apprunner_service" "app" {
     }
   }
 
+  depends_on = [
+    time_sleep.aws_iam_roles
+  ]
+
   tags = {
     "Name" = "${local.resource_prefix}-apprunner-service"
   }
+}
+
+resource "time_sleep" "aws_iam_roles" {
+  depends_on = [
+    aws_iam_role.apprunner_ecr_access,
+    aws_iam_role.apprunner_instance
+  ]
+
+  create_duration = "20s"
 }
 
 resource "aws_apprunner_custom_domain_association" "api" {
@@ -77,6 +90,8 @@ resource "aws_apprunner_custom_domain_association" "api" {
 }
 
 resource "aws_route53_record" "api" {
+  count = var.STEP_3 ? 1 : 0
+
   zone_id = data.aws_route53_zone.apprunner_domain.zone_id
   name    = aws_apprunner_custom_domain_association.api.domain_name
   type    = "CNAME"
@@ -85,12 +100,12 @@ resource "aws_route53_record" "api" {
 }
 
 resource "aws_route53_record" "certificate_validations" {
-  for_each = {
+  for_each = var.STEP_3 ? {
     for record in aws_apprunner_custom_domain_association.api.certificate_validation_records : record.name => {
       name   = record.name
       record = record.value
     }
-  }
+  } : {}
 
   zone_id = data.aws_route53_zone.apprunner_domain.zone_id
   name    = each.value.name

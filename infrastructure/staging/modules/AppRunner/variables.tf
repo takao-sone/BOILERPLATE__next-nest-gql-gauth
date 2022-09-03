@@ -1,3 +1,8 @@
+# SetUp ===========================
+variable "STEP_3" {
+  type = bool
+}
+
 # Base ========================
 variable "project_name" {
   type = string
@@ -6,8 +11,6 @@ variable "project_name" {
 variable "project_stg" {
   type = string
 }
-
-# Github ===========================
 
 # AppRunner ===========================
 variable "ecr_repository_url_apprunner" {
@@ -55,10 +58,6 @@ variable "ar_app_frontend_origin" {
   type = string
 }
 
-variable "ar_database_url" {
-  type = string
-}
-
 variable "ar_jwt_audience_web" {
   type = string
 }
@@ -103,7 +102,27 @@ variable "ar_session_secret" {
   type = string
 }
 
+variable "ar_rds_writer_instance_endpoint" {
+  type = string
+}
+
+variable "ar_rds_database_name" {
+  type = string
+}
+
+variable "ar_rds_master_username" {
+  type = string
+}
+
+variable "ar_rds_master_password" {
+  type = string
+}
+
 # locals ===========================
 locals {
   resource_prefix = "${var.project_name}-${var.project_stg}"
+}
+
+locals {
+  database_url = "mysql://${var.ar_rds_master_username}:${var.ar_rds_master_password}@${var.ar_rds_writer_instance_endpoint}/${var.ar_rds_database_name}"
 }

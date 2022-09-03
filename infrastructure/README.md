@@ -6,13 +6,21 @@
 
 ```shell
 cd infrastructure/{environment}
-touch terraform.tfvars # tfvarsの各項目入力
+cp terraform.tfvars.example terraform.tfvars # tfvarsの各項目入力
 terraform init
 terraform get
-# module 'apprunner' をコメントアウト
+# tfvarsの置き換え => repository, branch_name, example.com, github_accesstokenなど
+# STEP_1: STEP_2 = false, STEP_3 = false
 terraform plan
 terraform apply
-# module.apprunner.aws_route53_record.api & module.apprunner.aws_route53_record.certificate_validations をコメントアウト
+# Docker Image Build
+docker build . -t apprunner -f Dockerfile.apprunner
+docker tag apprunner:latest 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-apprunner
+aws ecr get-login-password --profile serialize | docker login --username AWS --password-stdin 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com
+docker push 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-apprunner
+# STEP_2: STEP_2 = true, STEP_3 = false
+terraform apply
+# STEP_3: STEP_2 = true, STEP_3 = true
 terraform apply
 ```
 

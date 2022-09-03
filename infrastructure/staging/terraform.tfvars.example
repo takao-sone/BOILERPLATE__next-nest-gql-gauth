@@ -1,32 +1,63 @@
+# SetUp ===========================
+STEP_2 = false
+STEP_3 = false
+
 # Base ===========================
 project_name = "boilerplate" // Lower case
-project_stg  = "dev"
-aws_profile  = "serialize"
+project_stg  = "staging"
+aws_profile  = "default"
 aws_region   = "ap-northeast-1"
 
 # Networking ===========================
-vpc_cidr                       = "10.0.0.0/16"
-# public_subnet_cidrs            = ["10.0.0.0/24", "10.0.1.0/24"]
-# private_subnet_container_cidrs = ["10.0.8.0/24", "10.0.9.0/24"]
+vpc_cidr                    = "10.0.0.0/16"
+public_subnet_general_cidrs = ["10.0.0.0/24", "10.0.1.0/24"]
+private_subnet_rds_cidrs    = ["10.0.8.0/24", "10.0.9.0/24"]
+count_of_public_nats        = 0
 # private_subnet_db_cidrs        = ["10.0.16.0/24", "10.0.17.0/24"]
 # private_subnet_redis_cidrs     = ["10.0.24.0/24", "10.0.25.0/24"]
 # private_subnet_endpoint_cidrs  = ["10.0.248.0/24", "10.0.249.0/24"]
 
 # DB ===========================
-# rds_master_username = "username"
-# rds_master_password = "password"
+rds_cluster_parameter_group_name    = "default.aurora-mysql8.0"
+rds_enabled_cloudwatch_logs_exports = ["audit", "error", "slowquery"]
+rds_master_username                 = "admin"
+rds_master_password                 = "password"
 
 # Github ===========================
-github_account_name    = "takao-sone"
-github_repository_name = "BOILERPLATE__next-nest-gql-gauth"
-github_access_token_amplify    = "Githubで発行したアクセストークン"
+github_account_name            = "takao-sone"
+github_repository_name_amplify = "BOILERPLATE__next-nest-gql-gauth"
+github_access_token_amplify    = "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" // Scope: 'admin:repo_hook'
 
 # Amplify ===========================
-amplify_github_branch_name_dev = "develop"
-amplify_domain_name            = ""
+amplify_github_branch_name_dev      = "feature/terraform-app-runner"
+amplify_domain_name                 = "example.com"
+amplify_staging_basic_auth_username = "username"
+amplify_staging_basic_auth_password = "password"
 # App Environment Variables
 next_public_app_env          = "development"
-next_public_graphql_endpoint = ""
+next_public_graphql_endpoint = "https://api.example.com/graphql"
+
+# AppRunner ===========================
+ar_observability_enabled = false
+ar_domain_name           = "example.com"
+# AppRunner App Env Variables ===========================
+ar_access_token_expires_in  = "30m"
+ar_access_token_secret      = "0123456789012345678901234567890123456789"
+ar_app_env                  = "development"
+ar_app_host                 = "0.0.0.0"
+ar_app_port                 = "23000"
+ar_app_frontend_origin      = "https://example.com"
+ar_jwt_audience_web         = "http://0.0.0.0:23000/graphql"
+ar_jwt_hash_algorithm       = "HS256"
+ar_jwt_issuer               = "http://0.0.0.0:23000/"
+ar_node_env                 = "development"
+ar_redis_host               = "boilerplate-redis"
+ar_redis_port               = "6379"
+ar_refresh_token_expires_in = "7d"
+ar_refresh_token_secret     = "01234567890123456789012345678901234567890"
+ar_session_max_age          = "432000000"
+ar_session_name             = "app.sid"
+ar_session_secret           = "5m1dHJmicq9MfwpD6rra"
 
 # Environmental Variables ===========================
 # ssm_param_app_bound_address       = "0.0.0.0:80"
@@ -35,6 +66,6 @@ next_public_graphql_endpoint = ""
 # ssm_param_app_valid_referer_value = "http://localhost:8080/"
 # ssm_param_app_database_url        = "postgres://username:password@localhost:5432/boilerplate"
 # ssm_param_app_redis_address_port  = "0.0.0.0:6379"
-# ssm_param_app_redis_private_key   = "Z7dkH8DaEjV9JbP!cBrxsi7YURebNXyRsjGw.*YRBDKXqb*p6hY*toxCfG!t3KdPZ*Uhj-gWLJNvGx2Ns.AGHKyUZ46uxRAXK6nD"
+# ssm_param_app_redis_private_key   = "Z7dkH8DaEjV9JbP!cBrxsi7YURebNXyRsjGw.*YRBDKXqb*p6hY*toxCfG!t3KdPZ*Uhj-gWLJNvGx2Ns.AGHKyUZ46uxRAXK8nD"
 # ssm_param_app_rust_log            = "debug"
 # ssm_param_app_rust_backtrace      = "1"
