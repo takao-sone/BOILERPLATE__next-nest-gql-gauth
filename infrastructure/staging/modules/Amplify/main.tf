@@ -13,7 +13,7 @@ resource "aws_amplify_app" "frontend" {
   }
 
   tags = {
-    Name = "${var.project_name}-${var.project_stg}-amplify-app"
+    Name = "${local.resource_prefix}-amplify-app"
   }
 }
 
@@ -30,7 +30,7 @@ resource "aws_amplify_branch" "develop" {
   }
 
   tags = {
-    Name = "${var.project_name}-${var.project_stg}-amplify-branch"
+    Name = "${local.resource_prefix}-amplify-branch"
   }
 }
 

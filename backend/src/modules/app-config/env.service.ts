@@ -8,6 +8,7 @@ interface EnvVariables {
   // APP
   APP_HOST: string;
   APP_PORT: number;
+  APP_FRONTEND_ORIGIN: string;
   APP_FRONTEND_PORT: number;
   // Redis
   REDIS_HOST: string;
@@ -47,8 +48,8 @@ export class EnvService {
     return this.configService.get('APP_PORT', { infer: true });
   }
 
-  getAppFrontendPort() {
-    return this.configService.get('APP_FRONTEND_PORT', { infer: true });
+  getAppFrontendOrigin() {
+    return this.configService.get('APP_FRONTEND_ORIGIN', { infer: true });
   }
 
   getRedisHost() {

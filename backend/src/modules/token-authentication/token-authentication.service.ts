@@ -157,7 +157,7 @@ export class TokenAuthenticationService {
   private generateAccessToken(userDisplayedId: string, roles: Role[]): string {
     const payload: AppUserInputAccessTokenPayload = {
       iss: this.envService.getJwtIssuer(),
-      aud: [this.envService.getJwtAudienceWeb(), 'hoge'],
+      aud: [this.envService.getJwtAudienceWeb()],
       sub: userDisplayedId,
       scope: roles.map((userRole) => userRole.name).join(' '),
       roleNames: roles.map((role) => role.name),

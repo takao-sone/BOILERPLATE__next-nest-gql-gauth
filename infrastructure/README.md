@@ -6,10 +6,21 @@
 
 ```shell
 cd infrastructure/{environment}
-touch terraform.tfvars # tfvarsの各項目入力
+cp terraform.tfvars.example terraform.tfvars # tfvarsの各項目入力
 terraform init
 terraform get
+# tfvarsの置き換え => repository, branch_name, example.com, github_accesstokenなど
+# STEP_1: STEP_2 = false, STEP_3 = false
 terraform plan
+terraform apply
+# Docker Image Build
+docker build . -t apprunner -f Dockerfile.apprunner
+docker tag apprunner:latest 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-apprunner
+aws ecr get-login-password --profile serialize | docker login --username AWS --password-stdin 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com
+docker push 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-apprunner
+# STEP_2: STEP_2 = true, STEP_3 = false
+terraform apply
+# STEP_3: STEP_2 = true, STEP_3 = true
 terraform apply
 ```
 
@@ -17,6 +28,21 @@ terraform apply
 1. AWSコンソールのAmplifyへアクセス
 2. 作成したappにアクセス
 3. `Run Build` をクリックしてデプロイ
+
+### Import
+
+```shell
+# import a resource into module
+terraform import module.rds.aws_rds_cluster.rds_cluster boilerplate-staging-rds-cluster
+# show tfstate
+terraform state show module.rds.aws_rds_cluster.rds_cluster
+# delete {Error: Value for unconfigurable attribute} values
+terraform plan -target=module.rds.aws_rds_cluster.rds_cluster
+# validation
+terraform validate
+# check plan
+terraform plan -target=module.rds.aws_rds_cluster.rds_cluster
+```
 
 ### Main Resources
 

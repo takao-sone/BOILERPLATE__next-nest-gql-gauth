@@ -45,3 +45,8 @@ variable "next_public_app_env" {
 variable "next_public_graphql_endpoint" {
   type = string
 }
+
+# locals ===========================
+locals {
+  resource_prefix = "${var.project_name}-${var.project_stg}"
+}

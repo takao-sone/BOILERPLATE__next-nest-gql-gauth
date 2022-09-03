@@ -1,3 +1,12 @@
+# SetUp ===========================
+variable "STEP_2" {
+  type = bool
+}
+
+variable "STEP_3" {
+  type = bool
+}
+
 # Base ========================
 variable "project_name" {
   type = string
@@ -34,6 +43,23 @@ variable "github_access_token_amplify" {
   type = string
 }
 
+# Networking ===========================
+variable "vpc_cidr" {
+  type = string
+}
+
+variable "public_subnet_general_cidrs" {
+  type = list(string)
+}
+
+variable "private_subnet_rds_cidrs" {
+  type = list(string)
+}
+
+variable "count_of_public_nats" {
+  type = number
+}
+
 # Amplify ===========================
 variable "amplify_domain_name" {
   type = string
@@ -59,45 +85,98 @@ variable "amplify_staging_basic_auth_password" {
   type = string
 }
 
-# Networking ===========================
-# variable "vpc_cidr" {
-#   type = string
-# }
+# AppRunner ===========================
+variable "ar_observability_enabled" {
+  type = bool
+}
 
-# variable "public_subnet_cidrs" {
-#   type = list(string)
-# }
+variable "ar_domain_name" {
+  type = string
+}
 
-# variable "private_subnet_container_cidrs" {
-#   type = list(string)
-# }
+# AppRunner App Env Variables ===========================
+variable "ar_access_token_expires_in" {
+  type = string
+}
 
-# variable "private_subnet_db_cidrs" {
-#   type = list(string)
-# }
+variable "ar_access_token_secret" {
+  type = string
+}
 
-# variable "private_subnet_redis_cidrs" {
-#   type = list(string)
-# }
+variable "ar_app_env" {
+  type = string
+}
 
-# variable "private_subnet_endpoint_cidrs" {
-#   type = list(string)
-# }
+variable "ar_app_host" {
+  type = string
+}
 
-# DB ===========================
-# variable "rds_master_username" {
-#   type = string
-# }
+variable "ar_app_port" {
+  type = string
+}
 
-# variable "rds_master_password" {
-#   type = string
-# }
+variable "ar_app_frontend_origin" {
+  type = string
+}
 
-# Deploy
-# variable "github_account_name" {
-#   type = string
-# }
+variable "ar_jwt_audience_web" {
+  type = string
+}
 
-# variable "github_repository_name" {
-#   type = string
-# }
+variable "ar_jwt_hash_algorithm" {
+  type = string
+}
+
+variable "ar_jwt_issuer" {
+  type = string
+}
+
+variable "ar_node_env" {
+  type = string
+}
+
+variable "ar_redis_host" {
+  type = string
+}
+
+variable "ar_redis_port" {
+  type = string
+}
+
+variable "ar_refresh_token_expires_in" {
+  type = string
+}
+
+variable "ar_refresh_token_secret" {
+  type = string
+}
+
+variable "ar_session_max_age" {
+  type = string
+}
+
+variable "ar_session_name" {
+  type = string
+}
+
+variable "ar_session_secret" {
+  type = string
+}
+
+# RDS ===========================
+variable "rds_cluster_parameter_group_name" {
+  type = string
+}
+
+variable "rds_enabled_cloudwatch_logs_exports" {
+  type = list(string)
+}
+
+variable "rds_master_username" {
+  type = string
+}
+
+variable "rds_master_password" {
+  type = string
+}
+
