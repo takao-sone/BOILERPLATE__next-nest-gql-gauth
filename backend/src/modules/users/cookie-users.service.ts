@@ -25,7 +25,7 @@ import { SessionService } from '../session/session.service';
 import { UserCredential } from './models/user-credential.model';
 
 @Injectable()
-export class UsersService {
+export class CookieUsersService {
   private ENCRYPTION_SALT_ROUNDS = 10;
 
   constructor(private prismaService: PrismaService, private sessionService: SessionService) {}
