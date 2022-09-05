@@ -15,7 +15,7 @@ registerEnumType(RoleSortField, {
 export class RoleSortInput extends SortInput {
   @Field(() => RoleSortField, {
     nullable: true,
-    description: 'ユーザー取得する際にソート対象にしたいフィールド',
+    description: 'ロール取得する際にソート対象にしたいフィールド',
   })
   field: RoleSortField = RoleSortField.ID;
 }
