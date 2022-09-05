@@ -1,10 +1,15 @@
 import { Module } from '@nestjs/common';
-import { SessionModule } from '../session/session.module';
+import { TokenUsersService } from './token-users.service';
 import { UsersResolver } from './users.resolver';
-import { UsersService } from './users.service';
 
 @Module({
-  imports: [SessionModule],
-  providers: [UsersService, UsersResolver],
+  // MEMO: cookie認証
+  // imports: [SessionModule],
+  providers: [
+    UsersResolver,
+    TokenUsersService,
+    // MEMO: cookie認証
+    // CookieUsersService,
+  ],
 })
 export class UsersModule {}
