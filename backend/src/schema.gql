@@ -127,7 +127,7 @@ input RoleSortInput {
   """ソートする方向"""
   direction: SortDirection = ASC
 
-  """ユーザー取得する際にソート対象にしたいフィールド"""
+  """ロール取得する際にソート対象にしたいフィールド"""
   field: RoleSortField = ID
 }
 

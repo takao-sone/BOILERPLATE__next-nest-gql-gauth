@@ -20,14 +20,13 @@ import { isUserWithRolesAndCredential } from '../prisma/custom-type-guards';
 import { UserWithRolesAndNullableCredential } from '../prisma/custom-types';
 import { PrismaService } from '../prisma/prisma.service';
 import { Role } from '../roles/models/role.model';
-import { SessionService } from '../session/session.service';
 import { UserCredential } from './models/user-credential.model';
 
 @Injectable()
 export class TokenUsersService {
   private ENCRYPTION_SALT_ROUNDS = 10;
 
-  constructor(private prismaService: PrismaService, private sessionService: SessionService) {}
+  constructor(private prismaService: PrismaService) {}
 
   /**
    * 新規ユーザーの作成
