@@ -74,10 +74,10 @@ input PaginationInput {
 
 type Query {
   "\n      権限: ADMIN \n\n      ページネーションによりロールを取得するオペレーション \n\n    "
-  getRoleConnection(pagination: PaginationInput = {first: 1, skip: 1}, sort: RoleSortInput = {direction: ASC, field: ID}): RoleConnection!
+  roleConnection(pagination: PaginationInput = {first: 1, skip: 1}, sort: RoleSortInput = {direction: ASC, field: ID}): RoleConnection!
 
   "\n      権限: ADMIN \n\n      ページネーションによりユーザーを取得するオペレーション \n\n    "
-  getUserConnection(pagination: PaginationInput = {first: 1, skip: 1}, sort: UserSortInput = {direction: ASC, field: ID}): UserConnection!
+  userConnection(pagination: PaginationInput = {first: 1, skip: 1}, sort: UserSortInput = {direction: ASC, field: ID}): UserConnection!
 }
 
 input RefreshTokensInput {
