@@ -48,7 +48,7 @@ export class CookieAuthenticationResolver {
       ログイン中のユーザー情報を取得するオペレーション
     `,
   })
-  async getAuthenticatedUser() {
+  async auth() {
     const auth: Auth = {};
 
     return auth;

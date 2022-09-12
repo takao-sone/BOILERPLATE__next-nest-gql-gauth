@@ -19,7 +19,7 @@ export class RolesResolver {
       ページネーションによりロールを取得するオペレーション \n
     `,
   })
-  async getRoleConnection(
+  async roleConnection(
     @Args({ name: 'pagination', nullable: true, defaultValue: DEFAULT_PAGINATION_INPUT })
     paginationInput: PaginationInput,
     @Args({ name: 'sort', nullable: true, defaultValue: DEFAULT_ROLE_SORT_INPUT })
