@@ -1,7 +1,7 @@
 import { CircularProgress } from '@mui/material';
+import { FC } from 'react';
 import { useUserConnection } from 'fetchers';
 import { SortDirection, UserConnectionQueryVariables, UserSortField } from 'generated/graphql';
-import { FC } from 'react';
 
 type Props = {};
 

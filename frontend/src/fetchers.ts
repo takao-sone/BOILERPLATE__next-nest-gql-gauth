@@ -1,8 +1,10 @@
-import {
-  useLogInMutation, UserConnectionQueryVariables, useUserConnectionQuery
-} from 'generated/graphql';
 import { GraphQLClient } from 'graphql-request';
 import { RequestInit } from 'graphql-request/dist/types.dom';
+import {
+  useLogInMutation,
+  UserConnectionQueryVariables,
+  useUserConnectionQuery,
+} from 'generated/graphql';
 
 const BASE_GRAPHQL_ENDPOINT =
   process.env.NEXT_PUBLIC_APP_ENV === 'development'
