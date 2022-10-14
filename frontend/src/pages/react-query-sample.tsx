@@ -1,14 +1,14 @@
 import { CircularProgress } from '@mui/material';
+import { useUserConnection } from 'fetchers';
+import { SortDirection, UserConnectionQueryVariables, UserSortField } from 'generated/graphql';
 import { FC } from 'react';
-import { useGetUserConnection } from 'fetchers';
-import { GetUserConnectionQueryVariables, SortDirection, UserSortField } from 'generated/graphql';
 
 type Props = {};
 
 // TODO: サンプルページなので本実装時に消す
 const ReactQuerySample: FC<Props> = () => {
   // MEMO: GraphQLリクエスト例
-  const getUserConnectionQueryVariables: GetUserConnectionQueryVariables = {
+  const getUserConnectionQueryVariables: UserConnectionQueryVariables = {
     pagination: {
       after: '3ee463b2-fbd7-11ec-a817-0242c0a8d002',
       first: 2,
@@ -19,7 +19,7 @@ const ReactQuerySample: FC<Props> = () => {
       field: UserSortField.ID,
     },
   };
-  const { isLoading, data } = useGetUserConnection(getUserConnectionQueryVariables);
+  const { isLoading, data } = useUserConnection(getUserConnectionQueryVariables);
 
   if (isLoading)
     return (
@@ -31,7 +31,7 @@ const ReactQuerySample: FC<Props> = () => {
   if (!data) return <div>data is undefined</div>;
 
   const {
-    getUserConnection: { edges, pageInfo, totalCount },
+    userConnection: { edges, pageInfo, totalCount },
   } = data;
   console.log(edges);
 
