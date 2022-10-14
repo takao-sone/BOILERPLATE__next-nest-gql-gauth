@@ -1,6 +1,7 @@
-query GetUserConnection($sort: UserSortInput, $pagination: PaginationInput) {
-  getUserConnection(sort: $sort, pagination: $pagination) {
+query UserConnection($pagination: PaginationInput, $sort: UserSortInput) {
+  userConnection(pagination: $pagination, sort: $sort) {
     edges {
+      cursor
       node {
         displayedId
         userCredential {
@@ -12,10 +13,10 @@ query GetUserConnection($sort: UserSortInput, $pagination: PaginationInput) {
       }
     }
     pageInfo {
-      startCursor
       endCursor
       hasNextPage
       hasPreviousPage
+      startCursor
     }
     totalCount
   }
