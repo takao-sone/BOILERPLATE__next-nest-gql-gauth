@@ -1,7 +1,8 @@
 import Head from 'next/head';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 type Props = {
+  children?: ReactNode;
   isIndex?: boolean;
   pageTitle?: string;
   pageDescription?: string;

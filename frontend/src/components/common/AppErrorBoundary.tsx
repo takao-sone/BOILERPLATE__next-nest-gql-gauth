@@ -1,7 +1,7 @@
 import { ErrorInfo, PureComponent, ReactNode } from 'react';
 
 type StatusMessages = { [status: number]: string };
-type Props = { statusMessages?: StatusMessages };
+type Props = { statusMessages?: StatusMessages; children?: ReactNode };
 type State = { hasError: boolean; error: APIError | null };
 
 const ERROR_TEXT = {

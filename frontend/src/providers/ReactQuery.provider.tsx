@@ -1,9 +1,11 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { isDevelopment } from '../utils/env';
 
-type Props = {};
+type Props = {
+  children?: ReactNode;
+};
 
 const queryClient = new QueryClient({
   defaultOptions: {

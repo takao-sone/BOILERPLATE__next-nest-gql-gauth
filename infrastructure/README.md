@@ -4,6 +4,8 @@
 
 #### Terraform
 
+**Set up**
+
 ```shell
 cd infrastructure/{environment}
 cp terraform.tfvars.example terraform.tfvars # tfvarsの各項目入力
@@ -22,6 +24,14 @@ docker push 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-stagin
 terraform apply
 # STEP_3: STEP_2 = true, STEP_3 = true
 terraform apply
+```
+
+**Clean up**
+
+```shell
+# STEP_1: STEP_2 = true, STEP_3 = true
+terraform destroy
+# STEP_2: STEP_2 = false, STEP_3 = false
 ```
 
 **Amplify**

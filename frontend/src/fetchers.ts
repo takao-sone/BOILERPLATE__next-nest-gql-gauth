@@ -1,9 +1,9 @@
 import { GraphQLClient } from 'graphql-request';
 import { RequestInit } from 'graphql-request/dist/types.dom';
 import {
-  GetUserConnectionQueryVariables,
-  useGetUserConnectionQuery,
   useLogInMutation,
+  UserConnectionQueryVariables,
+  useUserConnectionQuery,
 } from 'generated/graphql';
 
 const BASE_GRAPHQL_ENDPOINT =
@@ -13,10 +13,10 @@ const BASE_GRAPHQL_ENDPOINT =
 
 const BASE_GRAPHQL_CLIENT_OPTIONS: RequestInit = { credentials: 'include' };
 
-export const useGetUserConnection = (variables?: GetUserConnectionQueryVariables) => {
+export const useUserConnection = (variables?: UserConnectionQueryVariables) => {
   const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT, BASE_GRAPHQL_CLIENT_OPTIONS);
 
-  return useGetUserConnectionQuery(graphqlClient, variables);
+  return useUserConnectionQuery(graphqlClient, variables);
 };
 
 export const useLogIn = () => {
