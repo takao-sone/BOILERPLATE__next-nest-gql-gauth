@@ -1,8 +1,10 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import React, { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import muiTheme from '../styles/mui-theme';
 
-type Props = {};
+type Props = {
+  children?: ReactNode;
+};
 
 const MuiProvider: FC<Props> = (props) => {
   return (
