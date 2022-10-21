@@ -6,11 +6,11 @@ import { AppService } from './app.service';
 import { AppConfigModule } from './modules/app-config/app-config.module';
 import { GraphqlConfigService } from './modules/app-config/graphql-config.service';
 import { PrismaConfigService } from './modules/app-config/prisma-config.service';
+import { GoogleAuthenticationModule } from './modules/google-authentication/google-authentication.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { TokenAuthenticationModule } from './modules/token-authentication/token-authentication.module';
 import { UsersModule } from './modules/users/users.module';
-import { GoogleAuthenticationModule } from './modules/google-authentication/google-authentication.module';
 
 @Module({
   imports: [
