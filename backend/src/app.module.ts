@@ -10,6 +10,7 @@ import { PrismaModule } from './modules/prisma/prisma.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { TokenAuthenticationModule } from './modules/token-authentication/token-authentication.module';
 import { UsersModule } from './modules/users/users.module';
+import { GoogleAuthenticationModule } from './modules/google-authentication/google-authentication.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UsersModule } from './modules/users/users.module';
     UsersModule,
     RolesModule,
     TokenAuthenticationModule,
+    GoogleAuthenticationModule,
     // MEMO: cookieで認証する場合は以下2つをコメントイン
     // CookieAuthenticationModule,
     // SessionModule,

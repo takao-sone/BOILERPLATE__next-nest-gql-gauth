@@ -7,12 +7,7 @@ export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K]
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 
-function fetcher<TData, TVariables>(
-  client: GraphQLClient,
-  query: string,
-  variables?: TVariables,
-  headers?: RequestInit['headers'],
-) {
+function fetcher<TData, TVariables>(client: GraphQLClient, query: string, variables?: TVariables, headers?: RequestInit['headers']) {
   return async (): Promise<TData> => client.request<TData, TVariables>(query, variables, headers);
 }
 /** All built-in and custom scalars, mapped to their actual values */
@@ -36,6 +31,19 @@ export type CreateUserInput = {
   roleDisplayedId: Scalars['String'];
 };
 
+export type GoogleRegisterInput = {
+  /** フロントエンドのリクエストで発行されたGoogleのcredential（JWT） */
+  credential: Scalars['String'];
+};
+
+export type GoogleTokenAuth = {
+  __typename?: 'GoogleTokenAuth';
+  /** アクセストークン */
+  accessToken: Scalars['String'];
+  /** リフレッシュトークン */
+  refreshToken: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   /**
@@ -46,6 +54,14 @@ export type Mutation = {
    *
    */
   createUser: User;
+  /**
+   *
+   *       権限: ALL
+   *
+   *       新規ユーザー登録用オペレーション
+   *
+   */
+  googleRegisterUser: GoogleTokenAuth;
   /**
    *
    *       権限: ALL
@@ -90,25 +106,36 @@ export type Mutation = {
   updateUserRole: User;
 };
 
+
 export type MutationcreateUserArgs = {
   data: CreateUserInput;
 };
+
+
+export type MutationgoogleRegisterUserArgs = {
+  data: GoogleRegisterInput;
+};
+
 
 export type MutationlogInArgs = {
   data: TokenLogInInput;
 };
 
+
 export type MutationlogOutArgs = {
   data: TokenLogOutInput;
 };
+
 
 export type MutationrefreshTokensArgs = {
   data: RefreshTokensInput;
 };
 
+
 export type MutationupdateUserEmailArgs = {
   data: UpdateUserEmailInput;
 };
+
 
 export type MutationupdateUserRoleArgs = {
   data: UpdateUserRoleInput;
@@ -161,10 +188,12 @@ export type Query = {
   userConnection: UserConnection;
 };
 
+
 export type QueryroleConnectionArgs = {
   pagination?: InputMaybe<PaginationInput>;
   sort?: InputMaybe<RoleSortInput>;
 };
+
 
 export type QueryuserConnectionArgs = {
   pagination?: InputMaybe<PaginationInput>;
@@ -208,7 +237,7 @@ export type RoleEdge = {
 
 /** Properties by which role connections can be ordered. */
 export const RoleSortField = {
-  ID: 'ID',
+  ID: 'ID'
 } as const;
 
 export type RoleSortField = typeof RoleSortField[keyof typeof RoleSortField];
@@ -222,7 +251,7 @@ export type RoleSortInput = {
 /** Possible directions in which to order a list of items when provided an `orderBy` argument. */
 export const SortDirection = {
   ASC: 'ASC',
-  DESC: 'DESC',
+  DESC: 'DESC'
 } as const;
 
 export type SortDirection = typeof SortDirection[keyof typeof SortDirection];
@@ -303,7 +332,7 @@ export type UserEdge = {
 /** Properties by which user connections can be ordered. */
 export const UserSortField = {
   CREATED_AT: 'CREATED_AT',
-  ID: 'ID',
+  ID: 'ID'
 } as const;
 
 export type UserSortField = typeof UserSortField[keyof typeof UserSortField];
@@ -314,45 +343,50 @@ export type UserSortInput = {
   field?: InputMaybe<UserSortField>;
 };
 
+export type GoogleRegisterUserMutationVariables = Exact<{
+  data: GoogleRegisterInput;
+}>;
+
+
+export type GoogleRegisterUserMutation = { __typename?: 'Mutation', googleRegisterUser: { __typename?: 'GoogleTokenAuth', accessToken: string, refreshToken: string } };
+
 export type LogInMutationVariables = Exact<{
   data: TokenLogInInput;
 }>;
 
-export type LogInMutation = {
-  __typename?: 'Mutation';
-  logIn: { __typename?: 'TokenAuth'; accessToken: string; refreshToken: string };
-};
+
+export type LogInMutation = { __typename?: 'Mutation', logIn: { __typename?: 'TokenAuth', accessToken: string, refreshToken: string } };
 
 export type UserConnectionQueryVariables = Exact<{
   pagination?: InputMaybe<PaginationInput>;
   sort?: InputMaybe<UserSortInput>;
 }>;
 
-export type UserConnectionQuery = {
-  __typename?: 'Query';
-  userConnection: {
-    __typename?: 'UserConnection';
-    totalCount: number;
-    edges?: Array<{
-      __typename?: 'UserEdge';
-      cursor: string;
-      node: {
-        __typename?: 'User';
-        displayedId: string;
-        userCredential: { __typename?: 'UserCredential'; email: string };
-        userRole: { __typename?: 'Role'; name: string };
-      };
-    }> | null;
-    pageInfo: {
-      __typename?: 'PageInfo';
-      endCursor?: string | null;
-      hasNextPage?: boolean | null;
-      hasPreviousPage?: boolean | null;
-      startCursor?: string | null;
-    };
-  };
-};
 
+export type UserConnectionQuery = { __typename?: 'Query', userConnection: { __typename?: 'UserConnection', totalCount: number, edges?: Array<{ __typename?: 'UserEdge', cursor: string, node: { __typename?: 'User', displayedId: string, userCredential: { __typename?: 'UserCredential', email: string }, userRole: { __typename?: 'Role', name: string } } }> | null, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage?: boolean | null, hasPreviousPage?: boolean | null, startCursor?: string | null } } };
+
+
+export const GoogleRegisterUserDocument = `
+    mutation GoogleRegisterUser($data: GoogleRegisterInput!) {
+  googleRegisterUser(data: $data) {
+    accessToken
+    refreshToken
+  }
+}
+    `;
+export const useGoogleRegisterUserMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<GoogleRegisterUserMutation, TError, GoogleRegisterUserMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<GoogleRegisterUserMutation, TError, GoogleRegisterUserMutationVariables, TContext>(
+      ['GoogleRegisterUser'],
+      (variables?: GoogleRegisterUserMutationVariables) => fetcher<GoogleRegisterUserMutation, GoogleRegisterUserMutationVariables>(client, GoogleRegisterUserDocument, variables, headers)(),
+      options
+    );
 export const LogInDocument = `
     mutation LogIn($data: TokenLogInInput!) {
   logIn(data: $data) {
@@ -361,17 +395,19 @@ export const LogInDocument = `
   }
 }
     `;
-export const useLogInMutation = <TError = unknown, TContext = unknown>(
-  client: GraphQLClient,
-  options?: UseMutationOptions<LogInMutation, TError, LogInMutationVariables, TContext>,
-  headers?: RequestInit['headers'],
-) =>
-  useMutation<LogInMutation, TError, LogInMutationVariables, TContext>(
-    ['LogIn'],
-    (variables?: LogInMutationVariables) =>
-      fetcher<LogInMutation, LogInMutationVariables>(client, LogInDocument, variables, headers)(),
-    options,
-  );
+export const useLogInMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<LogInMutation, TError, LogInMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<LogInMutation, TError, LogInMutationVariables, TContext>(
+      ['LogIn'],
+      (variables?: LogInMutationVariables) => fetcher<LogInMutation, LogInMutationVariables>(client, LogInDocument, variables, headers)(),
+      options
+    );
 export const UserConnectionDocument = `
     query UserConnection($pagination: PaginationInput, $sort: UserSortInput) {
   userConnection(pagination: $pagination, sort: $sort) {
@@ -397,19 +433,17 @@ export const UserConnectionDocument = `
   }
 }
     `;
-export const useUserConnectionQuery = <TData = UserConnectionQuery, TError = unknown>(
-  client: GraphQLClient,
-  variables?: UserConnectionQueryVariables,
-  options?: UseQueryOptions<UserConnectionQuery, TError, TData>,
-  headers?: RequestInit['headers'],
-) =>
-  useQuery<UserConnectionQuery, TError, TData>(
-    variables === undefined ? ['UserConnection'] : ['UserConnection', variables],
-    fetcher<UserConnectionQuery, UserConnectionQueryVariables>(
-      client,
-      UserConnectionDocument,
-      variables,
-      headers,
-    ),
-    options,
-  );
+export const useUserConnectionQuery = <
+      TData = UserConnectionQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables?: UserConnectionQueryVariables,
+      options?: UseQueryOptions<UserConnectionQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<UserConnectionQuery, TError, TData>(
+      variables === undefined ? ['UserConnection'] : ['UserConnection', variables],
+      fetcher<UserConnectionQuery, UserConnectionQueryVariables>(client, UserConnectionDocument, variables, headers),
+      options
+    );
