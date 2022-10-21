@@ -8,10 +8,10 @@ import { GraphqlConfigService } from './modules/app-config/graphql-config.servic
 import { PrismaConfigService } from './modules/app-config/prisma-config.service';
 import { GoogleAuthenticationModule } from './modules/google-authentication/google-authentication.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
+import { RedisModule } from './modules/redis/redis.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { TokenAuthenticationModule } from './modules/token-authentication/token-authentication.module';
 import { UsersModule } from './modules/users/users.module';
-import { RedisModule } from './modules/redis/redis.module';
 
 @Module({
   imports: [
