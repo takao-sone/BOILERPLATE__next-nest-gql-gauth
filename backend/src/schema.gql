@@ -29,9 +29,6 @@ input GoogleRegisterInput {
 type GoogleTokenAuth {
   """アクセストークン"""
   accessToken: String!
-
-  """リフレッシュトークン"""
-  refreshToken: String!
 }
 
 type Mutation {

@@ -26,6 +26,10 @@ interface EnvVariables {
   JWT_HASH_ALGORITHM: 'HS256' | 'HS512';
   ACCESS_TOKEN_EXPIRES_IN: string;
   REFRESH_TOKEN_EXPIRES_IN: string;
+  // Google Identity
+  GOOGLE_CLIENT_ID: string;
+  // Google Identity Session
+  SESSION_MAX_AGE_IN_SECONDS: number;
 }
 
 @Injectable()
@@ -98,6 +102,14 @@ export class EnvService {
 
   getRefreshTokenExpiresIn() {
     return this.configService.get('REFRESH_TOKEN_EXPIRES_IN', { infer: true });
+  }
+
+  getGoogleCleintId() {
+    return this.configService.get('GOOGLE_CLIENT_ID', { infer: true });
+  }
+
+  getSessionMaxAgeInSeconds() {
+    return this.configService.get('SESSION_MAX_AGE_IN_SECONDS', { infer: true });
   }
 
   isProduction() {

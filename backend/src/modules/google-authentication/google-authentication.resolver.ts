@@ -16,9 +16,8 @@ export class GoogleAuthenticationResolver {
   async googleRegisterUser(@Args('data') input: GoogleRegisterInput) {
     const { credential } = input;
 
-    await this.googleAuthenticationService.googleRegisterUser(credential);
+    const googleTokenAuth = await this.googleAuthenticationService.registerGoogleUser(credential);
 
-    // TODO
-    return { accessToken: 'hoge', refreshToken: 'foo' };
+    return googleTokenAuth;
   }
 }

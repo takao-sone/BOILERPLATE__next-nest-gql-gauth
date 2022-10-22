@@ -6,9 +6,4 @@ export class GoogleTokenAuth {
     description: 'アクセストークン',
   })
   accessToken!: string;
-
-  @Field(() => String, {
-    description: 'リフレッシュトークン',
-  })
-  refreshToken!: string;
 }
