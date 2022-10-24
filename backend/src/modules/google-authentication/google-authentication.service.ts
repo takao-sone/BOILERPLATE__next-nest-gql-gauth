@@ -1,4 +1,3 @@
-import { randomFillSync } from 'crypto';
 import {
   ConflictException,
   HttpException,
@@ -17,6 +16,7 @@ import { isUserWithRolesAndContactDetailAndProfile } from '../prisma/custom-type
 import { UserWithRolesAndContactDetailAndProfile } from '../prisma/custom-types';
 import { PrismaService } from '../prisma/prisma.service';
 import { IORedisKey } from '../redis/redis.module';
+import { RedisService } from '../redis/redis.service';
 import { AppUserInputAccessTokenPayload } from './custom-types';
 import { SessionUser } from './dtos/session-user.dto';
 import { GoogleTokenAuth } from './models/auth.model';
@@ -27,6 +27,7 @@ export class GoogleAuthenticationService {
     private envService: EnvService,
     private prismaService: PrismaService,
     private jwtService: JwtService,
+    private redisService: RedisService,
     @Inject(IORedisKey) private redisClient: Redis,
   ) {}
 
@@ -40,7 +41,6 @@ export class GoogleAuthenticationService {
         Logger.error(err.message);
         throw new InternalServerErrorException();
       }
-
       throw err;
     }
 
@@ -58,12 +58,10 @@ export class GoogleAuthenticationService {
             throw new InternalServerErrorException();
         }
       }
-
       if (err instanceof Error) {
         Logger.error(err.message);
         throw new InternalServerErrorException();
       }
-
       throw err;
     }
 
@@ -76,12 +74,11 @@ export class GoogleAuthenticationService {
         Logger.error(err.message);
         throw new InternalServerErrorException();
       }
-
       throw err;
     }
 
     // Redisへセッション用ユーザーオブジェクトを保存
-    const redisSessionKey = this.generateRandomRedisKey();
+    const redisSessionKey = this.redisService.generateRandomRedisKey();
     try {
       const sessionMaxAgeInSeconds = this.envService.getSessionMaxAgeInSeconds();
       await this.redisClient.set(
@@ -95,7 +92,6 @@ export class GoogleAuthenticationService {
         Logger.error(`googleRegisterUser: ${err.message}`);
         throw new HttpException('Session Destroy Error', HttpStatus.INTERNAL_SERVER_ERROR);
       }
-
       throw err;
     }
 
@@ -120,12 +116,10 @@ export class GoogleAuthenticationService {
       audience: clientId,
     });
     const payload = loginTicket.getPayload();
-
     if (!payload) {
       Logger.error(`googleRegisterUser: No payload in loginTicket`);
       throw new Error();
     }
-
     return payload;
   }
 
@@ -144,6 +138,7 @@ export class GoogleAuthenticationService {
       throw new Error('Email should be configured.');
     }
 
+    // TODO: 最初はADMIN決め打ち
     const adminRole = await this.prismaService.role.findUnique({
       where: {
         name: RoleName.ADMIN,
@@ -236,19 +231,7 @@ export class GoogleAuthenticationService {
   };
 
   /**
-   * セッションユーザーをRedisに保存する際のkeyの作成
-   * @returns string
-   */
-  private generateRandomRedisKey(): string {
-    const S = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    const N = 32;
-    return Array.from(randomFillSync(new Uint32Array(N)))
-      .map((n) => S[n % S.length])
-      .join('');
-  }
-
-  /**
-   * アクセストークンを生成
+   * アクセストークンの生成
    * @param userDisplayedId user's displayedId
    * @param redisSessionKey redis session key
    * @returns accessToken(JWT)

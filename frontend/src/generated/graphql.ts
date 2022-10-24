@@ -45,8 +45,6 @@ export type GoogleTokenAuth = {
   __typename?: 'GoogleTokenAuth';
   /** アクセストークン */
   accessToken: Scalars['String'];
-  /** リフレッシュトークン */
-  refreshToken: Scalars['String'];
 };
 
 export type Mutation = {
@@ -345,7 +343,7 @@ export type GoogleRegisterUserMutationVariables = Exact<{
 
 export type GoogleRegisterUserMutation = {
   __typename?: 'Mutation';
-  googleRegisterUser: { __typename?: 'GoogleTokenAuth'; accessToken: string; refreshToken: string };
+  googleRegisterUser: { __typename?: 'GoogleTokenAuth'; accessToken: string };
 };
 
 export type LogInMutationVariables = Exact<{
@@ -391,7 +389,6 @@ export const GoogleRegisterUserDocument = `
     mutation GoogleRegisterUser($data: GoogleRegisterInput!) {
   googleRegisterUser(data: $data) {
     accessToken
-    refreshToken
   }
 }
     `;

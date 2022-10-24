@@ -1,5 +1,6 @@
 import { DynamicModule, FactoryProvider, Logger, Module, ModuleMetadata } from '@nestjs/common';
 import IORedis, { Redis, RedisOptions } from 'ioredis';
+import { RedisService } from './redis.service';
 
 export const IORedisKey = 'IORedis';
 
@@ -13,7 +14,10 @@ type RedisAsyncModuleOptions = {
 } & Required<Pick<ModuleMetadata, 'imports'>> &
   Required<Pick<FactoryProvider, 'inject'>>;
 
-@Module({})
+@Module({
+  providers: [RedisService],
+  exports: [RedisService],
+})
 export class RedisModule {
   static async registerAsync({
     useFactory,

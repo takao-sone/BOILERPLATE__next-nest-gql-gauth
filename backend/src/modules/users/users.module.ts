@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
-import { TokenUsersService } from './token-users.service';
-import { UsersResolver } from './users.resolver';
+import { GoogleUsersResolver } from './google-users.resolver';
+import { GoogleUsersService } from './google-users.service';
 
 @Module({
   // MEMO: cookie認証
   // imports: [SessionModule],
   providers: [
-    UsersResolver,
-    TokenUsersService,
+    GoogleUsersResolver,
+    GoogleUsersService,
+    // TokenUsersService,
     // MEMO: cookie認証
     // CookieUsersService,
   ],
