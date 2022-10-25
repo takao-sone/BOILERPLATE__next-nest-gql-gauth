@@ -3,11 +3,12 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { RoleName } from '@prisma/client';
 import { CurrentSessionUser } from 'src/common/decorators/current-session-user.decorator';
 import { GoogleRegisterInput } from './dtos/google-register.input';
-import { SessionUser } from './dtos/session-user.dto';
+import { SessionUser as RedisSessionUser } from './dtos/session-user.dto';
 import { GoogleAuthenticationService } from './google-authentication.service';
 import { LoggedInGuard } from './guards/logged-in.guard';
 import { RoleGuard } from './guards/role.guard';
 import { GoogleTokenAuth } from './models/auth.model';
+import { SessionUser as SessionUserModel } from './models/session-user.model';
 
 @Resolver(() => GoogleTokenAuth)
 export class GoogleAuthenticationResolver {
@@ -25,6 +26,17 @@ export class GoogleAuthenticationResolver {
     return googleTokenAuth;
   }
 
+  @UseGuards(LoggedInGuard)
+  @Query(() => SessionUserModel, {
+    description: `
+      権限: Logged-In \n
+      現在ログインしているユーザーの情報 \n
+    `,
+  })
+  async authenticatedUser(@CurrentSessionUser() currentSessionUser: RedisSessionUser) {
+    return currentSessionUser;
+  }
+
   // TODO: 本番で消す
   @UseGuards(LoggedInGuard)
   @Query(() => String, {
@@ -33,7 +45,7 @@ export class GoogleAuthenticationResolver {
       テスト
     `,
   })
-  async testLoggedInGuard(@CurrentSessionUser() currentSessionUser: SessionUser) {
+  async testLoggedInGuard(@CurrentSessionUser() currentSessionUser: RedisSessionUser) {
     console.log('testLoggedInGuard=========================');
     console.log(currentSessionUser);
 
@@ -48,7 +60,7 @@ export class GoogleAuthenticationResolver {
       テスト
     `,
   })
-  async testRoleGuard(@CurrentSessionUser() currentSessionUser: SessionUser) {
+  async testRoleGuard(@CurrentSessionUser() currentSessionUser: RedisSessionUser) {
     console.log('testRoleGuard=========================');
     console.log(currentSessionUser);
 

@@ -1,8 +1,9 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { UserContactDetail, UserProfile, UserThirdPartyCredential } from '@prisma/client';
 import { Base } from 'src/common/models/base.model';
 import { Role } from 'src/modules/roles/models/role.model';
-import { UserCredential } from './user-credential.model';
+import { UserContactDetail } from './user-contact-detail.model';
+import { UserProfile } from './user-profile.model';
+import { UserThirdPartyCredential } from './user-third-party-credential.model';
 
 @ObjectType()
 export class GoogleUser extends Base {
@@ -11,12 +12,12 @@ export class GoogleUser extends Base {
   })
   displayedId!: string;
 
-  @Field(() => UserCredential, {
+  @Field(() => UserContactDetail, {
     description: 'ユーザー連絡先情報',
   })
   userContactDetail?: UserContactDetail;
 
-  @Field(() => UserCredential, {
+  @Field(() => UserProfile, {
     description: 'ユーザープロフィール情報',
   })
   userProfile?: UserProfile;
@@ -26,7 +27,7 @@ export class GoogleUser extends Base {
   })
   userRole?: Role;
 
-  @Field(() => UserCredential, {
+  @Field(() => UserThirdPartyCredential, {
     description: 'ユーザー認証情報',
   })
   userThirdPartyCredential?: UserThirdPartyCredential;

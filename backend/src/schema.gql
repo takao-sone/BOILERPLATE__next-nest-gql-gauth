@@ -63,6 +63,9 @@ input PaginationInput {
 }
 
 type Query {
+  "\n      権限: Logged-In \n\n      現在ログインしているユーザーの情報 \n\n    "
+  authenticatedUser: SessionUser!
+
   "\n      権限: ADMIN \n\n      ページネーションによりロールを取得するオペレーション \n\n    "
   roleConnection(pagination: PaginationInput = {first: 1, skip: 1}, sort: RoleSortInput = {direction: ASC, field: ID}): RoleConnection!
 
@@ -127,6 +130,38 @@ input RoleSortInput {
   field: RoleSortField = ID
 }
 
+type SessionUser {
+  """アクセストークン"""
+  displayedId: String!
+
+  """ユーザー連絡先情報"""
+  userContactDetail: SessionUserContactDetail!
+
+  """ユーザープロフィール"""
+  userProfile: SessionUserProfile!
+
+  """ユーザー権限"""
+  userRole: SessionUserRole!
+}
+
+type SessionUserContactDetail {
+  """メールアドレス"""
+  email: String!
+}
+
+type SessionUserProfile {
+  """ユーザー名"""
+  name: String!
+}
+
+type SessionUserRole {
+  """クライアントアプリケーション側へ表示するID"""
+  displayedId: String!
+
+  """ロールの名前"""
+  name: String!
+}
+
 """
 Possible directions in which to order a list of items when provided an `orderBy` argument.
 """
@@ -184,6 +219,17 @@ type UserConnection {
   totalCount: Int!
 }
 
+type UserContactDetail {
+  """DBへのデータ作成時間"""
+  createdAt: DateTime!
+
+  """メールアドレス"""
+  email: String!
+
+  """DBへのデータ更新時間"""
+  updatedAt: DateTime!
+}
+
 type UserCredential {
   """DBへのデータ作成時間"""
   createdAt: DateTime!
@@ -203,6 +249,17 @@ type UserEdge {
   node: User!
 }
 
+type UserProfile {
+  """DBへのデータ作成時間"""
+  createdAt: DateTime!
+
+  """ユーザー名"""
+  name: String!
+
+  """DBへのデータ更新時間"""
+  updatedAt: DateTime!
+}
+
 """Properties by which user connections can be ordered."""
 enum UserSortField {
   CREATED_AT
@@ -215,4 +272,15 @@ input UserSortInput {
 
   """ユーザー取得する際にソート対象にしたいフィールド"""
   field: UserSortField = ID
+}
+
+type UserThirdPartyCredential {
+  """DBへのデータ作成時間"""
+  createdAt: DateTime!
+
+  """IDプロバイダー名"""
+  provider: String!
+
+  """DBへのデータ更新時間"""
+  updatedAt: DateTime!
 }

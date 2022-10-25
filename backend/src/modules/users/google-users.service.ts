@@ -1,6 +1,7 @@
 import { Connection, findManyCursorConnection } from '@devoxa/prisma-relay-cursor-connection';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { User } from '@prisma/client';
+import Redis from 'ioredis';
 import { PaginationInput } from 'src/common/pagination/pagination.input';
 import { UserSortInput } from 'src/common/pagination/user-order.model';
 import {
@@ -9,11 +10,15 @@ import {
   createFindManyArgs,
 } from 'src/common/pagination/utils';
 import { PrismaService } from '../prisma/prisma.service';
+import { IORedisKey } from '../redis/redis.module';
 import { Role } from '../roles/models/role.model';
 
 @Injectable()
 export class GoogleUsersService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    @Inject(IORedisKey) private redisClient: Redis,
+  ) {}
 
   /**
    * idを使用したユーザーの取得
