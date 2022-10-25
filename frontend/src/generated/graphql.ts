@@ -25,27 +25,27 @@ export type Scalars = {
   DateTime: any;
 };
 
-export type CreateUserInput = {
-  /** 確認用パスワード */
-  confirmationPassword: Scalars['String'];
-  /** メールアドレス */
-  email: Scalars['String'];
-  /** パスワード（8~64文字） */
-  password: Scalars['String'];
-  /** ユーザーに付与する権限のdisplayedId */
-  roleDisplayedId: Scalars['String'];
+export type GoogleRegisterInput = {
+  /** フロントエンドのリクエストで発行されたGoogleのcredential（JWT） */
+  credential: Scalars['String'];
+};
+
+export type GoogleTokenAuth = {
+  __typename?: 'GoogleTokenAuth';
+  /** アクセストークン */
+  accessToken: Scalars['String'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   /**
    *
-   *       権限: ADMIN
+   *       権限: ALL
    *
-   *       ユーザーを作成するオペレーション
+   *       Google Identityを使用した新規ユーザー登録用オペレーション
    *
    */
-  createUser: User;
+  googleRegisterUser: GoogleTokenAuth;
   /**
    *
    *       権限: ALL
@@ -70,28 +70,10 @@ export type Mutation = {
    *
    */
   refreshTokens: TokenAuth;
-  /**
-   *
-   *       権限: ログイン
-   *
-   *       ユーザーのメールアドレスを更新するオペレーション
-   *
-   */
-  updateUserEmail: User;
-  /**
-   *
-   *       権限: ADMIN
-   *
-   *       ユーザーの権限を更新するオペレーション
-   *
-   *       自分自身の権限は更新できない
-   *
-   */
-  updateUserRole: User;
 };
 
-export type MutationcreateUserArgs = {
-  data: CreateUserInput;
+export type MutationgoogleRegisterUserArgs = {
+  data: GoogleRegisterInput;
 };
 
 export type MutationlogInArgs = {
@@ -104,14 +86,6 @@ export type MutationlogOutArgs = {
 
 export type MutationrefreshTokensArgs = {
   data: RefreshTokensInput;
-};
-
-export type MutationupdateUserEmailArgs = {
-  data: UpdateUserEmailInput;
-};
-
-export type MutationupdateUserRoleArgs = {
-  data: UpdateUserRoleInput;
 };
 
 export type PageInfo = {
@@ -150,6 +124,22 @@ export type Query = {
    *
    */
   roleConnection: RoleConnection;
+  /**
+   *
+   *       権限: ALL
+   *
+   *       テスト
+   *
+   */
+  testLoggedInGuard: Scalars['String'];
+  /**
+   *
+   *       権限: ALL
+   *
+   *       テスト
+   *
+   */
+  testRoleGuard: Scalars['String'];
   /**
    *
    *       権限: ADMIN
@@ -246,18 +236,6 @@ export type TokenLogOutInput = {
   refreshToken: Scalars['String'];
 };
 
-export type UpdateUserEmailInput = {
-  /** 新しいメールアドレス */
-  newEmail: Scalars['String'];
-};
-
-export type UpdateUserRoleInput = {
-  /** 更新対象ユーザーの新しい権限のdisplaydId */
-  newRoleDisplayedId: Scalars['String'];
-  /** 更新対象ユーザーのdisplayedId */
-  updateTargetUserDisplayedId: Scalars['String'];
-};
-
 export type User = {
   __typename?: 'User';
   /** DBへのデータ作成時間 */
@@ -314,6 +292,15 @@ export type UserSortInput = {
   field?: InputMaybe<UserSortField>;
 };
 
+export type GoogleRegisterUserMutationVariables = Exact<{
+  data: GoogleRegisterInput;
+}>;
+
+export type GoogleRegisterUserMutation = {
+  __typename?: 'Mutation';
+  googleRegisterUser: { __typename?: 'GoogleTokenAuth'; accessToken: string };
+};
+
 export type LogInMutationVariables = Exact<{
   data: TokenLogInInput;
 }>;
@@ -353,6 +340,34 @@ export type UserConnectionQuery = {
   };
 };
 
+export const GoogleRegisterUserDocument = `
+    mutation GoogleRegisterUser($data: GoogleRegisterInput!) {
+  googleRegisterUser(data: $data) {
+    accessToken
+  }
+}
+    `;
+export const useGoogleRegisterUserMutation = <TError = unknown, TContext = unknown>(
+  client: GraphQLClient,
+  options?: UseMutationOptions<
+    GoogleRegisterUserMutation,
+    TError,
+    GoogleRegisterUserMutationVariables,
+    TContext
+  >,
+  headers?: RequestInit['headers'],
+) =>
+  useMutation<GoogleRegisterUserMutation, TError, GoogleRegisterUserMutationVariables, TContext>(
+    ['GoogleRegisterUser'],
+    (variables?: GoogleRegisterUserMutationVariables) =>
+      fetcher<GoogleRegisterUserMutation, GoogleRegisterUserMutationVariables>(
+        client,
+        GoogleRegisterUserDocument,
+        variables,
+        headers,
+      )(),
+    options,
+  );
 export const LogInDocument = `
     mutation LogIn($data: TokenLogInInput!) {
   logIn(data: $data) {

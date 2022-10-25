@@ -4,13 +4,14 @@ import ReactQueryProvider from '../providers/ReactQuery.provider';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
-    // @ts-ignore TODO v18のchildren系エラー
-    <ReactQueryProvider>
-      {/* @ts-ignore TODO v18のchildren系エラー */}
-      <MuiProvider>
-        <Component {...pageProps} />
-      </MuiProvider>
-    </ReactQueryProvider>
+    <>
+      <script src="https://accounts.google.com/gsi/client" async defer></script>
+      <ReactQueryProvider>
+        <MuiProvider>
+          <Component {...pageProps} />
+        </MuiProvider>
+      </ReactQueryProvider>
+    </>
   );
 };
 

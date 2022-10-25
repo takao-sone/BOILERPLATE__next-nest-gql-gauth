@@ -1,0 +1,5 @@
+mutation GoogleRegisterUser($data: GoogleRegisterInput!) {
+  googleRegisterUser(data: $data) {
+    accessToken
+  }
+}

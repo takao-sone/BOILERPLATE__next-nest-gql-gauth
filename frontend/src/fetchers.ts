@@ -1,6 +1,7 @@
 import { GraphQLClient } from 'graphql-request';
 import { RequestInit } from 'graphql-request/dist/types.dom';
 import {
+  useGoogleRegisterUserMutation,
   useLogInMutation,
   UserConnectionQueryVariables,
   useUserConnectionQuery,
@@ -23,4 +24,13 @@ export const useLogIn = () => {
   const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT, BASE_GRAPHQL_CLIENT_OPTIONS);
 
   return useLogInMutation(graphqlClient);
+};
+
+// TODO
+export const useGoogleRegisterUser = () => {
+  const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT, BASE_GRAPHQL_CLIENT_OPTIONS);
+
+  const { mutateAsync } = useGoogleRegisterUserMutation(graphqlClient);
+
+  return { mutateAsync };
 };

@@ -11,13 +11,16 @@ datasource db {
 }
 
 model User {
-  id                    Int                    @id @default(autoincrement()) @db.UnsignedInt
-  displayedId           String                 @unique @default(dbgenerated("(UUID())")) @map("displayed_id")
-  userCredential        UserCredential?
-  userRoles             UsersRoles[]
-  refreshTokenRotations RefreshTokenRotation[]
-  createdAt             DateTime               @default(now()) @map("created_at")
-  updatedAt             DateTime               @updatedAt @map("updated_at")
+  id                       Int                       @id @default(autoincrement()) @db.UnsignedInt
+  displayedId              String                    @unique @default(dbgenerated("(UUID())")) @map("displayed_id")
+  userCredential           UserCredential?
+  userThirdPartyCredential UserThirdPartyCredential?
+  userContactDetail        UserContactDetail?
+  userProfile              UserProfile?
+  userRoles                UsersRoles[]
+  refreshTokenRotations    RefreshTokenRotation[]
+  createdAt                DateTime                  @default(now()) @map("created_at")
+  updatedAt                DateTime                  @updatedAt @map("updated_at")
 
   @@map("users")
 }
@@ -32,6 +35,45 @@ model UserCredential {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("user_credentials")
+}
+
+model UserThirdPartyCredential {
+  id        Int                    @id @default(autoincrement()) @db.UnsignedInt
+  user      User                   @relation(fields: [userId], references: [id])
+  userId    Int                    @unique @map("user_id") @db.UnsignedInt
+  sub       String
+  provider  UserCredentialProvider
+  createdAt DateTime               @default(now()) @map("created_at")
+  updatedAt DateTime               @updatedAt @map("updated_at")
+
+  @@unique([sub, provider])
+  @@map("user_third_party_credentials")
+}
+
+enum UserCredentialProvider {
+  GOOGLE
+}
+
+model UserContactDetail {
+  id        Int      @id @default(autoincrement()) @db.UnsignedInt
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @unique @map("user_id") @db.UnsignedInt
+  email     String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("user_contact_details")
+}
+
+model UserProfile {
+  id        Int      @id @default(autoincrement()) @db.UnsignedInt
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @unique @map("user_id") @db.UnsignedInt
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("user_profiles")
 }
 
 model Role {

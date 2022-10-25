@@ -21,21 +21,20 @@ services:
       - boilerplate-mysql-volume:/var/lib/mysql
     networks:
       - boilerplate-network
-  # MEMO: cookie認証切替時に利用
-  # boilerplate-redis:
-  #   container_name: boilerplate-redis
-  #   image: redis:6.2
-  #   ports:
-  #     - '56379:6379'
-  #   healthcheck:
-  #     test: redis-cli ping
-  #     interval: 5s
-  #     timeout: 30s
-  #     start_period: 10s
-  #   volumes:
-  #     - boilerplate-redis-volume:/data
-  #   networks:
-  #     - boilerplate-network
+  boilerplate-redis:
+    container_name: boilerplate-redis
+    image: redis:7
+    ports:
+      - '56379:6379'
+    healthcheck:
+      test: redis-cli ping
+      interval: 5s
+      timeout: 30s
+      start_period: 10s
+    volumes:
+      - boilerplate-redis-volume:/data
+    networks:
+      - boilerplate-network
   boilerplate-backend:
     container_name: boilerplate-backend
     build:
@@ -59,9 +58,8 @@ services:
     depends_on:
       boilerplate-mysql:
         condition: service_healthy
-      # MEMO: cookie認証切替時に利用
-      # boilerplate-redis:
-      #   condition: service_healthy
+      boilerplate-redis:
+        condition: service_healthy
     volumes:
       - ./backend:/opt/project
       - boilerplate-backend-node-modules-volume:/opt/project/node_modules
@@ -95,8 +93,7 @@ volumes:
   boilerplate-backend-node-modules-volume:
   boilerplate-frontend-node-modules-volume:
   boilerplate-frontend-next-volume:
-  # MEMO: cookie認証切替時に利用
-  # boilerplate-redis-volume:
+  boilerplate-redis-volume:
 
 networks:
   boilerplate-network:
