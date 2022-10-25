@@ -8,8 +8,8 @@ module.exports = {
   ],
   rules: {
     'no-unused-vars': ['error', { ignoreRestSiblings: true }],
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': [
+    'eslint-plugin-react-hooks/rules-of-hooks': 'error',
+    'eslint-plugin-react-hooks/exhaustive-deps': [
       'warn',
       {
         additionalHooks: '(useRecoilCallback|useRecoilTransaction_UNSTABLE)',
