@@ -4,12 +4,12 @@ module.exports = {
     'prettier',
     'plugin:import/recommended',
     'plugin:import/warnings',
-    'react-hooks',
+    'plugin:react-hooks/recommended',
   ],
   rules: {
     'no-unused-vars': ['error', { ignoreRestSiblings: true }],
-    'eslint-plugin-react-hooks/rules-of-hooks': 'error',
-    'eslint-plugin-react-hooks/exhaustive-deps': [
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': [
       'warn',
       {
         additionalHooks: '(useRecoilCallback|useRecoilTransaction_UNSTABLE)',
