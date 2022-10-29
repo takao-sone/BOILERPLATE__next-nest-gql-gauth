@@ -48,7 +48,6 @@ export class GoogleAuthenticationResolver {
   async testLoggedInGuard(@CurrentSessionUser() currentSessionUser: RedisSessionUser) {
     console.log('testLoggedInGuard=========================');
     console.log(currentSessionUser);
-
     return 'OK';
   }
 
@@ -63,7 +62,6 @@ export class GoogleAuthenticationResolver {
   async testRoleGuard(@CurrentSessionUser() currentSessionUser: RedisSessionUser) {
     console.log('testRoleGuard=========================');
     console.log(currentSessionUser);
-
     return 'OK';
   }
 }

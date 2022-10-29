@@ -116,6 +116,15 @@ export type Query = {
   __typename?: 'Query';
   /**
    *
+   *       権限: Logged-In
+   *
+   *       現在ログインしているユーザーの情報
+   *
+   *
+   */
+  authenticatedUser: SessionUser;
+  /**
+   *
    *       権限: ADMIN
    *
    *       ページネーションによりロールを取得するオペレーション
@@ -210,6 +219,38 @@ export type RoleSortInput = {
   field?: InputMaybe<RoleSortField>;
 };
 
+export type SessionUser = {
+  __typename?: 'SessionUser';
+  /** アクセストークン */
+  displayedId: Scalars['String'];
+  /** ユーザー連絡先情報 */
+  userContactDetail: SessionUserContactDetail;
+  /** ユーザープロフィール */
+  userProfile: SessionUserProfile;
+  /** ユーザー権限 */
+  userRole: SessionUserRole;
+};
+
+export type SessionUserContactDetail = {
+  __typename?: 'SessionUserContactDetail';
+  /** メールアドレス */
+  email: Scalars['String'];
+};
+
+export type SessionUserProfile = {
+  __typename?: 'SessionUserProfile';
+  /** ユーザー名 */
+  name: Scalars['String'];
+};
+
+export type SessionUserRole = {
+  __typename?: 'SessionUserRole';
+  /** クライアントアプリケーション側へ表示するID */
+  displayedId: Scalars['String'];
+  /** ロールの名前 */
+  name: Scalars['String'];
+};
+
 /** Possible directions in which to order a list of items when provided an `orderBy` argument. */
 export const SortDirection = {
   ASC: 'ASC',
@@ -261,6 +302,16 @@ export type UserConnection = {
   totalCount: Scalars['Int'];
 };
 
+export type UserContactDetail = {
+  __typename?: 'UserContactDetail';
+  /** DBへのデータ作成時間 */
+  createdAt: Scalars['DateTime'];
+  /** メールアドレス */
+  email: Scalars['String'];
+  /** DBへのデータ更新時間 */
+  updatedAt: Scalars['DateTime'];
+};
+
 export type UserCredential = {
   __typename?: 'UserCredential';
   /** DBへのデータ作成時間 */
@@ -279,6 +330,16 @@ export type UserEdge = {
   node: User;
 };
 
+export type UserProfile = {
+  __typename?: 'UserProfile';
+  /** DBへのデータ作成時間 */
+  createdAt: Scalars['DateTime'];
+  /** ユーザー名 */
+  name: Scalars['String'];
+  /** DBへのデータ更新時間 */
+  updatedAt: Scalars['DateTime'];
+};
+
 /** Properties by which user connections can be ordered. */
 export const UserSortField = {
   CREATED_AT: 'CREATED_AT',
@@ -291,6 +352,16 @@ export type UserSortInput = {
   direction?: InputMaybe<SortDirection>;
   /** ユーザー取得する際にソート対象にしたいフィールド */
   field?: InputMaybe<UserSortField>;
+};
+
+export type UserThirdPartyCredential = {
+  __typename?: 'UserThirdPartyCredential';
+  /** DBへのデータ作成時間 */
+  createdAt: Scalars['DateTime'];
+  /** IDプロバイダー名 */
+  provider: Scalars['String'];
+  /** DBへのデータ更新時間 */
+  updatedAt: Scalars['DateTime'];
 };
 
 export type GoogleRegisterUserMutationVariables = Exact<{
