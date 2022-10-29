@@ -17,6 +17,48 @@ type GoogleTokenAuth {
   accessToken: String!
 }
 
+type GoogleUser {
+  """DBへのデータ作成時間"""
+  createdAt: DateTime!
+
+  """クライアントアプリケーション側へ表示するID"""
+  displayedId: String!
+
+  """DBへのデータ更新時間"""
+  updatedAt: DateTime!
+
+  """ユーザー連絡先情報"""
+  userContactDetail: UserContactDetail!
+
+  """ユーザープロフィール情報"""
+  userProfile: UserProfile!
+
+  """ユーザー権限"""
+  userRole: Role!
+
+  """ユーザー認証情報"""
+  userThirdPartyCredential: UserThirdPartyCredential!
+}
+
+type GoogleUserConnection {
+  """edgeオブジェクト配列"""
+  edges: [GoogleUserEdge!]
+
+  """ページネーションに関する情報"""
+  pageInfo: PageInfo!
+
+  """指定した条件で取得できる最大データ数"""
+  totalCount: Int!
+}
+
+type GoogleUserEdge {
+  """現在のnodeのカーソル"""
+  cursor: String!
+
+  """nodeオブジェクト"""
+  node: GoogleUser!
+}
+
 type Mutation {
   "\n      権限: ALL \n\n      Google Identityを使用した新規ユーザー登録用オペレーション\n    "
   googleRegisterUser(data: GoogleRegisterInput!): GoogleTokenAuth!
@@ -75,8 +117,14 @@ type Query {
   "\n      権限: ALL \n\n      テスト\n    "
   testRoleGuard: String!
 
+  "\n      権限: ADMIN \n\n      ユーザーのdisplayedIdによってユーザーを取得するオペレーション \n\n    "
+  user(
+    """ユーザーのdisplayedId"""
+    displayedId: String!
+  ): GoogleUser!
+
   "\n      権限: ADMIN \n\n      ページネーションによりユーザーを取得するオペレーション \n\n    "
-  userConnection(pagination: PaginationInput = {first: 1, skip: 1}, sort: UserSortInput = {direction: ASC, field: ID}): UserConnection!
+  userConnection(pagination: PaginationInput = {first: 1, skip: 1}, sort: UserSortInput = {direction: ASC, field: ID}): GoogleUserConnection!
 }
 
 input RefreshTokensInput {
@@ -191,34 +239,6 @@ input TokenLogOutInput {
   refreshToken: String!
 }
 
-type User {
-  """DBへのデータ作成時間"""
-  createdAt: DateTime!
-
-  """クライアントアプリケーション側へ表示するID"""
-  displayedId: String!
-
-  """DBへのデータ更新時間"""
-  updatedAt: DateTime!
-
-  """ユーザー認証情報"""
-  userCredential: UserCredential!
-
-  """ユーザー権限"""
-  userRole: Role!
-}
-
-type UserConnection {
-  """edgeオブジェクト配列"""
-  edges: [UserEdge!]
-
-  """ページネーションに関する情報"""
-  pageInfo: PageInfo!
-
-  """指定した条件で取得できる最大データ数"""
-  totalCount: Int!
-}
-
 type UserContactDetail {
   """DBへのデータ作成時間"""
   createdAt: DateTime!
@@ -228,25 +248,6 @@ type UserContactDetail {
 
   """DBへのデータ更新時間"""
   updatedAt: DateTime!
-}
-
-type UserCredential {
-  """DBへのデータ作成時間"""
-  createdAt: DateTime!
-
-  """メールアドレス"""
-  email: String!
-
-  """DBへのデータ更新時間"""
-  updatedAt: DateTime!
-}
-
-type UserEdge {
-  """現在のnodeのカーソル"""
-  cursor: String!
-
-  """nodeオブジェクト"""
-  node: User!
 }
 
 type UserProfile {
