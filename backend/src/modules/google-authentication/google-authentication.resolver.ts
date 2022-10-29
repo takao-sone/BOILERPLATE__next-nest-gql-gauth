@@ -2,6 +2,7 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { RoleName } from '@prisma/client';
 import { CurrentSessionUser } from 'src/common/decorators/current-session-user.decorator';
+import { GoogleLoginInput } from './dtos/google-login.input';
 import { GoogleRegisterInput } from './dtos/google-register.input';
 import { SessionUser as RedisSessionUser } from './dtos/session-user.dto';
 import { GoogleAuthenticationService } from './google-authentication.service';
@@ -35,6 +36,18 @@ export class GoogleAuthenticationResolver {
   })
   async authenticatedUser(@CurrentSessionUser() currentSessionUser: RedisSessionUser) {
     return currentSessionUser;
+  }
+
+  @Mutation(() => GoogleTokenAuth, {
+    description: `
+      権限: ALL \n
+      Google Identityを使用したログインオペレーション
+    `,
+  })
+  async googleLogin(@Args('data') input: GoogleLoginInput) {
+    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+
+    return await this.googleAuthenticationService.login(input.credential);
   }
 
   // TODO: 本番で消す

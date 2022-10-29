@@ -10,6 +10,7 @@ type Props = {
 
 const GoogleIdentity: FC<Props> = ({ buttonType }) => {
   const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string;
+  // TODO: 登録
   const { mutateAsync } = useGoogleRegisterUser();
 
   const handleCredentialResponse = async (response: any) => {
@@ -32,6 +33,30 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
 
     // ユーザー情報を取得
   };
+
+  // TODO: ログイン
+  // const { mutateAsync } = useGoogleLogin();
+
+  // const handleCredentialResponse = async (response: any) => {
+  //   const { credential } = response;
+  //   const googleLoginInput: GoogleLoginInput = {
+  //     credential,
+  //   };
+  //   const { googleLogin } = await mutateAsync({ data: googleLoginInput });
+
+  //   // TODO: 保存失敗した際の挙動が決めきれていない
+  //   // localStorageにaccessTokenを保存
+  //   try {
+  //     localStorage.setItem('accessToken', googleLogin.accessToken);
+  //   } catch (err) {
+  //     if (err instanceof Error) {
+  //       throw new Error(err.message);
+  //     }
+  //     throw err;
+  //   }
+
+  //   // ユーザー情報を取得
+  // };
 
   useEffect(() => {
     // @ts-ignore

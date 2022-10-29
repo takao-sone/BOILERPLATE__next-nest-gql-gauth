@@ -1,11 +1,10 @@
 import {
   ConflictException,
-  HttpException,
-  HttpStatus,
   Inject,
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { Prisma, RoleName, UserCredentialProvider } from '@prisma/client';
@@ -31,7 +30,12 @@ export class GoogleAuthenticationService {
     @Inject(IORedisKey) private redisClient: Redis,
   ) {}
 
-  async registerGoogleUser(credential: string): Promise<GoogleTokenAuth> {
+  /**
+   * Google Identityを使用したユーザー登録
+   * @param credential Googleのcredential（JWT）
+   * @returns GoogleTokenAuth
+   */
+  async registerGoogleUser(credential: string) {
     // フロントエンドで取得したcredentialが改竄されていないかの検証とpayloadの取得
     let payload: TokenPayload;
     try {
@@ -77,30 +81,103 @@ export class GoogleAuthenticationService {
       throw err;
     }
 
-    // Redisへセッション用ユーザーオブジェクトを保存
-    const redisSessionKey = this.redisService.generateRandomRedisKey();
+    // TODO: 重複@@@@@@@@@@@@@@@@@@@@Redisへセッション用ユーザーオブジェクトを保存
+    const sessionMaxAgeInSeconds = this.envService.getSessionMaxAgeInSeconds();
+    const sessionKey =
+      this.envService.getRedisSessionKeyPrefix() + ':' + this.redisService.generateRandomRedisKey();
+    const existingSessionKeysKey =
+      this.envService.getRedisExistingSessionPrefix() + ':' + sessionUser.displayedId;
+    await this.redisClient
+      .multi()
+      .set(sessionKey, JSON.stringify(sessionUser), 'EX', sessionMaxAgeInSeconds)
+      .sadd(existingSessionKeysKey, sessionKey)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .exec((err, _results) => {
+        if (!err) return;
+        Logger.error(`googleRegisterUser: ${err.message}`);
+        throw new InternalServerErrorException();
+      });
+
+    // アクセストークンの発行
+    const accessToken = this.generateAccessToken(sessionUser.displayedId, sessionKey);
+    const googleTokenAuth: GoogleTokenAuth = {
+      accessToken,
+    };
+
+    return googleTokenAuth;
+  }
+
+  /**
+   * Google Identityを使用したユーザーログイン
+   * @param credential Googleのcredential（JWT）
+   * @returns GoogleTokenAuth
+   */
+  async login(credential: string) {
+    let payload: TokenPayload;
     try {
-      const sessionMaxAgeInSeconds = this.envService.getSessionMaxAgeInSeconds();
-      await this.redisClient.set(
-        redisSessionKey,
-        JSON.stringify(sessionUser),
-        'EX',
-        sessionMaxAgeInSeconds,
-      );
+      payload = await this.verifyTokenFromFrontend(credential);
     } catch (err) {
       if (err instanceof Error) {
-        Logger.error(`googleRegisterUser: ${err.message}`);
-        throw new HttpException('Session Destroy Error', HttpStatus.INTERNAL_SERVER_ERROR);
+        Logger.error(err.message);
+        throw new InternalServerErrorException();
       }
       throw err;
     }
 
-    // アクセストークンの発行
-    const accessToken = this.generateAccessToken(sessionUser.displayedId, redisSessionKey);
+    let existingUser: UserWithRolesAndContactDetailAndProfile;
+    try {
+      existingUser = await this.getRegisteredUserBySub(payload.sub);
+    } catch (err) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        switch (err.code) {
+          case 'P2001':
+            throw new NotFoundException(`User does not exist.`);
+          default:
+            Logger.error(`Prisma Error Code: ${err.code}, ${err.message}`);
+            throw new InternalServerErrorException();
+        }
+      }
+      if (err instanceof Error) {
+        Logger.error(err.message);
+        throw new InternalServerErrorException();
+      }
+      throw err;
+    }
 
-    return {
+    let sessionUser: SessionUser;
+    try {
+      sessionUser = this.createSessionUserFromUserWithRolesAndContactDetailAndProfile(existingUser);
+    } catch (err) {
+      if (err instanceof Error) {
+        Logger.error(err.message);
+        throw new InternalServerErrorException();
+      }
+      throw err;
+    }
+
+    // TODO: 重複@@@@@@@@@@@@@@@@@@@@Redisへセッション用ユーザーオブジェクトを保存
+    const sessionMaxAgeInSeconds = this.envService.getSessionMaxAgeInSeconds();
+    const sessionKey =
+      this.envService.getRedisSessionKeyPrefix() + ':' + this.redisService.generateRandomRedisKey();
+    const existingSessionKeysKey =
+      this.envService.getRedisExistingSessionPrefix() + ':' + sessionUser.displayedId;
+    await this.redisClient
+      .multi()
+      .set(sessionKey, JSON.stringify(sessionUser), 'EX', sessionMaxAgeInSeconds)
+      .sadd(existingSessionKeysKey, sessionKey)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .exec((err, _results) => {
+        if (!err) return;
+        Logger.error(`googleRegisterUser: ${err.message}`);
+        throw new InternalServerErrorException();
+      });
+
+    const accessToken = this.generateAccessToken(sessionUser.displayedId, sessionKey);
+    const googleTokenAuth: GoogleTokenAuth = {
       accessToken,
     };
+
+    return googleTokenAuth;
   }
 
   /**
@@ -108,7 +185,7 @@ export class GoogleAuthenticationService {
    * @param credential フロントエンドから送られてきたGoogle Identityで発行されたcreadential(JWT)
    * @returns TokenPayload
    */
-  private async verifyTokenFromFrontend(credential: string): Promise<TokenPayload> {
+  private async verifyTokenFromFrontend(credential: string) {
     const clientId = this.envService.getGoogleCleintId();
     const client = new OAuth2Client(clientId);
     const loginTicket = await client.verifyIdToken({
@@ -128,9 +205,7 @@ export class GoogleAuthenticationService {
    * @param payloadFromGoogle Google Identityの検証用APIで検証済みのpayload
    * @returns UserWithRolesAndContactDetailAndProfile
    */
-  private async createGoogleProviderUser(
-    payloadFromGoogle: TokenPayload,
-  ): Promise<UserWithRolesAndContactDetailAndProfile> {
+  private async createGoogleProviderUser(payloadFromGoogle: TokenPayload) {
     const { sub, email, name } = payloadFromGoogle;
 
     if (!email) {
@@ -196,13 +271,47 @@ export class GoogleAuthenticationService {
   }
 
   /**
+   * DBから取得した後に型ガードで絞り込んだuserオブジェクトを取得
+   * @param sub Google Identityで取得したpayload中のsubject
+   * @returns UserWithRolesAndContactDetailAndProfile
+   */
+  private async getRegisteredUserBySub(sub: string) {
+    const existingUserThirdPartyCredential =
+      await this.prismaService.userThirdPartyCredential.findUniqueOrThrow({
+        where: {
+          sub_provider: {
+            sub,
+            provider: UserCredentialProvider.GOOGLE,
+          },
+        },
+      });
+    const user = await this.prismaService.user.findUniqueOrThrow({
+      where: {
+        id: existingUserThirdPartyCredential.userId,
+      },
+      include: {
+        userContactDetail: true,
+        userProfile: true,
+        userRoles: { include: { role: true } },
+      },
+    });
+    if (!isUserWithRolesAndContactDetailAndProfile(user)) {
+      Logger.error(
+        `googleRegisterUser: createdUser is not type of UserWithRolesAndContactDetailAndProfile.`,
+      );
+      throw new Error();
+    }
+    return user;
+  }
+
+  /**
    * DBから取得した後に型ガードで絞り込んだuserオブジェクトをセッション保存用のユーザーに変換
    * @param userWithRolesAndContactDetailAndProfile DBから取得した後に型ガードで絞り込んだuserオブジェクト
    * @returns SessionUser
    */
-  private createSessionUserFromUserWithRolesAndContactDetailAndProfile = (
+  private createSessionUserFromUserWithRolesAndContactDetailAndProfile(
     userWithRolesAndContactDetailAndProfile: UserWithRolesAndContactDetailAndProfile,
-  ) => {
+  ) {
     const { userRoles } = userWithRolesAndContactDetailAndProfile;
 
     if (!userRoles[0]) {
@@ -228,7 +337,7 @@ export class GoogleAuthenticationService {
     };
 
     return sessionUser;
-  };
+  }
 
   /**
    * アクセストークンの生成
@@ -236,7 +345,7 @@ export class GoogleAuthenticationService {
    * @param redisSessionKey redis session key
    * @returns accessToken(JWT)
    */
-  private generateAccessToken(userDisplayedId: string, redisSessionKey: string): string {
+  private generateAccessToken(userDisplayedId: string, redisSessionKey: string) {
     const payload: AppUserInputAccessTokenPayload = {
       iss: this.envService.getJwtIssuer(),
       aud: [this.envService.getJwtAudienceWeb()],

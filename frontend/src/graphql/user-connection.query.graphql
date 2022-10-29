@@ -1,23 +1,23 @@
-query UserConnection($pagination: PaginationInput, $sort: UserSortInput) {
-  userConnection(pagination: $pagination, sort: $sort) {
-    edges {
-      cursor
-      node {
-        displayedId
-        userCredential {
-          email
-        }
-        userRole {
-          name
-        }
-      }
-    }
-    pageInfo {
-      endCursor
-      hasNextPage
-      hasPreviousPage
-      startCursor
-    }
-    totalCount
-  }
-}
+# query UserConnection($pagination: PaginationInput, $sort: UserSortInput) {
+#   userConnection(pagination: $pagination, sort: $sort) {
+#     edges {
+#       cursor
+#       node {
+#         displayedId
+#         userCredential {
+#           email
+#         }
+#         userRole {
+#           name
+#         }
+#       }
+#     }
+#     pageInfo {
+#       endCursor
+#       hasNextPage
+#       hasPreviousPage
+#       startCursor
+#     }
+#     totalCount
+#   }
+# }
