@@ -17,6 +17,48 @@ type GoogleTokenAuth {
   accessToken: String!
 }
 
+type GoogleUser {
+  """DBへのデータ作成時間"""
+  createdAt: DateTime!
+
+  """クライアントアプリケーション側へ表示するID"""
+  displayedId: String!
+
+  """DBへのデータ更新時間"""
+  updatedAt: DateTime!
+
+  """ユーザー連絡先情報"""
+  userContactDetail: UserContactDetail!
+
+  """ユーザープロフィール情報"""
+  userProfile: UserProfile!
+
+  """ユーザー権限"""
+  userRole: Role!
+
+  """ユーザー認証情報"""
+  userThirdPartyCredential: UserThirdPartyCredential!
+}
+
+type GoogleUserConnection {
+  """edgeオブジェクト配列"""
+  edges: [GoogleUserEdge!]
+
+  """ページネーションに関する情報"""
+  pageInfo: PageInfo!
+
+  """指定した条件で取得できる最大データ数"""
+  totalCount: Int!
+}
+
+type GoogleUserEdge {
+  """現在のnodeのカーソル"""
+  cursor: String!
+
+  """nodeオブジェクト"""
+  node: GoogleUser!
+}
+
 type Mutation {
   "\n      権限: ALL \n\n      Google Identityを使用した新規ユーザー登録用オペレーション\n    "
   googleRegisterUser(data: GoogleRegisterInput!): GoogleTokenAuth!
@@ -63,6 +105,9 @@ input PaginationInput {
 }
 
 type Query {
+  "\n      権限: Logged-In \n\n      現在ログインしているユーザーの情報 \n\n    "
+  authenticatedUser: SessionUser!
+
   "\n      権限: ADMIN \n\n      ページネーションによりロールを取得するオペレーション \n\n    "
   roleConnection(pagination: PaginationInput = {first: 1, skip: 1}, sort: RoleSortInput = {direction: ASC, field: ID}): RoleConnection!
 
@@ -72,8 +117,14 @@ type Query {
   "\n      権限: ALL \n\n      テスト\n    "
   testRoleGuard: String!
 
+  "\n      権限: ADMIN \n\n      ユーザーのdisplayedIdによってユーザーを取得するオペレーション \n\n    "
+  user(
+    """ユーザーのdisplayedId"""
+    displayedId: String!
+  ): GoogleUser!
+
   "\n      権限: ADMIN \n\n      ページネーションによりユーザーを取得するオペレーション \n\n    "
-  userConnection(pagination: PaginationInput = {first: 1, skip: 1}, sort: UserSortInput = {direction: ASC, field: ID}): UserConnection!
+  userConnection(pagination: PaginationInput = {first: 1, skip: 1}, sort: UserSortInput = {direction: ASC, field: ID}): GoogleUserConnection!
 }
 
 input RefreshTokensInput {
@@ -127,6 +178,38 @@ input RoleSortInput {
   field: RoleSortField = ID
 }
 
+type SessionUser {
+  """アクセストークン"""
+  displayedId: String!
+
+  """ユーザー連絡先情報"""
+  userContactDetail: SessionUserContactDetail!
+
+  """ユーザープロフィール"""
+  userProfile: SessionUserProfile!
+
+  """ユーザー権限"""
+  userRole: SessionUserRole!
+}
+
+type SessionUserContactDetail {
+  """メールアドレス"""
+  email: String!
+}
+
+type SessionUserProfile {
+  """ユーザー名"""
+  name: String!
+}
+
+type SessionUserRole {
+  """クライアントアプリケーション側へ表示するID"""
+  displayedId: String!
+
+  """ロールの名前"""
+  name: String!
+}
+
 """
 Possible directions in which to order a list of items when provided an `orderBy` argument.
 """
@@ -156,35 +239,7 @@ input TokenLogOutInput {
   refreshToken: String!
 }
 
-type User {
-  """DBへのデータ作成時間"""
-  createdAt: DateTime!
-
-  """クライアントアプリケーション側へ表示するID"""
-  displayedId: String!
-
-  """DBへのデータ更新時間"""
-  updatedAt: DateTime!
-
-  """ユーザー認証情報"""
-  userCredential: UserCredential!
-
-  """ユーザー権限"""
-  userRole: Role!
-}
-
-type UserConnection {
-  """edgeオブジェクト配列"""
-  edges: [UserEdge!]
-
-  """ページネーションに関する情報"""
-  pageInfo: PageInfo!
-
-  """指定した条件で取得できる最大データ数"""
-  totalCount: Int!
-}
-
-type UserCredential {
+type UserContactDetail {
   """DBへのデータ作成時間"""
   createdAt: DateTime!
 
@@ -195,12 +250,15 @@ type UserCredential {
   updatedAt: DateTime!
 }
 
-type UserEdge {
-  """現在のnodeのカーソル"""
-  cursor: String!
+type UserProfile {
+  """DBへのデータ作成時間"""
+  createdAt: DateTime!
 
-  """nodeオブジェクト"""
-  node: User!
+  """ユーザー名"""
+  name: String!
+
+  """DBへのデータ更新時間"""
+  updatedAt: DateTime!
 }
 
 """Properties by which user connections can be ordered."""
@@ -215,4 +273,15 @@ input UserSortInput {
 
   """ユーザー取得する際にソート対象にしたいフィールド"""
   field: UserSortField = ID
+}
+
+type UserThirdPartyCredential {
+  """DBへのデータ作成時間"""
+  createdAt: DateTime!
+
+  """IDプロバイダー名"""
+  provider: String!
+
+  """DBへのデータ更新時間"""
+  updatedAt: DateTime!
 }
