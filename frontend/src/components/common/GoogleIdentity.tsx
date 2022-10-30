@@ -1,29 +1,32 @@
 import { FC, useEffect } from 'react';
-import { useGoogleRegisterUser } from 'fetchers';
-import { GoogleRegisterInput } from 'generated/graphql';
+import { useGoogleLogin, useGoogleRegisterUser } from 'fetchers';
+import { GoogleLoginInput, GoogleRegisterInput } from 'generated/graphql';
 
 const RENDERED_BUTTON_ID = 'login-with-google';
 
+export const GI_BUTTON_TYPE = {
+  REGISTER: 'REGISTER',
+  LOGIN: 'LOGIN',
+} as const;
+
 type Props = {
-  buttonType: 'REGISTER' | 'LOGIN';
+  buttonType: keyof typeof GI_BUTTON_TYPE;
 };
 
 const GoogleIdentity: FC<Props> = ({ buttonType }) => {
   const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string;
-  // TODO: 登録
-  const { mutateAsync } = useGoogleRegisterUser();
+  const { mutateAsync: mutateAsyncForRegister } = useGoogleRegisterUser();
+  const { mutateAsync: mutateAsyncForLogin } = useGoogleLogin();
 
-  const handleCredentialResponse = async (response: any) => {
-    const { credential } = response;
-    const googleRegisterUserInput: GoogleRegisterInput = {
-      credential,
-    };
-    const { googleRegisterUser } = await mutateAsync({ data: googleRegisterUserInput });
+  const handleRegisterCredentialResponse = async (response: any) => {
+    const data: GoogleRegisterInput = { credential: response.credential };
+    const {
+      googleRegisterUser: { accessToken },
+    } = await mutateAsyncForRegister({ data });
 
     // TODO: 保存失敗した際の挙動が決めきれていない
-    // localStorageにaccessTokenを保存
     try {
-      localStorage.setItem('accessToken', googleRegisterUser.accessToken);
+      localStorage.setItem('accessToken', accessToken);
     } catch (err) {
       if (err instanceof Error) {
         throw new Error(err.message);
@@ -31,45 +34,43 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
       throw err;
     }
 
+    // TODO
     // ユーザー情報を取得
   };
 
-  // TODO: ログイン
-  // const { mutateAsync } = useGoogleLogin();
+  const handleLoginCredentialResponse = async (response: any) => {
+    const data: GoogleLoginInput = { credential: response.credential };
+    const {
+      googleLogin: { accessToken },
+    } = await mutateAsyncForLogin({ data });
 
-  // const handleCredentialResponse = async (response: any) => {
-  //   const { credential } = response;
-  //   const googleLoginInput: GoogleLoginInput = {
-  //     credential,
-  //   };
-  //   const { googleLogin } = await mutateAsync({ data: googleLoginInput });
+    // TODO: 保存失敗した際の挙動が決めきれていない
+    try {
+      localStorage.setItem('accessToken', accessToken);
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new Error(err.message);
+      }
+      throw err;
+    }
 
-  //   // TODO: 保存失敗した際の挙動が決めきれていない
-  //   // localStorageにaccessTokenを保存
-  //   try {
-  //     localStorage.setItem('accessToken', googleLogin.accessToken);
-  //   } catch (err) {
-  //     if (err instanceof Error) {
-  //       throw new Error(err.message);
-  //     }
-  //     throw err;
-  //   }
-
-  //   // ユーザー情報を取得
-  // };
+    // TODO
+    // ユーザー情報を取得
+  };
 
   useEffect(() => {
+    const isRegister = buttonType === GI_BUTTON_TYPE.REGISTER;
     // @ts-ignore
     google.accounts.id.initialize({
       client_id: googleClientId,
-      callback: handleCredentialResponse,
+      callback: isRegister ? handleRegisterCredentialResponse : handleLoginCredentialResponse,
     });
-
     // @ts-ignore
     google.accounts.id.renderButton(document.getElementById(RENDERED_BUTTON_ID), {
+      type: 'standard',
       theme: 'outline',
-      size: 'large',
-      text: buttonType === 'REGISTER' ? 'Googleで登録' : 'Googleでログイン',
+      size: 'medium',
+      text: isRegister ? 'signup_with' : 'signin_with',
     });
   });
 

@@ -45,8 +45,6 @@ export class GoogleAuthenticationResolver {
     `,
   })
   async googleLogin(@Args('data') input: GoogleLoginInput) {
-    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-
     return await this.googleAuthenticationService.login(input.credential);
   }
 

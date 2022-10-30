@@ -56,7 +56,7 @@ export class GoogleAuthenticationService {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         switch (err.code) {
           case 'P2002':
-            throw new ConflictException(`sub already used.`);
+            throw new ConflictException(`sub already exists.`);
           default:
             Logger.error(`Prisma Error Code: ${err.code}, ${err.message}`);
             throw new InternalServerErrorException();
