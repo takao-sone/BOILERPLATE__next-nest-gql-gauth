@@ -48,6 +48,14 @@ export class EnvValidator {
 
   @IsNotEmpty()
   @IsString()
+  REDIS_SESSION_KEY_PREFIX!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  REDIS_EXISTING_SESSION_PREFIX!: string;
+
+  @IsNotEmpty()
+  @IsString()
   SESSION_SECRET!: string;
 
   @IsNotEmpty()

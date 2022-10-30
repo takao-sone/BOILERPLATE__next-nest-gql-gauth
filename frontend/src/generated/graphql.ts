@@ -1,6 +1,5 @@
 import { GraphQLClient } from 'graphql-request';
-import { RequestInit } from 'graphql-request/dist/types.dom';
-import { useMutation, useQuery, UseMutationOptions, UseQueryOptions } from 'react-query';
+import { useMutation, UseMutationOptions } from 'react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -25,6 +24,11 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type GoogleLoginInput = {
+  /** フロントエンドのリクエストで発行されたGoogleのcredential（JWT） */
+  credential: Scalars['String'];
+};
+
 export type GoogleRegisterInput = {
   /** フロントエンドのリクエストで発行されたGoogleのcredential（JWT） */
   credential: Scalars['String'];
@@ -36,8 +40,52 @@ export type GoogleTokenAuth = {
   accessToken: Scalars['String'];
 };
 
+export type GoogleUser = {
+  __typename?: 'GoogleUser';
+  /** DBへのデータ作成時間 */
+  createdAt: Scalars['DateTime'];
+  /** クライアントアプリケーション側へ表示するID */
+  displayedId: Scalars['String'];
+  /** DBへのデータ更新時間 */
+  updatedAt: Scalars['DateTime'];
+  /** ユーザー連絡先情報 */
+  userContactDetail: UserContactDetail;
+  /** ユーザープロフィール情報 */
+  userProfile: UserProfile;
+  /** ユーザー権限 */
+  userRole: Role;
+  /** ユーザー認証情報 */
+  userThirdPartyCredential: UserThirdPartyCredential;
+};
+
+export type GoogleUserConnection = {
+  __typename?: 'GoogleUserConnection';
+  /** edgeオブジェクト配列 */
+  edges?: Maybe<Array<GoogleUserEdge>>;
+  /** ページネーションに関する情報 */
+  pageInfo: PageInfo;
+  /** 指定した条件で取得できる最大データ数 */
+  totalCount: Scalars['Int'];
+};
+
+export type GoogleUserEdge = {
+  __typename?: 'GoogleUserEdge';
+  /** 現在のnodeのカーソル */
+  cursor: Scalars['String'];
+  /** nodeオブジェクト */
+  node: GoogleUser;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  /**
+   *
+   *       権限: ALL
+   *
+   *       Google Identityを使用したログインオペレーション
+   *
+   */
+  googleLogin: GoogleTokenAuth;
   /**
    *
    *       権限: ALL
@@ -70,6 +118,10 @@ export type Mutation = {
    *
    */
   refreshTokens: TokenAuth;
+};
+
+export type MutationgoogleLoginArgs = {
+  data: GoogleLoginInput;
 };
 
 export type MutationgoogleRegisterUserArgs = {
@@ -153,16 +205,29 @@ export type Query = {
    *
    *       権限: ADMIN
    *
+   *       ユーザーのdisplayedIdによってユーザーを取得するオペレーション
+   *
+   *
+   */
+  user: GoogleUser;
+  /**
+   *
+   *       権限: ADMIN
+   *
    *       ページネーションによりユーザーを取得するオペレーション
    *
    *
    */
-  userConnection: UserConnection;
+  userConnection: GoogleUserConnection;
 };
 
 export type QueryroleConnectionArgs = {
   pagination?: InputMaybe<PaginationInput>;
   sort?: InputMaybe<RoleSortInput>;
+};
+
+export type QueryuserArgs = {
+  displayedId: Scalars['String'];
 };
 
 export type QueryuserConnectionArgs = {
@@ -277,30 +342,6 @@ export type TokenLogOutInput = {
   refreshToken: Scalars['String'];
 };
 
-export type User = {
-  __typename?: 'User';
-  /** DBへのデータ作成時間 */
-  createdAt: Scalars['DateTime'];
-  /** クライアントアプリケーション側へ表示するID */
-  displayedId: Scalars['String'];
-  /** DBへのデータ更新時間 */
-  updatedAt: Scalars['DateTime'];
-  /** ユーザー認証情報 */
-  userCredential: UserCredential;
-  /** ユーザー権限 */
-  userRole: Role;
-};
-
-export type UserConnection = {
-  __typename?: 'UserConnection';
-  /** edgeオブジェクト配列 */
-  edges?: Maybe<Array<UserEdge>>;
-  /** ページネーションに関する情報 */
-  pageInfo: PageInfo;
-  /** 指定した条件で取得できる最大データ数 */
-  totalCount: Scalars['Int'];
-};
-
 export type UserContactDetail = {
   __typename?: 'UserContactDetail';
   /** DBへのデータ作成時間 */
@@ -309,24 +350,6 @@ export type UserContactDetail = {
   email: Scalars['String'];
   /** DBへのデータ更新時間 */
   updatedAt: Scalars['DateTime'];
-};
-
-export type UserCredential = {
-  __typename?: 'UserCredential';
-  /** DBへのデータ作成時間 */
-  createdAt: Scalars['DateTime'];
-  /** メールアドレス */
-  email: Scalars['String'];
-  /** DBへのデータ更新時間 */
-  updatedAt: Scalars['DateTime'];
-};
-
-export type UserEdge = {
-  __typename?: 'UserEdge';
-  /** 現在のnodeのカーソル */
-  cursor: Scalars['String'];
-  /** nodeオブジェクト */
-  node: User;
 };
 
 export type UserProfile = {
@@ -363,6 +386,15 @@ export type UserThirdPartyCredential = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type GoogleLoginMutationVariables = Exact<{
+  data: GoogleLoginInput;
+}>;
+
+export type GoogleLoginMutation = {
+  __typename?: 'Mutation';
+  googleLogin: { __typename?: 'GoogleTokenAuth'; accessToken: string };
+};
+
 export type GoogleRegisterUserMutationVariables = Exact<{
   data: GoogleRegisterInput;
 }>;
@@ -381,36 +413,29 @@ export type LogInMutation = {
   logIn: { __typename?: 'TokenAuth'; accessToken: string; refreshToken: string };
 };
 
-export type UserConnectionQueryVariables = Exact<{
-  pagination?: InputMaybe<PaginationInput>;
-  sort?: InputMaybe<UserSortInput>;
-}>;
-
-export type UserConnectionQuery = {
-  __typename?: 'Query';
-  userConnection: {
-    __typename?: 'UserConnection';
-    totalCount: number;
-    edges?: Array<{
-      __typename?: 'UserEdge';
-      cursor: string;
-      node: {
-        __typename?: 'User';
-        displayedId: string;
-        userCredential: { __typename?: 'UserCredential'; email: string };
-        userRole: { __typename?: 'Role'; name: string };
-      };
-    }> | null;
-    pageInfo: {
-      __typename?: 'PageInfo';
-      endCursor?: string | null;
-      hasNextPage?: boolean | null;
-      hasPreviousPage?: boolean | null;
-      startCursor?: string | null;
-    };
-  };
-};
-
+export const GoogleLoginDocument = `
+    mutation GoogleLogin($data: GoogleLoginInput!) {
+  googleLogin(data: $data) {
+    accessToken
+  }
+}
+    `;
+export const useGoogleLoginMutation = <TError = unknown, TContext = unknown>(
+  client: GraphQLClient,
+  options?: UseMutationOptions<GoogleLoginMutation, TError, GoogleLoginMutationVariables, TContext>,
+  headers?: RequestInit['headers'],
+) =>
+  useMutation<GoogleLoginMutation, TError, GoogleLoginMutationVariables, TContext>(
+    ['GoogleLogin'],
+    (variables?: GoogleLoginMutationVariables) =>
+      fetcher<GoogleLoginMutation, GoogleLoginMutationVariables>(
+        client,
+        GoogleLoginDocument,
+        variables,
+        headers,
+      )(),
+    options,
+  );
 export const GoogleRegisterUserDocument = `
     mutation GoogleRegisterUser($data: GoogleRegisterInput!) {
   googleRegisterUser(data: $data) {
@@ -456,46 +481,5 @@ export const useLogInMutation = <TError = unknown, TContext = unknown>(
     ['LogIn'],
     (variables?: LogInMutationVariables) =>
       fetcher<LogInMutation, LogInMutationVariables>(client, LogInDocument, variables, headers)(),
-    options,
-  );
-export const UserConnectionDocument = `
-    query UserConnection($pagination: PaginationInput, $sort: UserSortInput) {
-  userConnection(pagination: $pagination, sort: $sort) {
-    edges {
-      cursor
-      node {
-        displayedId
-        userCredential {
-          email
-        }
-        userRole {
-          name
-        }
-      }
-    }
-    pageInfo {
-      endCursor
-      hasNextPage
-      hasPreviousPage
-      startCursor
-    }
-    totalCount
-  }
-}
-    `;
-export const useUserConnectionQuery = <TData = UserConnectionQuery, TError = unknown>(
-  client: GraphQLClient,
-  variables?: UserConnectionQueryVariables,
-  options?: UseQueryOptions<UserConnectionQuery, TError, TData>,
-  headers?: RequestInit['headers'],
-) =>
-  useQuery<UserConnectionQuery, TError, TData>(
-    variables === undefined ? ['UserConnection'] : ['UserConnection', variables],
-    fetcher<UserConnectionQuery, UserConnectionQueryVariables>(
-      client,
-      UserConnectionDocument,
-      variables,
-      headers,
-    ),
     options,
   );

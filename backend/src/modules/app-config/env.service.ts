@@ -16,6 +16,8 @@ interface EnvVariables {
   SESSION_SECRET: string;
   SESSION_NAME: string;
   SESSION_MAX_AGE: number;
+  REDIS_SESSION_KEY_PREFIX: string;
+  REDIS_EXISTING_SESSION_PREFIX: string;
   // Prisma
   DATABASE_URL: string;
   // Token
@@ -74,6 +76,14 @@ export class EnvService {
 
   getSessionMaxAge() {
     return this.configService.get('SESSION_MAX_AGE', { infer: true });
+  }
+
+  getRedisSessionKeyPrefix() {
+    return this.configService.get('REDIS_SESSION_KEY_PREFIX', { infer: true });
+  }
+
+  getRedisExistingSessionPrefix() {
+    return this.configService.get('REDIS_EXISTING_SESSION_PREFIX', { infer: true });
   }
 
   getAccessTokenSecret() {

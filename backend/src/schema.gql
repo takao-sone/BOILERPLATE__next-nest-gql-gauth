@@ -7,6 +7,11 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input GoogleLoginInput {
+  """フロントエンドのリクエストで発行されたGoogleのcredential（JWT）"""
+  credential: String!
+}
+
 input GoogleRegisterInput {
   """フロントエンドのリクエストで発行されたGoogleのcredential（JWT）"""
   credential: String!
@@ -60,6 +65,9 @@ type GoogleUserEdge {
 }
 
 type Mutation {
+  "\n      権限: ALL \n\n      Google Identityを使用したログインオペレーション\n    "
+  googleLogin(data: GoogleLoginInput!): GoogleTokenAuth!
+
   "\n      権限: ALL \n\n      Google Identityを使用した新規ユーザー登録用オペレーション\n    "
   googleRegisterUser(data: GoogleRegisterInput!): GoogleTokenAuth!
 

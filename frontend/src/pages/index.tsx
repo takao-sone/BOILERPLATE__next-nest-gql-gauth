@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import SEO from '../components/common/SEO';
 import styles from '../styles/Home.module.css';
-import GoogleIdentity from 'components/common/GoogleIdentity';
+import GoogleIdentity, { GI_BUTTON_TYPE } from 'components/common/GoogleIdentity';
 
 const Home: NextPage = () => {
   return (
@@ -12,7 +12,8 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         {/* TODO */}
-        <GoogleIdentity buttonType="REGISTER" />
+        {/* <GoogleIdentity buttonType={GI_BUTTON_TYPE.REGISTER} /> */}
+        <GoogleIdentity buttonType={GI_BUTTON_TYPE.LOGIN} />
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
