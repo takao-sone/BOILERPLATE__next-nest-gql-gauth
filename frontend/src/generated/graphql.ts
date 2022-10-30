@@ -6,7 +6,12 @@ export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K]
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 
-function fetcher<TData, TVariables>(client: GraphQLClient, query: string, variables?: TVariables, headers?: RequestInit['headers']) {
+function fetcher<TData, TVariables>(
+  client: GraphQLClient,
+  query: string,
+  variables?: TVariables,
+  headers?: RequestInit['headers'],
+) {
   return async (): Promise<TData> => client.request<TData, TVariables>(query, variables, headers);
 }
 /** All built-in and custom scalars, mapped to their actual values */
@@ -115,26 +120,21 @@ export type Mutation = {
   refreshTokens: TokenAuth;
 };
 
-
 export type MutationgoogleLoginArgs = {
   data: GoogleLoginInput;
 };
-
 
 export type MutationgoogleRegisterUserArgs = {
   data: GoogleRegisterInput;
 };
 
-
 export type MutationlogInArgs = {
   data: TokenLogInInput;
 };
 
-
 export type MutationlogOutArgs = {
   data: TokenLogOutInput;
 };
-
 
 export type MutationrefreshTokensArgs = {
   data: RefreshTokensInput;
@@ -221,17 +221,14 @@ export type Query = {
   userConnection: GoogleUserConnection;
 };
 
-
 export type QueryroleConnectionArgs = {
   pagination?: InputMaybe<PaginationInput>;
   sort?: InputMaybe<RoleSortInput>;
 };
 
-
 export type QueryuserArgs = {
   displayedId: Scalars['String'];
 };
-
 
 export type QueryuserConnectionArgs = {
   pagination?: InputMaybe<PaginationInput>;
@@ -275,7 +272,7 @@ export type RoleEdge = {
 
 /** Properties by which role connections can be ordered. */
 export const RoleSortField = {
-  ID: 'ID'
+  ID: 'ID',
 } as const;
 
 export type RoleSortField = typeof RoleSortField[keyof typeof RoleSortField];
@@ -321,7 +318,7 @@ export type SessionUserRole = {
 /** Possible directions in which to order a list of items when provided an `orderBy` argument. */
 export const SortDirection = {
   ASC: 'ASC',
-  DESC: 'DESC'
+  DESC: 'DESC',
 } as const;
 
 export type SortDirection = typeof SortDirection[keyof typeof SortDirection];
@@ -368,7 +365,7 @@ export type UserProfile = {
 /** Properties by which user connections can be ordered. */
 export const UserSortField = {
   CREATED_AT: 'CREATED_AT',
-  ID: 'ID'
+  ID: 'ID',
 } as const;
 
 export type UserSortField = typeof UserSortField[keyof typeof UserSortField];
@@ -393,23 +390,28 @@ export type GoogleLoginMutationVariables = Exact<{
   data: GoogleLoginInput;
 }>;
 
-
-export type GoogleLoginMutation = { __typename?: 'Mutation', googleLogin: { __typename?: 'GoogleTokenAuth', accessToken: string } };
+export type GoogleLoginMutation = {
+  __typename?: 'Mutation';
+  googleLogin: { __typename?: 'GoogleTokenAuth'; accessToken: string };
+};
 
 export type GoogleRegisterUserMutationVariables = Exact<{
   data: GoogleRegisterInput;
 }>;
 
-
-export type GoogleRegisterUserMutation = { __typename?: 'Mutation', googleRegisterUser: { __typename?: 'GoogleTokenAuth', accessToken: string } };
+export type GoogleRegisterUserMutation = {
+  __typename?: 'Mutation';
+  googleRegisterUser: { __typename?: 'GoogleTokenAuth'; accessToken: string };
+};
 
 export type LogInMutationVariables = Exact<{
   data: TokenLogInInput;
 }>;
 
-
-export type LogInMutation = { __typename?: 'Mutation', logIn: { __typename?: 'TokenAuth', accessToken: string, refreshToken: string } };
-
+export type LogInMutation = {
+  __typename?: 'Mutation';
+  logIn: { __typename?: 'TokenAuth'; accessToken: string; refreshToken: string };
+};
 
 export const GoogleLoginDocument = `
     mutation GoogleLogin($data: GoogleLoginInput!) {
@@ -418,19 +420,22 @@ export const GoogleLoginDocument = `
   }
 }
     `;
-export const useGoogleLoginMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(
-      client: GraphQLClient,
-      options?: UseMutationOptions<GoogleLoginMutation, TError, GoogleLoginMutationVariables, TContext>,
-      headers?: RequestInit['headers']
-    ) =>
-    useMutation<GoogleLoginMutation, TError, GoogleLoginMutationVariables, TContext>(
-      ['GoogleLogin'],
-      (variables?: GoogleLoginMutationVariables) => fetcher<GoogleLoginMutation, GoogleLoginMutationVariables>(client, GoogleLoginDocument, variables, headers)(),
-      options
-    );
+export const useGoogleLoginMutation = <TError = unknown, TContext = unknown>(
+  client: GraphQLClient,
+  options?: UseMutationOptions<GoogleLoginMutation, TError, GoogleLoginMutationVariables, TContext>,
+  headers?: RequestInit['headers'],
+) =>
+  useMutation<GoogleLoginMutation, TError, GoogleLoginMutationVariables, TContext>(
+    ['GoogleLogin'],
+    (variables?: GoogleLoginMutationVariables) =>
+      fetcher<GoogleLoginMutation, GoogleLoginMutationVariables>(
+        client,
+        GoogleLoginDocument,
+        variables,
+        headers,
+      )(),
+    options,
+  );
 export const GoogleRegisterUserDocument = `
     mutation GoogleRegisterUser($data: GoogleRegisterInput!) {
   googleRegisterUser(data: $data) {
@@ -438,19 +443,27 @@ export const GoogleRegisterUserDocument = `
   }
 }
     `;
-export const useGoogleRegisterUserMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(
-      client: GraphQLClient,
-      options?: UseMutationOptions<GoogleRegisterUserMutation, TError, GoogleRegisterUserMutationVariables, TContext>,
-      headers?: RequestInit['headers']
-    ) =>
-    useMutation<GoogleRegisterUserMutation, TError, GoogleRegisterUserMutationVariables, TContext>(
-      ['GoogleRegisterUser'],
-      (variables?: GoogleRegisterUserMutationVariables) => fetcher<GoogleRegisterUserMutation, GoogleRegisterUserMutationVariables>(client, GoogleRegisterUserDocument, variables, headers)(),
-      options
-    );
+export const useGoogleRegisterUserMutation = <TError = unknown, TContext = unknown>(
+  client: GraphQLClient,
+  options?: UseMutationOptions<
+    GoogleRegisterUserMutation,
+    TError,
+    GoogleRegisterUserMutationVariables,
+    TContext
+  >,
+  headers?: RequestInit['headers'],
+) =>
+  useMutation<GoogleRegisterUserMutation, TError, GoogleRegisterUserMutationVariables, TContext>(
+    ['GoogleRegisterUser'],
+    (variables?: GoogleRegisterUserMutationVariables) =>
+      fetcher<GoogleRegisterUserMutation, GoogleRegisterUserMutationVariables>(
+        client,
+        GoogleRegisterUserDocument,
+        variables,
+        headers,
+      )(),
+    options,
+  );
 export const LogInDocument = `
     mutation LogIn($data: TokenLogInInput!) {
   logIn(data: $data) {
@@ -459,16 +472,14 @@ export const LogInDocument = `
   }
 }
     `;
-export const useLogInMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(
-      client: GraphQLClient,
-      options?: UseMutationOptions<LogInMutation, TError, LogInMutationVariables, TContext>,
-      headers?: RequestInit['headers']
-    ) =>
-    useMutation<LogInMutation, TError, LogInMutationVariables, TContext>(
-      ['LogIn'],
-      (variables?: LogInMutationVariables) => fetcher<LogInMutation, LogInMutationVariables>(client, LogInDocument, variables, headers)(),
-      options
-    );
+export const useLogInMutation = <TError = unknown, TContext = unknown>(
+  client: GraphQLClient,
+  options?: UseMutationOptions<LogInMutation, TError, LogInMutationVariables, TContext>,
+  headers?: RequestInit['headers'],
+) =>
+  useMutation<LogInMutation, TError, LogInMutationVariables, TContext>(
+    ['LogIn'],
+    (variables?: LogInMutationVariables) =>
+      fetcher<LogInMutation, LogInMutationVariables>(client, LogInDocument, variables, headers)(),
+    options,
+  );

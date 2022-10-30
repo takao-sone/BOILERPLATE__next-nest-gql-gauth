@@ -81,25 +81,10 @@ export class GoogleAuthenticationService {
       throw err;
     }
 
-    // TODO: 重複@@@@@@@@@@@@@@@@@@@@Redisへセッション用ユーザーオブジェクトを保存
-    const sessionMaxAgeInSeconds = this.envService.getSessionMaxAgeInSeconds();
-    const sessionKey =
-      this.envService.getRedisSessionKeyPrefix() + ':' + this.redisService.generateRandomRedisKey();
-    const existingSessionKeysKey =
-      this.envService.getRedisExistingSessionPrefix() + ':' + sessionUser.displayedId;
-    await this.redisClient
-      .multi()
-      .set(sessionKey, JSON.stringify(sessionUser), 'EX', sessionMaxAgeInSeconds)
-      .sadd(existingSessionKeysKey, sessionKey)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .exec((err, _results) => {
-        if (!err) return;
-        Logger.error(`googleRegisterUser: ${err.message}`);
-        throw new InternalServerErrorException();
-      });
+    const newSessionKey = await this.saveSessionAndKeysOnRedis(sessionUser);
 
     // アクセストークンの発行
-    const accessToken = this.generateAccessToken(sessionUser.displayedId, sessionKey);
+    const accessToken = this.generateAccessToken(sessionUser.displayedId, newSessionKey);
     const googleTokenAuth: GoogleTokenAuth = {
       accessToken,
     };
@@ -155,24 +140,9 @@ export class GoogleAuthenticationService {
       throw err;
     }
 
-    // TODO: 重複@@@@@@@@@@@@@@@@@@@@Redisへセッション用ユーザーオブジェクトを保存
-    const sessionMaxAgeInSeconds = this.envService.getSessionMaxAgeInSeconds();
-    const sessionKey =
-      this.envService.getRedisSessionKeyPrefix() + ':' + this.redisService.generateRandomRedisKey();
-    const existingSessionKeysKey =
-      this.envService.getRedisExistingSessionPrefix() + ':' + sessionUser.displayedId;
-    await this.redisClient
-      .multi()
-      .set(sessionKey, JSON.stringify(sessionUser), 'EX', sessionMaxAgeInSeconds)
-      .sadd(existingSessionKeysKey, sessionKey)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .exec((err, _results) => {
-        if (!err) return;
-        Logger.error(`googleRegisterUser: ${err.message}`);
-        throw new InternalServerErrorException();
-      });
+    const newSessionKey = await this.saveSessionAndKeysOnRedis(sessionUser);
 
-    const accessToken = this.generateAccessToken(sessionUser.displayedId, sessionKey);
+    const accessToken = this.generateAccessToken(sessionUser.displayedId, newSessionKey);
     const googleTokenAuth: GoogleTokenAuth = {
       accessToken,
     };
@@ -359,5 +329,29 @@ export class GoogleAuthenticationService {
     };
 
     return this.jwtService.sign(payload, jwtSignOptions);
+  }
+
+  /**
+   * "セッション"と"ユーザーごとのセッションキー"をRedisに保存
+   * @param sessionUser Redisに保存するユーザーオブジェクト
+   * @returns sessionKey 新たに生成されたセッションのキー
+   */
+  private async saveSessionAndKeysOnRedis(sessionUser: SessionUser) {
+    const sessionMaxAgeInSeconds = this.envService.getSessionMaxAgeInSeconds();
+    const newSessionKey =
+      this.envService.getRedisSessionKeyPrefix() + ':' + this.redisService.generateRandomRedisKey();
+    const existingSessionKeysKey =
+      this.envService.getRedisExistingSessionPrefix() + ':' + sessionUser.displayedId;
+    await this.redisClient
+      .multi()
+      .set(newSessionKey, JSON.stringify(sessionUser), 'EX', sessionMaxAgeInSeconds)
+      .sadd(existingSessionKeysKey, newSessionKey)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .exec((err, _results) => {
+        if (!err) return;
+        Logger.error(`googleRegisterUser: ${err.message}`);
+        throw new InternalServerErrorException();
+      });
+    return newSessionKey;
   }
 }
