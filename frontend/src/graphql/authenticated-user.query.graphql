@@ -1,0 +1,15 @@
+query AuthenticatedUser {
+  authenticatedUser {
+    displayedId
+    userContactDetail {
+      email
+    }
+    userProfile {
+      name
+    }
+    userRole {
+      displayedId
+      name
+    }
+  }
+}

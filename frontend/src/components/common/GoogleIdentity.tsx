@@ -1,6 +1,7 @@
 import { FC, useEffect } from 'react';
 import { useGoogleLogin, useGoogleRegisterUser } from 'fetchers';
 import { GoogleLoginInput, GoogleRegisterInput } from 'generated/graphql';
+import { useAuthAccessToken } from 'global-states/auth-access-token-state';
 
 const RENDERED_BUTTON_ID = 'login-with-google';
 
@@ -17,6 +18,7 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
   const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string;
   const { mutateAsync: mutateAsyncForRegister } = useGoogleRegisterUser();
   const { mutateAsync: mutateAsyncForLogin } = useGoogleLogin();
+  const { updateAuthAccessToken } = useAuthAccessToken();
 
   const handleRegisterCredentialResponse = async (response: any) => {
     const data: GoogleRegisterInput = { credential: response.credential };
@@ -26,16 +28,13 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
 
     // TODO: 保存失敗した際の挙動が決めきれていない
     try {
-      localStorage.setItem('accessToken', accessToken);
+      updateAuthAccessToken(accessToken);
     } catch (err) {
       if (err instanceof Error) {
         throw new Error(err.message);
       }
       throw err;
     }
-
-    // TODO
-    // ユーザー情報を取得
   };
 
   const handleLoginCredentialResponse = async (response: any) => {
@@ -46,16 +45,13 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
 
     // TODO: 保存失敗した際の挙動が決めきれていない
     try {
-      localStorage.setItem('accessToken', accessToken);
+      updateAuthAccessToken(accessToken);
     } catch (err) {
       if (err instanceof Error) {
         throw new Error(err.message);
       }
       throw err;
     }
-
-    // TODO
-    // ユーザー情報を取得
   };
 
   useEffect(() => {
