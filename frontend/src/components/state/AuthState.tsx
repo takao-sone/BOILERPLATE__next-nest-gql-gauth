@@ -3,10 +3,10 @@ import { useAuthenticatedUser } from 'fetchers';
 
 type Props = {};
 
-const Auth: FC<Props> = () => {
+const AuthState: FC<Props> = () => {
   useAuthenticatedUser();
 
   return null;
 };
 
-export default Auth;
+export default AuthState;

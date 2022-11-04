@@ -2,8 +2,8 @@ import type { AppProps } from 'next/app';
 import { RecoilRoot } from 'recoil';
 import MuiProvider from '../providers/Mui.provider';
 import ReactQueryProvider from '../providers/ReactQuery.provider';
-import Auth from 'components/common/Auth';
 import CSR from 'components/common/CSR';
+import AuthState from 'components/state/AuthState';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
@@ -13,7 +13,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <RecoilRoot>
           <ReactQueryProvider>
             <MuiProvider>
-              <Auth />
+              <AuthState />
               <Component {...pageProps} />
             </MuiProvider>
           </ReactQueryProvider>
