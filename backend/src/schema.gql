@@ -68,6 +68,9 @@ type Mutation {
   "\n      権限: ALL \n\n      Google Identityを使用したログインオペレーション\n    "
   googleLogin(data: GoogleLoginInput!): GoogleTokenAuth!
 
+  "\n      権限: Logged-In \n\n      Google Identityを使用したログアウトオペレーション\n    "
+  googleLogout: String!
+
   "\n      権限: ALL \n\n      Google Identityを使用した新規ユーザー登録用オペレーション\n    "
   googleRegisterUser(data: GoogleRegisterInput!): GoogleTokenAuth!
 

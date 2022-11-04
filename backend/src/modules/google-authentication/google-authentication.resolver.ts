@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { RoleName } from '@prisma/client';
+import { CurrentAccessToken } from 'src/common/decorators/current-access-token.decorator';
 import { CurrentSessionUser } from 'src/common/decorators/current-session-user.decorator';
 import { GoogleLoginInput } from './dtos/google-login.input';
 import { GoogleRegisterInput } from './dtos/google-register.input';
@@ -46,6 +47,21 @@ export class GoogleAuthenticationResolver {
   })
   async googleLogin(@Args('data') input: GoogleLoginInput) {
     return await this.googleAuthenticationService.login(input.credential);
+  }
+
+  @UseGuards(LoggedInGuard)
+  @Mutation(() => String, {
+    description: `
+      権限: Logged-In \n
+      Google Identityを使用したログアウトオペレーション
+    `,
+  })
+  async googleLogout(
+    @CurrentAccessToken() accessToken: string,
+    @CurrentSessionUser() currentSessionUser: RedisSessionUser,
+  ) {
+    await this.googleAuthenticationService.logout(accessToken, currentSessionUser);
+    return 'Logged out';
   }
 
   // TODO: 本番で消す
