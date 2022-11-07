@@ -3,7 +3,6 @@ import { RecoilRoot } from 'recoil';
 import MuiProvider from '../providers/Mui.provider';
 import ReactQueryProvider from '../providers/ReactQuery.provider';
 import CSR from 'components/common/CSR';
-import AuthState from 'components/state/AuthState';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
@@ -13,7 +12,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <RecoilRoot>
           <ReactQueryProvider>
             <MuiProvider>
-              <AuthState />
               <Component {...pageProps} />
             </MuiProvider>
           </ReactQueryProvider>

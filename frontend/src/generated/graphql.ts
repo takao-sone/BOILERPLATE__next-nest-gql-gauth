@@ -1,6 +1,6 @@
 import { GraphQLClient } from 'graphql-request';
 import { RequestInit } from 'graphql-request/dist/types.dom';
-import { useQuery, useMutation, UseQueryOptions, UseMutationOptions } from 'react-query';
+import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from 'react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -87,6 +87,14 @@ export type Mutation = {
    *
    */
   googleLogin: GoogleTokenAuth;
+  /**
+   *
+   *       権限: Logged-In
+   *
+   *       Google Identityを使用したログアウトオペレーション
+   *
+   */
+  googleLogout: Scalars['String'];
   /**
    *
    *       権限: ALL
@@ -460,6 +468,17 @@ export const useAuthenticatedUserQuery = <TData = AuthenticatedUserQuery, TError
     ),
     options,
   );
+useAuthenticatedUserQuery.fetcher = (
+  client: GraphQLClient,
+  variables?: AuthenticatedUserQueryVariables,
+  headers?: RequestInit['headers'],
+) =>
+  fetcher<AuthenticatedUserQuery, AuthenticatedUserQueryVariables>(
+    client,
+    AuthenticatedUserDocument,
+    variables,
+    headers,
+  );
 export const GoogleLoginDocument = `
     mutation GoogleLogin($data: GoogleLoginInput!) {
   googleLogin(data: $data) {
@@ -482,6 +501,17 @@ export const useGoogleLoginMutation = <TError = unknown, TContext = unknown>(
         headers,
       )(),
     options,
+  );
+useGoogleLoginMutation.fetcher = (
+  client: GraphQLClient,
+  variables: GoogleLoginMutationVariables,
+  headers?: RequestInit['headers'],
+) =>
+  fetcher<GoogleLoginMutation, GoogleLoginMutationVariables>(
+    client,
+    GoogleLoginDocument,
+    variables,
+    headers,
   );
 export const GoogleRegisterUserDocument = `
     mutation GoogleRegisterUser($data: GoogleRegisterInput!) {
@@ -511,6 +541,17 @@ export const useGoogleRegisterUserMutation = <TError = unknown, TContext = unkno
       )(),
     options,
   );
+useGoogleRegisterUserMutation.fetcher = (
+  client: GraphQLClient,
+  variables: GoogleRegisterUserMutationVariables,
+  headers?: RequestInit['headers'],
+) =>
+  fetcher<GoogleRegisterUserMutation, GoogleRegisterUserMutationVariables>(
+    client,
+    GoogleRegisterUserDocument,
+    variables,
+    headers,
+  );
 export const LogInDocument = `
     mutation LogIn($data: TokenLogInInput!) {
   logIn(data: $data) {
@@ -530,3 +571,8 @@ export const useLogInMutation = <TError = unknown, TContext = unknown>(
       fetcher<LogInMutation, LogInMutationVariables>(client, LogInDocument, variables, headers)(),
     options,
   );
+useLogInMutation.fetcher = (
+  client: GraphQLClient,
+  variables: LogInMutationVariables,
+  headers?: RequestInit['headers'],
+) => fetcher<LogInMutation, LogInMutationVariables>(client, LogInDocument, variables, headers);

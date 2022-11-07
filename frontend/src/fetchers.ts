@@ -1,7 +1,7 @@
 import { GraphQLClient } from 'graphql-request';
 import { RequestInit } from 'graphql-request/dist/types.dom';
 import { UseQueryOptions } from 'react-query';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   AuthenticatedUserQuery,
   useAuthenticatedUserQuery,
@@ -9,7 +9,7 @@ import {
   useGoogleRegisterUserMutation,
   useLogInMutation,
 } from 'generated/graphql';
-import { useAuthAccessToken } from 'global-states/auth-access-token-state';
+import { authAccessTokenState } from 'global-states/auth-access-token-state';
 import { authUserState } from 'global-states/auth-user-state';
 
 const BASE_GRAPHQL_ENDPOINT =
@@ -50,7 +50,8 @@ export const useGoogleLogin = () => {
 };
 
 export const useAuthenticatedUser = () => {
-  const { authAccessToken } = useAuthAccessToken();
+  // const { authAccessToken } = useAuthAccessToken();
+  const authAccessToken = useRecoilValue(authAccessTokenState);
   const setAuthUser = useSetRecoilState(authUserState);
   const headers: HeadersInit = {
     Authorization: `Bearer ${authAccessToken}`,
@@ -68,4 +69,13 @@ export const useAuthenticatedUser = () => {
 
   const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT, { headers });
   return useAuthenticatedUserQuery(graphqlClient, undefined, options, headers);
+};
+
+export const getAuthenticatedUser = (authAccessToken: string) => {
+  const headers: HeadersInit = {
+    Authorization: `Bearer ${authAccessToken}`,
+  };
+
+  const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT, { headers });
+  return useAuthenticatedUserQuery.fetcher(graphqlClient)();
 };

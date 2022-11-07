@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
-import { atom, useRecoilState } from 'recoil';
+import { atom, selector, useRecoilState } from 'recoil';
 import { PersistConfiguration, recoilPersist } from 'recoil-persist';
 import { AUTH_ACCESS_TOKEN_STATE } from './atom-keys';
+import { getAuthenticatedUser } from 'fetchers';
 
 const localStorage = typeof window !== 'undefined' ? window.localStorage : undefined;
 let persistConfiguration: PersistConfiguration = {
@@ -17,7 +18,7 @@ const { persistAtom } = recoilPersist(persistConfiguration);
 
 export type AuthAccessToken = string;
 
-const authAccessTokenState = atom<AuthAccessToken | null>({
+export const authAccessTokenState = atom<AuthAccessToken | null>({
   key: AUTH_ACCESS_TOKEN_STATE,
   default: (() => {
     if (!localStorage) return null;
@@ -25,7 +26,33 @@ const authAccessTokenState = atom<AuthAccessToken | null>({
     if (!accessToken) return null;
     return JSON.parse(accessToken);
   })(),
-  effects_UNSTABLE: [persistAtom],
+  effects: [
+    persistAtom,
+    ({ onSet, setSelf }) => {
+      setSelf((newToken) => {
+        console.log('-----------------');
+        console.info('Current Token:', newToken);
+        return newToken;
+      });
+      onSet((newToken) => {
+        console.log('================');
+        console.info('Current Token:', newToken);
+      });
+    },
+  ],
+});
+
+export const vvv = selector({
+  key: 'vvv',
+  get: async ({ get }) => {
+    const accessToken = get(authAccessTokenState);
+    if (!accessToken) return;
+    const resp = await getAuthenticatedUser(accessToken).catch((err) => {
+      console.log(err);
+    });
+    if (!resp) return;
+    return resp.authenticatedUser;
+  },
 });
 
 export const useAuthAccessToken = () => {

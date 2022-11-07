@@ -1,7 +1,8 @@
 import { FC, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 import { useGoogleLogin, useGoogleRegisterUser } from 'fetchers';
 import { GoogleLoginInput, GoogleRegisterInput } from 'generated/graphql';
-import { useAuthAccessToken } from 'global-states/auth-access-token-state';
+import { useAuthAccessToken, vvv } from 'global-states/auth-access-token-state';
 
 const RENDERED_BUTTON_ID = 'login-with-google';
 
@@ -18,7 +19,10 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
   const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string;
   const { mutateAsync: mutateAsyncForRegister } = useGoogleRegisterUser();
   const { mutateAsync: mutateAsyncForLogin } = useGoogleLogin();
-  const { updateAuthAccessToken } = useAuthAccessToken();
+  const { updateAuthAccessToken, authAccessToken } = useAuthAccessToken();
+  const authUser = useRecoilValue(vvv);
+  console.log('mmmmmmmmmm');
+  console.log(authAccessToken);
 
   const handleRegisterCredentialResponse = async (response: any) => {
     const data: GoogleRegisterInput = { credential: response.credential };
@@ -66,13 +70,24 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
       type: 'standard',
       theme: 'outline',
       size: 'medium',
+      width: 300,
       text: isRegister ? 'signup_with' : 'signin_with',
     });
   });
 
+  console.log('@@@');
+  console.log(authUser);
+
   return (
     <div>
-      <div id={RENDERED_BUTTON_ID}></div>
+      {authUser ? (
+        <div>
+          <div>{authUser.displayedId}</div>
+          <div id={RENDERED_BUTTON_ID}></div>
+        </div>
+      ) : (
+        <div id={RENDERED_BUTTON_ID}></div>
+      )}
     </div>
   );
 };
