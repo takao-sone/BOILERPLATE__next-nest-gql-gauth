@@ -1,8 +1,7 @@
 import { FC, useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
 import { useGoogleLogin, useGoogleRegisterUser } from 'fetchers';
 import { GoogleLoginInput, GoogleRegisterInput } from 'generated/graphql';
-import { authUserState, useSetAuthAccessToken } from 'global-states/auth-state';
+import { useAuthUserValue, useSetAuthAccessToken } from 'global-states/auth-state';
 
 const RENDERED_BUTTON_ID = 'login-with-google';
 
@@ -20,7 +19,7 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
   const { mutateAsync: mutateAsyncForRegister } = useGoogleRegisterUser();
   const { mutateAsync: mutateAsyncForLogin } = useGoogleLogin();
   const setAuthAccessToken = useSetAuthAccessToken();
-  const authUser = useRecoilValue(authUserState);
+  const authUser = useAuthUserValue();
 
   const handleRegisterCredentialResponse = async (response: any) => {
     const data: GoogleRegisterInput = { credential: response.credential };
@@ -78,11 +77,11 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
       {authUser ? (
         <div>
           <div>{authUser.displayedId}</div>
-          <div id={RENDERED_BUTTON_ID}></div>
         </div>
       ) : (
-        <div id={RENDERED_BUTTON_ID}></div>
+        <div>Not Logged in</div>
       )}
+      <div id={RENDERED_BUTTON_ID}></div>
     </div>
   );
 };

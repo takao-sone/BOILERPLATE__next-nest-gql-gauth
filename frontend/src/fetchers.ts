@@ -1,7 +1,6 @@
 import { GraphQLClient } from 'graphql-request';
 import { RequestInit } from 'graphql-request/dist/types.dom';
 import { UseQueryOptions } from 'react-query';
-import { useRecoilValue } from 'recoil';
 import {
   AuthenticatedUserQuery,
   useAuthenticatedUserQuery,
@@ -9,7 +8,7 @@ import {
   useGoogleRegisterUserMutation,
   useLogInMutation,
 } from 'generated/graphql';
-import { authAccessTokenState } from 'global-states/auth-state';
+import { useAuthAccessTokenValue } from 'global-states/auth-state';
 
 const BASE_GRAPHQL_ENDPOINT =
   process.env.NEXT_PUBLIC_APP_ENV === 'development'
@@ -49,7 +48,8 @@ export const useGoogleLogin = () => {
 };
 
 export const useAuthenticatedUser = () => {
-  const authAccessToken = useRecoilValue(authAccessTokenState);
+  // const authAccessToken = useRecoilValue(authAccessTokenState);
+  const authAccessToken = useAuthAccessTokenValue();
   const headers: HeadersInit = {
     Authorization: `Bearer ${authAccessToken}`,
   };
