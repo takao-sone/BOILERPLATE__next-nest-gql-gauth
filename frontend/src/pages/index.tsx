@@ -12,8 +12,6 @@ const Home: NextPage = () => {
       </SEO>
 
       <main className={styles.main}>
-        {/* TODO */}
-        {/* <GoogleIdentity buttonType={GI_BUTTON_TYPE.REGISTER} /> */}
         <Suspense fallback={<div>Loading...</div>}>
           <GoogleIdentity buttonType={GI_BUTTON_TYPE.LOGIN} />
         </Suspense>

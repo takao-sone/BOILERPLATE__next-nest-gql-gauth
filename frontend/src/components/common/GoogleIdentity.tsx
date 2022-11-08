@@ -1,5 +1,5 @@
 import { FC, useEffect } from 'react';
-import { useGoogleLogin, useGoogleRegisterUser } from 'fetchers';
+import { useGoogleLogin, useGoogleLogout, useGoogleRegisterUser } from 'fetchers';
 import { GoogleLoginInput, GoogleRegisterInput } from 'generated/graphql';
 import { useAuthUserValue, useSetAuthAccessToken } from 'global-states/auth-state';
 
@@ -18,6 +18,7 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
   const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string;
   const { mutateAsync: mutateAsyncForRegister } = useGoogleRegisterUser();
   const { mutateAsync: mutateAsyncForLogin } = useGoogleLogin();
+  const { mutateAsync: mutateAsyncForLogout } = useGoogleLogout();
   const setAuthAccessToken = useSetAuthAccessToken();
   const authUser = useAuthUserValue();
 
@@ -55,6 +56,18 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await mutateAsyncForLogout({});
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new Error(err.message);
+      }
+      throw err;
+    }
+    setAuthAccessToken(null);
+  };
+
   useEffect(() => {
     const isRegister = buttonType === GI_BUTTON_TYPE.REGISTER;
     // @ts-ignore
@@ -77,11 +90,16 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
       {authUser ? (
         <div>
           <div>{authUser.displayedId}</div>
+          <div>
+            <button onClick={handleLogout}>ログアウト</button>
+          </div>
         </div>
       ) : (
-        <div>Not Logged in</div>
+        <div>
+          <div>Not Logged in</div>
+        </div>
       )}
-      <div id={RENDERED_BUTTON_ID}></div>
+      <div id={RENDERED_BUTTON_ID} hidden={!!authUser}></div>
     </div>
   );
 };
