@@ -16,7 +16,7 @@ import { UserWithRolesAndContactDetailAndProfile } from '../prisma/custom-types'
 import { PrismaService } from '../prisma/prisma.service';
 import { IORedisKey } from '../redis/redis.module';
 import { RedisService } from '../redis/redis.service';
-import { AppUserInputAccessTokenPayload } from './custom-types';
+import { AppAccessTokenPayload, AppUserInputAccessTokenPayload } from './custom-types';
 import { SessionUser } from './dtos/session-user.dto';
 import { GoogleTokenAuth } from './models/auth.model';
 
@@ -148,6 +148,42 @@ export class GoogleAuthenticationService {
     };
 
     return googleTokenAuth;
+  }
+
+  /**
+   * 現在ログインしているユーザーをセッションから削除
+   * @param accessToken
+   * @param currentSessionUser
+   */
+  async logout(accessToken: string, currentSessionUser: SessionUser) {
+    const decodedAccessTokenPayload = this.jwtService.decode(
+      accessToken,
+    ) as AppAccessTokenPayload | null;
+    if (!decodedAccessTokenPayload) {
+      Logger.error(`logout: No AccessToken Payload`);
+      throw new InternalServerErrorException('No AccessToken Payload');
+    }
+    const { session: sessionKey } = decodedAccessTokenPayload;
+    const sessionKeysKey =
+      this.envService.getRedisExistingSessionPrefix() + ':' + currentSessionUser.displayedId;
+    try {
+      await this.redisClient
+        .multi()
+        .del(sessionKey)
+        .srem(sessionKeysKey, sessionKey)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .exec((err, _results) => {
+          if (!err) return;
+          Logger.error(`logout: ${err.message}`);
+          throw new InternalServerErrorException();
+        });
+    } catch (err) {
+      if (err instanceof Error) {
+        Logger.error(err.message);
+        throw new InternalServerErrorException();
+      }
+      throw err;
+    }
   }
 
   /**

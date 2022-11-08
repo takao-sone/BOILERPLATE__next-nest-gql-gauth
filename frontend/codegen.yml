@@ -9,6 +9,7 @@ generates:
       - 'typescript-react-query'
     config:
       fetcher: graphql-request
+      exposeFetcher: true
       isReactHook: true
       namingConvention: keep
       enumsAsConst: true

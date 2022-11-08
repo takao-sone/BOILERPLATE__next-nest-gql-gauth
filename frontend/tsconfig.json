@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "src",
     "module": "esnext",
-    "target": "es5",
+    "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,

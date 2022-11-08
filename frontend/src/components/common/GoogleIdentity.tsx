@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import { useGoogleLogin, useGoogleRegisterUser } from 'fetchers';
 import { GoogleLoginInput, GoogleRegisterInput } from 'generated/graphql';
-import { useAuthAccessToken } from 'global-states/auth-access-token-state';
+import { useAuthUserValue, useSetAuthAccessToken } from 'global-states/auth-state';
 
 const RENDERED_BUTTON_ID = 'login-with-google';
 
@@ -18,7 +18,8 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
   const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string;
   const { mutateAsync: mutateAsyncForRegister } = useGoogleRegisterUser();
   const { mutateAsync: mutateAsyncForLogin } = useGoogleLogin();
-  const { updateAuthAccessToken } = useAuthAccessToken();
+  const setAuthAccessToken = useSetAuthAccessToken();
+  const authUser = useAuthUserValue();
 
   const handleRegisterCredentialResponse = async (response: any) => {
     const data: GoogleRegisterInput = { credential: response.credential };
@@ -28,7 +29,7 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
 
     // TODO: 保存失敗した際の挙動が決めきれていない
     try {
-      updateAuthAccessToken(accessToken);
+      setAuthAccessToken(accessToken);
     } catch (err) {
       if (err instanceof Error) {
         throw new Error(err.message);
@@ -45,7 +46,7 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
 
     // TODO: 保存失敗した際の挙動が決めきれていない
     try {
-      updateAuthAccessToken(accessToken);
+      setAuthAccessToken(accessToken);
     } catch (err) {
       if (err instanceof Error) {
         throw new Error(err.message);
@@ -66,12 +67,20 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
       type: 'standard',
       theme: 'outline',
       size: 'medium',
+      width: 300,
       text: isRegister ? 'signup_with' : 'signin_with',
     });
   });
 
   return (
     <div>
+      {authUser ? (
+        <div>
+          <div>{authUser.displayedId}</div>
+        </div>
+      ) : (
+        <div>Not Logged in</div>
+      )}
       <div id={RENDERED_BUTTON_ID}></div>
     </div>
   );
