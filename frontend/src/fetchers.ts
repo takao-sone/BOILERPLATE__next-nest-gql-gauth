@@ -5,6 +5,7 @@ import {
   AuthenticatedUserQuery,
   useAuthenticatedUserQuery,
   useGoogleLoginMutation,
+  useGoogleLogoutMutation,
   useGoogleRegisterUserMutation,
   useLogInMutation,
 } from 'generated/graphql';
@@ -61,4 +62,13 @@ export const getAuthenticatedUser = (authAccessToken: string) => {
   };
   const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT, { headers });
   return useAuthenticatedUserQuery.fetcher(graphqlClient)();
+};
+
+export const useGoogleLogout = () => {
+  const authAccessToken = useAuthAccessTokenValue();
+  const headers: HeadersInit = {
+    Authorization: `Bearer ${authAccessToken}`,
+  };
+  const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT, { headers });
+  return useGoogleLogoutMutation(graphqlClient);
 };

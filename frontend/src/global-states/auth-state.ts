@@ -1,3 +1,4 @@
+import { ClientError } from 'graphql-request';
 import { useCallback } from 'react';
 import { atom, selector, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { PersistConfiguration, recoilPersist } from 'recoil-persist';
@@ -31,16 +32,20 @@ const authAccessTokenState = atom<AuthAccessToken | null>({
   effects: [persistAtom],
 });
 
-const authUserState = selector<AuthUser | undefined>({
+const authUserState = selector<AuthUser | null>({
   key: SelectorKeys.AUTH_USER_STATE,
   get: async ({ get }) => {
     const accessToken = get(authAccessTokenState);
-    if (!accessToken) return;
+    if (!accessToken) return null;
     const resp = await getAuthenticatedUser(accessToken).catch((err) => {
-      if (err instanceof Error) throw new Error(err.message);
-      throw err;
+      if (err instanceof ClientError) {
+        const errors = err.response.errors;
+        const errorMessage = errors ? errors[0]?.message : 'unauthorized';
+        console.error(errorMessage);
+      }
+      return null;
     });
-    if (!resp) return;
+    if (!resp) return null;
     return resp.authenticatedUser;
   },
 });

@@ -417,6 +417,10 @@ export type GoogleLoginMutation = {
   googleLogin: { __typename?: 'GoogleTokenAuth'; accessToken: string };
 };
 
+export type GoogleLogoutMutationVariables = Exact<{ [key: string]: never }>;
+
+export type GoogleLogoutMutation = { __typename?: 'Mutation'; googleLogout: string };
+
 export type GoogleRegisterUserMutationVariables = Exact<{
   data: GoogleRegisterInput;
 }>;
@@ -510,6 +514,43 @@ useGoogleLoginMutation.fetcher = (
   fetcher<GoogleLoginMutation, GoogleLoginMutationVariables>(
     client,
     GoogleLoginDocument,
+    variables,
+    headers,
+  );
+export const GoogleLogoutDocument = `
+    mutation GoogleLogout {
+  googleLogout
+}
+    `;
+export const useGoogleLogoutMutation = <TError = unknown, TContext = unknown>(
+  client: GraphQLClient,
+  options?: UseMutationOptions<
+    GoogleLogoutMutation,
+    TError,
+    GoogleLogoutMutationVariables,
+    TContext
+  >,
+  headers?: RequestInit['headers'],
+) =>
+  useMutation<GoogleLogoutMutation, TError, GoogleLogoutMutationVariables, TContext>(
+    ['GoogleLogout'],
+    (variables?: GoogleLogoutMutationVariables) =>
+      fetcher<GoogleLogoutMutation, GoogleLogoutMutationVariables>(
+        client,
+        GoogleLogoutDocument,
+        variables,
+        headers,
+      )(),
+    options,
+  );
+useGoogleLogoutMutation.fetcher = (
+  client: GraphQLClient,
+  variables?: GoogleLogoutMutationVariables,
+  headers?: RequestInit['headers'],
+) =>
+  fetcher<GoogleLogoutMutation, GoogleLogoutMutationVariables>(
+    client,
+    GoogleLogoutDocument,
     variables,
     headers,
   );

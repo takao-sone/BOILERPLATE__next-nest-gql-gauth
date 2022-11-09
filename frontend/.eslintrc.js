@@ -23,6 +23,7 @@ module.exports = {
         },
       },
     ],
+    '@next/next/no-img-element': 'off',
   },
   overrides: [],
 };
