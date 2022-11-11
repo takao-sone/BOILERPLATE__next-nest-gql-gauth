@@ -1,8 +1,8 @@
 import type { NextPage } from 'next';
 import { Suspense } from 'react';
+import GoogleIdentity, { GI_BUTTON_TYPE } from '../components/common/GoogleIdentity';
 import SEO from '../components/common/SEO';
 import styles from '../styles/Home.module.css';
-import GoogleIdentity, { GI_BUTTON_TYPE } from 'components/common/GoogleIdentity';
 
 const Home: NextPage = () => {
   return (
@@ -14,6 +14,7 @@ const Home: NextPage = () => {
       <main className={styles.main}>
         <Suspense fallback={<div>Loading...</div>}>
           <GoogleIdentity buttonType={GI_BUTTON_TYPE.LOGIN} />
+          {/* <GoogleIdentity buttonType={GI_BUTTON_TYPE.REGISTER} /> */}
         </Suspense>
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
