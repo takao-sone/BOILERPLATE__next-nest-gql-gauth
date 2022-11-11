@@ -1,6 +1,4 @@
-import { GraphQLClient } from 'graphql-request';
-import { RequestInit } from 'graphql-request/dist/types.dom';
-import { UseQueryOptions } from '@tanstack/react-query';
+import { UseQueryOptions } from '@tanstack/react-query/build/lib/types';
 import {
   AuthenticatedUserQuery,
   useAuthenticatedUserQuery,
@@ -10,6 +8,8 @@ import {
   useLogInMutation,
 } from 'generated/graphql';
 import { useAuthAccessTokenValue } from 'global-states/auth-state';
+import { GraphQLClient } from 'graphql-request';
+import { RequestInit } from 'graphql-request/dist/types.dom';
 
 const BASE_GRAPHQL_ENDPOINT =
   process.env.NEXT_PUBLIC_APP_ENV === 'development'

@@ -6,6 +6,7 @@ module.exports = {
     'plugin:import/warnings',
     'plugin:react-hooks/recommended',
   ],
+  ignorePatterns: ['src/generated/*'],
   rules: {
     'no-unused-vars': ['error', { ignoreRestSiblings: true }],
     'react-hooks/rules-of-hooks': 'error',
@@ -15,14 +16,14 @@ module.exports = {
         additionalHooks: '(useRecoilCallback|useRecoilTransaction_UNSTABLE)',
       },
     ],
-    'import/order': [
-      'error',
-      {
-        alphabetize: {
-          order: 'asc',
-        },
-      },
-    ],
+    // 'import/order': [
+    //   'error',
+    //   {
+    //     alphabetize: {
+    //       order: 'asc',
+    //     },
+    //   },
+    // ],
     '@next/next/no-img-element': 'off',
   },
   overrides: [],
