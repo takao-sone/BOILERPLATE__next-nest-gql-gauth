@@ -28,6 +28,9 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
       googleRegisterUser: { accessToken },
     } = await mutateAsyncForRegister({ data });
 
+    // TODO: ===後で消す===
+    console.log(response);
+
     // TODO: 保存失敗した際の挙動が決めきれていない
     try {
       setAuthAccessToken(accessToken);
@@ -44,6 +47,9 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
     const {
       googleLogin: { accessToken },
     } = await mutateAsyncForLogin({ data });
+
+    // TODO: ===後で消す===
+    console.log(response);
 
     // TODO: 保存失敗した際の挙動が決めきれていない
     try {
