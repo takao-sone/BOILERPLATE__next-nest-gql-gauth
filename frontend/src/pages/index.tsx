@@ -13,8 +13,8 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <Suspense fallback={<div>Loading...</div>}>
-          <GoogleIdentity buttonType={GI_BUTTON_TYPE.LOGIN} />
-          {/* <GoogleIdentity buttonType={GI_BUTTON_TYPE.REGISTER} /> */}
+          {/* <GoogleIdentity buttonType={GI_BUTTON_TYPE.LOGIN} /> */}
+          <GoogleIdentity buttonType={GI_BUTTON_TYPE.REGISTER} />
         </Suspense>
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
