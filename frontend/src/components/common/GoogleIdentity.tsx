@@ -23,13 +23,13 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
   const authUser = useAuthUserValue();
 
   const handleRegisterCredentialResponse = async (response: any) => {
+    // TODO: ===後で消す===
+    console.log(response);
+
     const data: GoogleRegisterInput = { credential: response.credential };
     const {
       googleRegisterUser: { accessToken },
     } = await mutateAsyncForRegister({ data });
-
-    // TODO: ===後で消す===
-    console.log(response);
 
     // TODO: 保存失敗した際の挙動が決めきれていない
     try {
@@ -43,13 +43,13 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
   };
 
   const handleLoginCredentialResponse = async (response: any) => {
+    // TODO: ===後で消す===
+    console.log(response);
+
     const data: GoogleLoginInput = { credential: response.credential };
     const {
       googleLogin: { accessToken },
     } = await mutateAsyncForLogin({ data });
-
-    // TODO: ===後で消す===
-    console.log(response);
 
     // TODO: 保存失敗した際の挙動が決めきれていない
     try {
