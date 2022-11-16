@@ -40,6 +40,17 @@ resource "aws_subnet" "private_subnets_rds" {
   }
 }
 
+resource "aws_subnet" "private_subnets_elasticcache" {
+  count             = 2
+  vpc_id            = aws_vpc.vpc.id
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+  cidr_block        = var.private_subnet_elasticcache_cidrs[count.index]
+
+  tags = {
+    Name = "${local.resource_prefix}-private-subnet-elasticcache-${count.index + 1}"
+  }
+}
+
 # Route Table ===============================
 # resource "aws_route_table" "internet_rt" {
 #   vpc_id = aws_vpc.vpc.id
@@ -145,5 +156,21 @@ resource "aws_security_group" "rds_sg" {
 
   tags = {
     Name = "${local.resource_prefix}-rds-sg"
+  }
+}
+
+resource "aws_security_group" "elasticcache_sg" {
+  vpc_id = aws_vpc.vpc.id
+  name   = "${local.resource_prefix}-elasticcache-sg"
+
+  ingress {
+    protocol        = "tcp"
+    from_port       = 6379
+    to_port         = 6379
+    security_groups = [aws_security_group.app_runner_vpc_connector_sg.id]
+  }
+
+  tags = {
+    Name = "${local.resource_prefix}-elasticcache-sg"
   }
 }

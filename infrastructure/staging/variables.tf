@@ -56,6 +56,10 @@ variable "private_subnet_rds_cidrs" {
   type = list(string)
 }
 
+variable "private_subnet_elasticcache_cidrs" {
+  type = list(string)
+}
+
 variable "count_of_public_nats" {
   type = number
 }
