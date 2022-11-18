@@ -139,14 +139,6 @@ variable "ar_node_env" {
   type = string
 }
 
-variable "ar_redis_host" {
-  type = string
-}
-
-variable "ar_redis_port" {
-  type = string
-}
-
 variable "ar_refresh_token_expires_in" {
   type = string
 }

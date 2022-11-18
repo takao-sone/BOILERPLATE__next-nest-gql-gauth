@@ -83,8 +83,8 @@ module "apprunner" {
   ar_jwt_audience_web                = var.ar_jwt_audience_web
   ar_jwt_hash_algorithm              = var.ar_jwt_hash_algorithm
   ar_jwt_issuer                      = var.ar_jwt_issuer
-  ar_redis_host                      = var.ar_redis_host
-  ar_redis_port                      = var.ar_redis_port
+  ar_redis_host                      = module.elasticcache.redis_host
+  ar_redis_port                      = module.elasticcache.redis_port
   ar_refresh_token_expires_in        = var.ar_refresh_token_expires_in
   ar_refresh_token_secret            = var.ar_refresh_token_secret
   ar_session_max_age                 = var.ar_session_max_age
