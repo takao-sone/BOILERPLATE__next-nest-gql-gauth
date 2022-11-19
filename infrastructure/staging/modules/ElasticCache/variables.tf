@@ -20,35 +20,3 @@ variable "redis_security_group_ids" {
 locals {
   resource_prefix = "${var.project_name}-${var.project_stg}"
 }
-
-# variable "engine_version" {
-#   type = string
-# }
-
-# variable "parameter_group_name" {
-#   type = string
-# }
-
-# variable "node_type" {
-#   type = string
-# }
-
-# variable "cache_cluster_number" {
-#   type = number
-# }
-
-# variable "port" {
-#   type = number
-# }
-
-# variable "skip_final_snapshot" {
-#   type = bool
-# }
-
-# variable "redis_sg_ids" {
-#   type = list(string)
-# }
-
-# variable "redis_private_subnet_ids" {
-#   type = list(string)
-# }
