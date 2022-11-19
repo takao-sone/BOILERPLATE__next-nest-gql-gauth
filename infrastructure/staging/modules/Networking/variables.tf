@@ -12,15 +12,11 @@ variable "vpc_cidr" {
   type = string
 }
 
-variable "public_subnet_general_cidrs" {
+variable "public_subnet_cidrs" {
   type = list(string)
 }
 
-variable "private_subnet_rds_cidrs" {
-  type = list(string)
-}
-
-variable "private_subnet_elasticcache_cidrs" {
+variable "private_subnet_cidrs" {
   type = list(string)
 }
 

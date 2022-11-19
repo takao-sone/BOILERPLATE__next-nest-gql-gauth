@@ -23,14 +23,13 @@ module "resource_groups" {
 # デフォルトではVPCはインターネットアクセスを許可してない
 # NAT等を有効にしたい場合はモジュール内のコメントアウトしたリソースをコメントインすること
 module "networking" {
-  source                            = "./modules/Networking"
-  project_name                      = var.project_name
-  project_stg                       = var.project_stg
-  vpc_cidr                          = var.vpc_cidr
-  public_subnet_general_cidrs       = var.public_subnet_general_cidrs
-  private_subnet_rds_cidrs          = var.private_subnet_rds_cidrs
-  private_subnet_elasticcache_cidrs = var.private_subnet_elasticcache_cidrs
-  count_of_public_nats              = var.count_of_public_nats
+  source               = "./modules/Networking"
+  project_name         = var.project_name
+  project_stg          = var.project_stg
+  vpc_cidr             = var.vpc_cidr
+  public_subnet_cidrs  = var.public_subnet_cidrs
+  private_subnet_cidrs = var.private_subnet_cidrs
+  count_of_public_nats = var.count_of_public_nats
 }
 
 module "ecs" {
@@ -43,9 +42,8 @@ module "rds" {
   source                              = "./modules/RDS"
   project_name                        = var.project_name
   project_stg                         = var.project_stg
-  rds_subnet_group_subnet_ids         = module.networking.rds_subnet_ids
-  rds_security_group_ids              = module.networking.rds_security_group_ids
-  rds_vpc_connector_sg_id             = module.networking.rds_vpc_connector_sg_id
+  rds_subnet_group_subnet_ids         = module.networking.private_subnet_ids
+  rds_security_group_ids              = [module.networking.rds_security_group_id]
   rds_cluster_parameter_group_name    = var.rds_cluster_parameter_group_name
   rds_enabled_cloudwatch_logs_exports = var.rds_enabled_cloudwatch_logs_exports
   rds_master_username                 = var.rds_master_username
@@ -56,8 +54,8 @@ module "elasticcache" {
   source                        = "./modules/ElasticCache"
   project_name                  = var.project_name
   project_stg                   = var.project_stg
-  redis_subnet_group_subnet_ids = module.networking.elasticcache_subnet_ids
-  redis_security_group_ids      = module.networking.elasticcache_security_group_ids
+  redis_subnet_group_subnet_ids = module.networking.private_subnet_ids
+  redis_security_group_ids      = [module.networking.redis_security_group_id]
 }
 
 module "apprunner" {
@@ -69,7 +67,7 @@ module "apprunner" {
   project_stg                        = var.project_stg
   ar_domain_name                     = var.ar_domain_name
   ar_vpc_connector_sg_ids            = [module.networking.app_runner_vpc_connector_sg_id]
-  ar_vpc_connector_target_subnet_ids = concat(module.networking.rds_subnet_ids, module.networking.elasticcache_subnet_ids)
+  ar_vpc_connector_target_subnet_ids = module.networking.private_subnet_ids
   ar_observability_enabled           = var.ar_observability_enabled
   # AppRunner App Env Variables ===========================
   ecr_repository_url_apprunner       = module.ecs.ecr_repository_url_apprunner
@@ -107,8 +105,7 @@ module "amplify" {
   amplify_domain_name                 = var.amplify_domain_name
   amplify_staging_basic_auth_username = var.amplify_staging_basic_auth_username
   amplify_staging_basic_auth_password = var.amplify_staging_basic_auth_password
-
   # App Environment Variables
-  next_public_app_env          = var.next_public_app_env
-  next_public_graphql_endpoint = var.next_public_graphql_endpoint
+  next_public_app_env                 = var.next_public_app_env
+  next_public_graphql_endpoint        = var.next_public_graphql_endpoint
 }

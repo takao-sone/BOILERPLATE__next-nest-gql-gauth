@@ -16,10 +16,6 @@ variable "rds_subnet_group_subnet_ids" {
   type = list(string)
 }
 
-variable "rds_vpc_connector_sg_id" {
-  type = string
-}
-
 variable "rds_cluster_parameter_group_name" {
   type = string
 }
