@@ -79,7 +79,7 @@ variable "ar_redis_host" {
 }
 
 variable "ar_redis_port" {
-  type = string
+  type = number
 }
 
 variable "ar_refresh_token_expires_in" {

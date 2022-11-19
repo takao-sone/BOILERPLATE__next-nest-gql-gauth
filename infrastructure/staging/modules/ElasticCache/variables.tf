@@ -7,21 +7,13 @@ variable "project_stg" {
   type = string
 }
 
-# ===========================
-variable "vpc_cidr" {
-  type = string
-}
-
-variable "public_subnet_cidrs" {
+# Redis ===========================
+variable "redis_subnet_group_subnet_ids" {
   type = list(string)
 }
 
-variable "private_subnet_cidrs" {
+variable "redis_security_group_ids" {
   type = list(string)
-}
-
-variable "count_of_public_nats" {
-  type = number
 }
 
 # locals ===========================

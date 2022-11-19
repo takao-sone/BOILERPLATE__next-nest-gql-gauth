@@ -40,7 +40,7 @@ resource "aws_apprunner_service" "app" {
       image_repository_type = "ECR"
 
       image_configuration {
-        port = var.ar_app_port
+        port                          = var.ar_app_port
         runtime_environment_variables = {
           "NODE_ENV"                 = var.ar_node_env
           "APP_ENV"                  = var.ar_app_env
@@ -101,10 +101,10 @@ resource "aws_route53_record" "api" {
 
 resource "aws_route53_record" "certificate_validations" {
   for_each = var.STEP_3 ? {
-    for record in aws_apprunner_custom_domain_association.api.certificate_validation_records : record.name => {
-      name   = record.name
-      record = record.value
-    }
+  for record in aws_apprunner_custom_domain_association.api.certificate_validation_records : record.name => {
+    name   = record.name
+    record = record.value
+  }
   } : {}
 
   zone_id = data.aws_route53_zone.apprunner_domain.zone_id
@@ -127,19 +127,19 @@ resource "aws_apprunner_observability_configuration" "app" {
 }
 
 resource "aws_apprunner_vpc_connector" "apprunner" {
-  vpc_connector_name = "${local.resource_prefix}-rds-vpc-connector"
+  vpc_connector_name = "${local.resource_prefix}-vpc-connector"
   security_groups    = var.ar_vpc_connector_sg_ids
   subnets            = var.ar_vpc_connector_target_subnet_ids
 
   tags = {
-    "Name" = "${local.resource_prefix}-rds-vpc-connector"
+    "Name" = "${local.resource_prefix}-vpc-connector"
   }
 }
 
 resource "aws_iam_role" "apprunner_ecr_access" {
-  name               = "${local.resource_prefix}-apprunner-ecr-access"
-  path               = "/"
-  assume_role_policy = data.aws_iam_policy_document.apprunner_ecr_access.json
+  name                = "${local.resource_prefix}-apprunner-ecr-access"
+  path                = "/"
+  assume_role_policy  = data.aws_iam_policy_document.apprunner_ecr_access.json
   managed_policy_arns = [
     "arn:aws:iam::aws:policy/service-role/AWSAppRunnerServicePolicyForECRAccess"
   ]
@@ -150,9 +150,9 @@ resource "aws_iam_role" "apprunner_ecr_access" {
 }
 
 resource "aws_iam_role" "apprunner_instance" {
-  name               = "${local.resource_prefix}-apprunner-instance"
-  path               = "/"
-  assume_role_policy = data.aws_iam_policy_document.apprunner_instance.json
+  name                = "${local.resource_prefix}-apprunner-instance"
+  path                = "/"
+  assume_role_policy  = data.aws_iam_policy_document.apprunner_instance.json
   managed_policy_arns = [
     "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess"
   ]
@@ -169,7 +169,7 @@ data "aws_iam_policy_document" "apprunner_ecr_access" {
     ]
 
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = [
         "build.apprunner.amazonaws.com"
       ]
@@ -184,7 +184,7 @@ data "aws_iam_policy_document" "apprunner_instance" {
     ]
 
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = [
         "tasks.apprunner.amazonaws.com"
       ]

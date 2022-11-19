@@ -65,6 +65,12 @@ export class GoogleAuthenticationResolver {
   }
 
   // TODO: 本番で消す
+  @Query(() => String)
+  async test() {
+    return 'OKKKKKKKKKK';
+  }
+
+  // TODO: 本番で消す
   @UseGuards(LoggedInGuard)
   @Query(() => String, {
     description: `

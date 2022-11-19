@@ -48,11 +48,11 @@ variable "vpc_cidr" {
   type = string
 }
 
-variable "public_subnet_general_cidrs" {
+variable "public_subnet_cidrs" {
   type = list(string)
 }
 
-variable "private_subnet_rds_cidrs" {
+variable "private_subnet_cidrs" {
   type = list(string)
 }
 
@@ -132,14 +132,6 @@ variable "ar_jwt_issuer" {
 }
 
 variable "ar_node_env" {
-  type = string
-}
-
-variable "ar_redis_host" {
-  type = string
-}
-
-variable "ar_redis_port" {
   type = string
 }
 
