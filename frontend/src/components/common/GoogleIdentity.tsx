@@ -1,7 +1,7 @@
-import { FC, useEffect } from 'react';
 import { useGoogleLogin, useGoogleLogout, useGoogleRegisterUser } from 'fetchers';
 import { GoogleLoginInput, GoogleRegisterInput } from 'generated/graphql';
 import { useAuthUserValue, useSetAuthAccessToken } from 'global-states/auth-state';
+import { FC, useEffect } from 'react';
 
 const RENDERED_BUTTON_ID = 'login-with-google';
 
@@ -76,19 +76,26 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
 
   useEffect(() => {
     const isRegister = buttonType === GI_BUTTON_TYPE.REGISTER;
-    // @ts-ignore
-    google.accounts.id.initialize({
-      client_id: googleClientId,
-      callback: isRegister ? handleRegisterCredentialResponse : handleLoginCredentialResponse,
-    });
-    // @ts-ignore
-    google.accounts.id.renderButton(document.getElementById(RENDERED_BUTTON_ID), {
-      type: 'standard',
-      theme: 'outline',
-      size: 'medium',
-      width: 300,
-      text: isRegister ? 'signup_with' : 'signin_with',
-    });
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+    script.onload = () => {
+      // @ts-ignore
+      google.accounts.id.initialize({
+        client_id: googleClientId,
+        callback: isRegister ? handleRegisterCredentialResponse : handleLoginCredentialResponse,
+      });
+      // @ts-ignore
+      google.accounts.id.renderButton(document.getElementById(RENDERED_BUTTON_ID), {
+        type: 'standard',
+        theme: 'outline',
+        size: 'medium',
+        width: 300,
+        text: isRegister ? 'signup_with' : 'signin_with',
+      });
+    };
   });
 
   return (
