@@ -1,8 +1,8 @@
 import { Button } from '@mui/material';
+import AppErrorBoundary from 'components/common/AppErrorBoundary';
 import { useLogIn } from 'fetchers';
 import { LogInMutationVariables } from 'generated/graphql';
-import { useAuthUserValue } from 'global-states/auth-state';
-import { FC, Suspense } from 'react';
+import { FC } from 'react';
 
 type Props = {};
 
@@ -39,34 +39,12 @@ const Sample2: FC<Props> = () => {
   );
 };
 
-const AuthUser: FC = () => {
-  const authUser = useAuthUserValue();
-
-  return (
-    <div>
-      {authUser ? (
-        <div>
-          <div>{authUser.displayedId}</div>
-          <div>{authUser.userProfile.name}</div>
-        </div>
-      ) : (
-        <div>
-          <div>No Auth User</div>
-        </div>
-      )}
-    </div>
-  );
-};
-
 const Sample: FC = () => {
   return (
     <div>
-      {/* <AppErrorBoundary>
+      <AppErrorBoundary>
         <Sample2 />
-      </AppErrorBoundary> */}
-      <Suspense>
-        <AuthUser />
-      </Suspense>
+      </AppErrorBoundary>
     </div>
   );
 };
