@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@mui/material';
 import AppErrorBoundary from 'components/common/AppErrorBoundary';
 import { useLogIn } from 'fetchers';

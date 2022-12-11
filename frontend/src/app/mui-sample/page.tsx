@@ -1,3 +1,5 @@
+'use client';
+
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Button, Typography } from '@mui/material';
 import { FC } from 'react';

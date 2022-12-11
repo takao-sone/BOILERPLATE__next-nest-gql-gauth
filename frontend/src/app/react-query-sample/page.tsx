@@ -1,3 +1,5 @@
+'use client';
+
 import { FC } from 'react';
 // import { useUserConnection } from 'fetchers';
 // import { SortDirection, UserConnectionQueryVariables, UserSortField } from 'generated/graphql';
@@ -54,7 +56,7 @@ const ReactQuerySample: FC<Props> = () => {
   //     </section>
   //   </div>
   // );
-  return null;
+  return <div>ReactQuerySample</div>;
 };
 
 export default ReactQuerySample;
