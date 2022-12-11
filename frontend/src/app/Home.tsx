@@ -1,5 +1,7 @@
 'use client';
 
+import CircularProgress from '@mui/material/CircularProgress';
+import { Test } from 'components/common/Test';
 import type { NextPage } from 'next';
 import { Suspense } from 'react';
 import GoogleIdentity, { GI_BUTTON_TYPE } from '../components/common/GoogleIdentity';
@@ -14,13 +16,17 @@ const Home: NextPage = () => {
       </SEO>
 
       <main className={styles.main}>
-        {/* <Suspense fallback={<div>Loading....</div>}>
-
-        </Suspense> */}
-        <Suspense fallback={<div>Loading....</div>}>
-          <GoogleIdentity buttonType={GI_BUTTON_TYPE.LOGIN} />
-          {/* <GoogleIdentity buttonType={GI_BUTTON_TYPE.REGISTER} /> */}
+        <Suspense
+          fallback={
+            <div>
+              <CircularProgress />
+            </div>
+          }
+        >
+          <Test />
         </Suspense>
+        <GoogleIdentity buttonType={GI_BUTTON_TYPE.LOGIN} />
+        {/* <GoogleIdentity buttonType={GI_BUTTON_TYPE.REGISTER} /> */}
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>

@@ -14,7 +14,6 @@ const queryClient = new QueryClient({
     queries: {
       retry: 0,
       refetchOnWindowFocus: false,
-      // MEMO: React18の機能が正式実装されたらSuspenseで対応する
       suspense: true,
     },
     mutations: {

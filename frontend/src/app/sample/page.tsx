@@ -36,6 +36,7 @@ const Sample2: FC<Props> = () => {
       >
         LogIn
       </Button>
+      <a href="http://localhost:13000">Back</a>
       <div>{JSON.stringify(mutation.data)}</div>
     </div>
   );

@@ -1,6 +1,6 @@
 import AppErrorBoundary from 'components/common/AppErrorBoundary';
 import AuthProvider from 'providers/AuthProvider';
-import { FC, ReactNode, Suspense } from 'react';
+import { FC, ReactNode } from 'react';
 import MuiProvider from '../providers/Mui.provider';
 import ReactQueryProvider from '../providers/ReactQuery.provider';
 import RecoilWrapper from './RecoilWrapper';
@@ -15,13 +15,11 @@ const Layout: FC<Props> = ({ children }) => {
       <body>
         <RecoilWrapper>
           <AuthProvider />
-          <Suspense fallback={<div>Loading...</div>}>
-            <ReactQueryProvider>
-              <MuiProvider>
-                <AppErrorBoundary>{children}</AppErrorBoundary>
-              </MuiProvider>
-            </ReactQueryProvider>
-          </Suspense>
+          <ReactQueryProvider>
+            <MuiProvider>
+              <AppErrorBoundary>{children}</AppErrorBoundary>
+            </MuiProvider>
+          </ReactQueryProvider>
         </RecoilWrapper>
       </body>
     </html>
