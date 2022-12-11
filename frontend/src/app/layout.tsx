@@ -14,8 +14,8 @@ const Layout: FC<Props> = ({ children }) => {
     <html lang="ja">
       <body>
         <RecoilWrapper>
+          <AuthProvider />
           <Suspense fallback={<div>Loading...</div>}>
-            <AuthProvider />
             <ReactQueryProvider>
               <MuiProvider>
                 <AppErrorBoundary>{children}</AppErrorBoundary>
