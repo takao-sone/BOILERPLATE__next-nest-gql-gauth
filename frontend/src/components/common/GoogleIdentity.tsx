@@ -1,3 +1,5 @@
+'use client';
+
 import { useGoogleLogin, useGoogleLogout, useGoogleRegisterUser } from 'fetchers';
 import { GoogleLoginInput, GoogleRegisterInput } from 'generated/graphql';
 import { useSetAuthAccessToken } from 'global-states/auth-access-token-state';

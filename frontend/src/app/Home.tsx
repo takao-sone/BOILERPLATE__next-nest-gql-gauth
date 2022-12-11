@@ -1,3 +1,5 @@
+'use client';
+
 import type { NextPage } from 'next';
 import { Suspense } from 'react';
 import GoogleIdentity, { GI_BUTTON_TYPE } from '../components/common/GoogleIdentity';
