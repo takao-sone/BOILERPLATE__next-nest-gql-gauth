@@ -54,4 +54,4 @@ export const useGoogleLogout = () => {
 export const useTest = () => {
   const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT);
   return useTestQuery(graphqlClient);
-}
+};
