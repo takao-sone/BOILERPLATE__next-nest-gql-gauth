@@ -5,6 +5,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "dev": "next dev -p 13000",
+    "pure:build": "next build",
     "build": "next build && next export",
     "start": "next start -p 13000",
     "build:start": "next build && next export && next start -p 13000",

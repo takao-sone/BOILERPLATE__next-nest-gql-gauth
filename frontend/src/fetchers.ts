@@ -4,6 +4,7 @@ import {
   useGoogleLogoutMutation,
   useGoogleRegisterUserMutation,
   useLogInMutation,
+  useTestQuery
 } from 'generated/graphql';
 import { useAuthAccessTokenValue } from 'global-states/auth-access-token-state';
 import { GraphQLClient } from 'graphql-request';
@@ -49,3 +50,8 @@ export const useGoogleLogout = () => {
   const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT, { headers });
   return useGoogleLogoutMutation(graphqlClient);
 };
+
+export const useTest = () => {
+  const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT);
+  return useTestQuery(graphqlClient);
+}

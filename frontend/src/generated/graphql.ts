@@ -430,6 +430,11 @@ export type LogInMutationVariables = Exact<{
 
 export type LogInMutation = { __typename?: 'Mutation', logIn: { __typename?: 'TokenAuth', accessToken: string, refreshToken: string } };
 
+export type TestQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TestQuery = { __typename?: 'Query', test: string };
+
 
 export const AuthenticatedUserDocument = `
     query AuthenticatedUser {
@@ -546,3 +551,23 @@ export const useLogInMutation = <
       options
     );
 useLogInMutation.fetcher = (client: GraphQLClient, variables: LogInMutationVariables, headers?: RequestInit['headers']) => fetcher<LogInMutation, LogInMutationVariables>(client, LogInDocument, variables, headers);
+export const TestDocument = `
+    query Test {
+  test
+}
+    `;
+export const useTestQuery = <
+      TData = TestQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables?: TestQueryVariables,
+      options?: UseQueryOptions<TestQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<TestQuery, TError, TData>(
+      variables === undefined ? ['Test'] : ['Test', variables],
+      fetcher<TestQuery, TestQueryVariables>(client, TestDocument, variables, headers),
+      options
+    );
+useTestQuery.fetcher = (client: GraphQLClient, variables?: TestQueryVariables, headers?: RequestInit['headers']) => fetcher<TestQuery, TestQueryVariables>(client, TestDocument, variables, headers);

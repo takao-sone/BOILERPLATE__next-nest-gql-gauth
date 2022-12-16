@@ -67,6 +67,10 @@ export class GoogleAuthenticationResolver {
   // TODO: 本番で消す
   @Query(() => String)
   async test() {
+    const sleep = async (ms: number) => {
+      return new Promise((r) => setTimeout(r, ms));
+    };
+    await sleep(2000);
     return 'OKKKKKKKKKK';
   }
 
