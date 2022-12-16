@@ -2,10 +2,15 @@ import { getAuthenticatedUser } from 'fetchers';
 import { SessionUser } from 'generated/graphql';
 import { ClientError } from 'graphql-request';
 import { useCallback } from 'react';
-import { atom, SetterOrUpdater, useRecoilState, useSetRecoilState } from 'recoil';
+import { atom, SetterOrUpdater, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { AtomKeys } from './recoil-keys';
 
 export type AuthUser = SessionUser;
+
+const authUserState = atom<AuthUser | null>({
+  key: AtomKeys.AUTH_USER_STATE,
+  default: null,
+});
 
 const useUpdateAuthUserCallback = (setAuthUser: SetterOrUpdater<SessionUser | null>) =>
   useCallback(
@@ -24,15 +29,14 @@ const useUpdateAuthUserCallback = (setAuthUser: SetterOrUpdater<SessionUser | nu
     [setAuthUser],
   );
 
-const authUserState = atom<AuthUser | null>({
-  key: AtomKeys.AUTH_USER_STATE,
-  default: null,
-});
-
 export const useAuthUser = () => {
   const [authUser, setAuthUser] = useRecoilState(authUserState);
   const updateAuthUser = useUpdateAuthUserCallback(setAuthUser);
   return { authUser, setAuthUser, updateAuthUser };
+};
+
+export const useAuthUserValue = () => {
+  return useRecoilValue(authUserState);
 };
 
 export const useAuthUserUpdate = () => {

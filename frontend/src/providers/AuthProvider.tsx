@@ -1,22 +1,16 @@
-'use client';
-
 import { useAuthAccessTokenValue } from 'global-states/auth-access-token-state';
 import { useAuthUserUpdate } from 'global-states/auth-user-state';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 
 type Props = {};
 
 const AuthProvider: FC<Props> = () => {
   const authAccessToken = useAuthAccessTokenValue();
   const updateAuthUser = useAuthUserUpdate();
-  // const authUsr = useAuthUsr();
-  console.log('---AuthProvider---');
-  // console.log(authUsr);
 
-  useEffect(() => {
-    if (!authAccessToken) return;
+  if (authAccessToken) {
     updateAuthUser(authAccessToken);
-  }, [authAccessToken, updateAuthUser]);
+  }
 
   return null;
 };
