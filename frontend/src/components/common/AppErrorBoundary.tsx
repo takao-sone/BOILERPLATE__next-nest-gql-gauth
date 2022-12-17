@@ -34,6 +34,15 @@ export type AppGraphQLErrorExtensions = {
   };
 };
 
+const convertClientErrorToAPIError = (e: ClientError) => {
+  const { errors } = e.response;
+  if (errors && errors[0]) {
+    const extensions = errors[0].extensions as AppGraphQLErrorExtensions;
+    return new ApiError(extensions.response.statusCode, extensions.response.message);
+  }
+  return new ApiError(500, 'ClientError: fail to convert to APIErrro.');
+};
+
 class AppErrorBoundary extends PureComponent<Props, State> {
   constructor(props: Props) {
     console.log('constructor======================================');
@@ -41,35 +50,21 @@ class AppErrorBoundary extends PureComponent<Props, State> {
     this.state = { hasError: false, error: null };
   }
 
-  static getDerivedStateFromError = (error: unknown): State => {
+  static getDerivedStateFromError = (e: unknown): State => {
     console.log('getDerivedStateFromError=======================================');
-
-    if (error instanceof ClientError) {
-      const { errors } = error.response;
-      if (errors && errors[0]) {
-        const extensions = errors[0].extensions as AppGraphQLErrorExtensions;
-        const newApiError = new ApiError(
-          extensions.response.statusCode,
-          extensions.response.message,
-        );
-        return {
-          hasError: true,
-          error: newApiError,
-        };
-      }
+    if (e instanceof ClientError) {
       return {
         hasError: true,
-        error: null,
+        error: convertClientErrorToAPIError(e),
       };
     }
-
-    if (error instanceof Error) {
+    if (e instanceof Error) {
       return {
         hasError: true,
-        error: new ApiError(500, error.message),
+        error: new ApiError(500, e.message),
       };
     }
-
+    // Not expected, because e should be derived from Error object.
     return {
       hasError: false,
       error: null,
