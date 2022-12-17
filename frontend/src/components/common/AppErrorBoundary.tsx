@@ -1,3 +1,5 @@
+import { ClientError } from 'graphql-request';
+import { ApiError } from 'next/dist/server/api-utils';
 import { ErrorInfo, PureComponent, ReactNode } from 'react';
 
 type StatusMessages = { [status: number]: string };
@@ -12,11 +14,10 @@ const ERROR_TEXT = {
   API_409: '入力されたメールアドレスのユーザはすでに存在しています。',
   API_500: 'システムエラーです。しばらく待ってからアクセスしてください。',
 } as const;
-const DEFAULT_MESSAGES: StatusMessages = { 0: ERROR_TEXT.API_500 };
+const DEFAULT_MESSAGES: StatusMessages = { 500: ERROR_TEXT.API_500 };
 
 export class APIError extends Error {
   statusCode: number;
-
   constructor(statusCode: number, message?: string) {
     super(message);
     this.statusCode = statusCode;
@@ -24,18 +25,59 @@ export class APIError extends Error {
   }
 }
 
+export type AppGraphQLErrorExtensions = {
+  code: string;
+  response: {
+    statusCode: number;
+    message: string;
+    error: string;
+  };
+};
+
 class AppErrorBoundary extends PureComponent<Props, State> {
   constructor(props: Props) {
+    console.log('constructor======================================');
     super(props);
     this.state = { hasError: false, error: null };
   }
 
-  static getDerivedStateFromError = (error: APIError): State => ({
-    hasError: true,
-    error,
-  });
+  static getDerivedStateFromError = (error: unknown): State => {
+    console.log('getDerivedStateFromError=======================================');
+
+    if (error instanceof ClientError) {
+      const { errors } = error.response;
+      if (errors && errors[0]) {
+        const extensions = errors[0].extensions as AppGraphQLErrorExtensions;
+        const newApiError = new ApiError(
+          extensions.response.statusCode,
+          extensions.response.message,
+        );
+        return {
+          hasError: true,
+          error: newApiError,
+        };
+      }
+      return {
+        hasError: true,
+        error: null,
+      };
+    }
+
+    if (error instanceof Error) {
+      return {
+        hasError: true,
+        error: new ApiError(500, error.message),
+      };
+    }
+
+    return {
+      hasError: false,
+      error: null,
+    };
+  };
 
   componentDidCatch(error: APIError, errorInfo: ErrorInfo) {
+    console.log('componentDidCatch=======================================');
     console.error(error, errorInfo);
   }
 
@@ -51,13 +93,16 @@ class AppErrorBoundary extends PureComponent<Props, State> {
         return <div>{messages[statusCode]}</div>;
       }
 
+      console.log('1=======================================');
       if (error?.message) {
         return <div>{error.message}</div>;
       }
 
+      console.log('2=======================================');
       return <div>{messages[0]}</div>;
     }
 
+    console.log('3=======================================');
     return children;
   };
 }

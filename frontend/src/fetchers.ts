@@ -4,7 +4,7 @@ import {
   useGoogleLogoutMutation,
   useGoogleRegisterUserMutation,
   useLogInMutation,
-  useTestQuery
+  useTestQuery,
 } from 'generated/graphql';
 import { useAuthAccessTokenValue } from 'global-states/auth-access-token-state';
 import { GraphQLClient } from 'graphql-request';
