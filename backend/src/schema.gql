@@ -121,6 +121,7 @@ type Query {
 
   "\n      権限: ADMIN \n\n      ページネーションによりロールを取得するオペレーション \n\n    "
   roleConnection(pagination: PaginationInput = {first: 1, skip: 1}, sort: RoleSortInput = {direction: ASC, field: ID}): RoleConnection!
+  test: String!
 
   "\n      権限: ALL \n\n      テスト\n    "
   testLoggedInGuard: String!

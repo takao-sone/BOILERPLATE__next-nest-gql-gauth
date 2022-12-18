@@ -1,8 +1,9 @@
 import { Button } from '@mui/material';
-import { FC } from 'react';
 import AppErrorBoundary from 'components/common/AppErrorBoundary';
 import { useLogIn } from 'fetchers';
 import { LogInMutationVariables } from 'generated/graphql';
+import Link from 'next/link';
+import { FC } from 'react';
 
 type Props = {};
 
@@ -34,6 +35,9 @@ const Sample2: FC<Props> = () => {
       >
         LogIn
       </Button>
+      <div>
+        <Link href="/">Back</Link>
+      </div>
       <div>{JSON.stringify(mutation.data)}</div>
     </div>
   );

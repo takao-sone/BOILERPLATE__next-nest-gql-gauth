@@ -1,13 +1,12 @@
-import { UseQueryOptions } from '@tanstack/react-query/build/lib/types';
 import {
-  AuthenticatedUserQuery,
   useAuthenticatedUserQuery,
   useGoogleLoginMutation,
   useGoogleLogoutMutation,
   useGoogleRegisterUserMutation,
   useLogInMutation,
+  useTestQuery,
 } from 'generated/graphql';
-import { useAuthAccessTokenValue } from 'global-states/auth-state';
+import { useAuthAccessTokenValue } from 'global-states/auth-access-token-state';
 import { GraphQLClient } from 'graphql-request';
 import { RequestInit } from 'graphql-request/dist/types.dom';
 
@@ -18,42 +17,21 @@ const BASE_GRAPHQL_ENDPOINT =
 
 const BASE_GRAPHQL_CLIENT_OPTIONS: RequestInit = { credentials: 'include' };
 
-// export const useUserConnection = (variables?: UserConnectionQueryVariables) => {
-//   const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT, BASE_GRAPHQL_CLIENT_OPTIONS);
-
-//   return useUserConnectionQuery(graphqlClient, variables);
-// };
-
 export const useLogIn = () => {
   const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT, BASE_GRAPHQL_CLIENT_OPTIONS);
   return useLogInMutation(graphqlClient);
 };
 
-// TODO
 export const useGoogleRegisterUser = () => {
   const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT, BASE_GRAPHQL_CLIENT_OPTIONS);
   const { mutateAsync } = useGoogleRegisterUserMutation(graphqlClient);
   return { mutateAsync };
 };
 
-// TODO
 export const useGoogleLogin = () => {
   const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT, BASE_GRAPHQL_CLIENT_OPTIONS);
   const { mutateAsync } = useGoogleLoginMutation(graphqlClient);
   return { mutateAsync };
-};
-
-export const useAuthenticatedUser = () => {
-  const authAccessToken = useAuthAccessTokenValue();
-  const headers: HeadersInit = {
-    Authorization: `Bearer ${authAccessToken}`,
-  };
-  const options: UseQueryOptions<AuthenticatedUserQuery, unknown, AuthenticatedUserQuery> = {
-    enabled: !!authAccessToken,
-    retry: false,
-  };
-  const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT, { headers });
-  return useAuthenticatedUserQuery(graphqlClient, undefined, options, headers);
 };
 
 export const getAuthenticatedUser = (authAccessToken: string) => {
@@ -71,4 +49,9 @@ export const useGoogleLogout = () => {
   };
   const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT, { headers });
   return useGoogleLogoutMutation(graphqlClient);
+};
+
+export const useTest = () => {
+  const graphqlClient = new GraphQLClient(BASE_GRAPHQL_ENDPOINT);
+  return useTestQuery(graphqlClient);
 };

@@ -1,22 +1,23 @@
+import AppErrorBoundary from 'components/common/AppErrorBoundary';
 import type { AppProps } from 'next/app';
+import AuthProvider from 'providers/AuthProvider';
 import { RecoilRoot } from 'recoil';
 import MuiProvider from '../providers/Mui.provider';
 import ReactQueryProvider from '../providers/ReactQuery.provider';
-import CSR from 'components/common/CSR';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <>
-      <script src="https://accounts.google.com/gsi/client" async defer></script>
-      <CSR>
-        <RecoilRoot>
-          <ReactQueryProvider>
-            <MuiProvider>
+      <RecoilRoot>
+        <ReactQueryProvider>
+          <MuiProvider>
+            <AppErrorBoundary>
+              <AuthProvider />
               <Component {...pageProps} />
-            </MuiProvider>
-          </ReactQueryProvider>
-        </RecoilRoot>
-      </CSR>
+            </AppErrorBoundary>
+          </MuiProvider>
+        </ReactQueryProvider>
+      </RecoilRoot>
     </>
   );
 };

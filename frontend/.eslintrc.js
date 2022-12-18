@@ -17,6 +17,7 @@ module.exports = {
         additionalHooks: '(useRecoilCallback|useRecoilTransaction_UNSTABLE)',
       },
     ],
+    '@next/next/no-img-element': 'off',
     // 'import/order': [
     //   'error',
     //   {
@@ -25,7 +26,6 @@ module.exports = {
     //     },
     //   },
     // ],
-    '@next/next/no-img-element': 'off',
   },
   overrides: [],
 };
