@@ -1,5 +1,6 @@
+import AppDialogElements from 'components/common/AppDialogElements';
 import AppErrorBoundary from 'components/common/AppErrorBoundary';
-import { DialogPortalDOMId } from 'global-states/dialog-portal';
+import { DialogPortalDOMId } from 'global-states/dialog-portal-dom-state';
 import type { AppProps } from 'next/app';
 import AuthProvider from 'providers/AuthProvider';
 import { RecoilRoot } from 'recoil';
@@ -15,6 +16,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
             <AppErrorBoundary>
               <AuthProvider />
               <Component {...pageProps} />
+              <AppDialogElements />
             </AppErrorBoundary>
           </MuiProvider>
         </ReactQueryProvider>

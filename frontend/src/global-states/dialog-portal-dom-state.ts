@@ -1,7 +1,7 @@
 import { atom, AtomEffect, useRecoilValue } from 'recoil';
 import { AtomKeys } from './recoil-keys';
 
-export type DialogPortalDOM = HTMLElement;
+type DialogPortalDOM = HTMLElement;
 
 export const DialogPortalDOMId = 'dialog-portal';
 
@@ -11,7 +11,7 @@ const InitiationAtomEffect: AtomEffect<DialogPortalDOM | null> = ({ setSelf }) =
   setSelf(initialValue);
 };
 
-const dialogPortalDOMState = atom<DialogPortalDOM | null>({
+export const dialogPortalDOMState = atom<DialogPortalDOM | null>({
   key: AtomKeys.DIALOG_PORTAL_DOM_STATE,
   default: null,
   effects: [InitiationAtomEffect],
