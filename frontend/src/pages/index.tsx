@@ -1,7 +1,9 @@
 import { CircularProgress } from '@mui/material';
+import AppDialog from 'components/common/AppDialog';
 import { Test } from 'components/common/Test';
 import type { NextPage } from 'next';
 import { Suspense } from 'react';
+import { useRecoilCallback } from 'recoil';
 import GoogleIdentity, { GI_BUTTON_TYPE } from '../components/common/GoogleIdentity';
 import SEO from '../components/common/SEO';
 import styles from '../styles/Home.module.css';
@@ -22,51 +24,28 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
-
-        <p className={styles.description}>
-          Get started by editing <code className={styles.code}>pages/index.tsx</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a href="https://github.com/vercel/next.js/tree/canary/examples" className={styles.card}>
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>Instantly deploy your Next.js site to a public URL with Vercel.</p>
-          </a>
-        </div>
+        <AppDialog />
+        {process.env.NODE_ENV === 'development' && <DebugButton />}
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <img src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
     </div>
   );
 };
+
+function DebugButton() {
+  const onClick = useRecoilCallback(
+    ({ snapshot }) =>
+      async () => {
+        console.debug('Atom values:');
+        // @ts-ignore
+        for (const node of snapshot.getNodes_UNSTABLE()) {
+          const value = await snapshot.getPromise(node);
+          console.log(node.key, value);
+        }
+      },
+    [],
+  );
+
+  return <button onClick={onClick}>Dump State</button>;
+}
 
 export default Home;
