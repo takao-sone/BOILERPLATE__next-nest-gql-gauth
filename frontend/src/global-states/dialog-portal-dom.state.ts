@@ -17,6 +17,6 @@ export const dialogPortalDOMState = atom<DialogPortalDOM | null>({
   effects: [InitiationAtomEffect],
 });
 
-export const useDialogPortalDOM = () => {
+export const useDialogPortalDOMValue = () => {
   return useRecoilValue(dialogPortalDOMState);
 };

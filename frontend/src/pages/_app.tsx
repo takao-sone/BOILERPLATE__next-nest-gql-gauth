@@ -1,6 +1,6 @@
-import AppDialogElements from 'components/common/AppDialogElements';
+import { AppDialogElements } from 'components/common/AppDialogElements';
 import AppErrorBoundary from 'components/common/AppErrorBoundary';
-import { DialogPortalDOMId } from 'global-states/dialog-portal-dom-state';
+import { DialogPortalDOMId } from 'global-states/dialog-portal-dom.state';
 import type { AppProps } from 'next/app';
 import AuthProvider from 'providers/AuthProvider';
 import { RecoilRoot } from 'recoil';

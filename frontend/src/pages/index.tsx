@@ -1,9 +1,9 @@
 import { CircularProgress } from '@mui/material';
-import { Test } from 'components/common/Test';
-import { useDialog } from 'global-states/dialogs-state';
+import RecoilStateDebugButton from 'components/dev/RecoilStateDebugBtn';
+import { Test } from 'components/dev/Test';
+import { useDialog } from 'global-states/dialogs.state';
 import type { NextPage } from 'next';
 import { Suspense } from 'react';
-import { useRecoilCallback } from 'recoil';
 import GoogleIdentity, { GI_BUTTON_TYPE } from '../components/common/GoogleIdentity';
 import SEO from '../components/common/SEO';
 import styles from '../styles/Home.module.css';
@@ -45,27 +45,10 @@ const Home: NextPage = () => {
             </button>
           </p>
         </div>
-        {process.env.NODE_ENV === 'development' && <DebugButton />}
+        {process.env.NODE_ENV === 'development' && <RecoilStateDebugButton />}
       </main>
     </div>
   );
 };
-
-function DebugButton() {
-  const onClick = useRecoilCallback(
-    ({ snapshot }) =>
-      async () => {
-        console.debug('Atom values:');
-        // @ts-ignore
-        for (const node of snapshot.getNodes_UNSTABLE()) {
-          const value = await snapshot.getPromise(node);
-          console.log(node.key, value);
-        }
-      },
-    [],
-  );
-
-  return <button onClick={onClick}>Dump State</button>;
-}
 
 export default Home;

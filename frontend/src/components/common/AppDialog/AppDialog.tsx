@@ -4,25 +4,22 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { DialogInContext } from 'global-states/dialogs-state';
-import { FC, useState } from 'react';
+import { DialogInContext } from 'global-states/dialogs.state';
+import { FC } from 'react';
+import RecoilStateDebugButton from '../../dev/RecoilStateDebugBtn';
+import { useHandleConfirm } from './AppDialog.hooks';
 
-type Props = {
+export type Props = {
   dialog: DialogInContext;
   onClose: () => void;
 };
 
 const AppDialog: FC<Props> = ({ dialog, onClose }) => {
-  const [open, _] = useState(true);
-  const handleConfirm = () => {
-    dialog.onConfirm();
-    onClose();
-  };
-  console.log(_);
+  const handleConfirm = useHandleConfirm(dialog, onClose);
 
   return (
     <Dialog
-      open={open}
+      open
       onClose={onClose}
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
@@ -30,6 +27,7 @@ const AppDialog: FC<Props> = ({ dialog, onClose }) => {
       <DialogTitle id="dialog-title">{dialog.title}</DialogTitle>
       <DialogContent>
         <DialogContentText id="dialog-description">{dialog.contentText}</DialogContentText>
+        <RecoilStateDebugButton />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>{dialog.closeText}</Button>
