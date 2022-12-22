@@ -1,4 +1,10 @@
 export const AtomKeys = {
   AUTH_ACCESS_TOKEN_STATE: 'accessToken',
-  AUTH_USER_STATE: 'authUserState',
+  AUTH_USER_STATE: 'authUser',
+  DIALOG_PORTAL_DOM_STATE: 'dialogPortalDOM',
+  DIALOGS_STATE: 'dialogs',
+} as const;
+
+export const SelectorKeys = {
+  DIALOG_ELEMENTS_STATE: 'dialogElements',
 } as const;

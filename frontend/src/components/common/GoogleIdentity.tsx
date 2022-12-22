@@ -1,7 +1,7 @@
 import { useGoogleLogin, useGoogleLogout, useGoogleRegisterUser } from 'fetchers';
 import { GoogleLoginInput, GoogleRegisterInput } from 'generated/graphql';
-import { useSetAuthAccessToken } from 'global-states/auth-access-token-state';
-import { useAuthUser } from 'global-states/auth-user-state';
+import { useSetAuthAccessToken } from 'global-states/auth-access-token.state';
+import { useAuthUser } from 'global-states/auth-user.state';
 import { FC, useEffect } from 'react';
 
 const RENDERED_BUTTON_ID = 'login-with-google';

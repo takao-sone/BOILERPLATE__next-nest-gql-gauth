@@ -6,7 +6,7 @@ import {
   useLogInMutation,
   useTestQuery,
 } from 'generated/graphql';
-import { useAuthAccessTokenValue } from 'global-states/auth-access-token-state';
+import { useAuthAccessTokenValue } from 'global-states/auth-access-token.state';
 import { GraphQLClient } from 'graphql-request';
 import { RequestInit } from 'graphql-request/dist/types.dom';
 

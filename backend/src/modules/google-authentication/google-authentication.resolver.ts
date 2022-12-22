@@ -72,7 +72,7 @@ export class GoogleAuthenticationResolver {
     };
     await sleep(2000);
     throw new InternalServerErrorException('@@@');
-    return 'OKKKKKKKKKK';
+    // return 'OKKKKKKKKKK';
   }
 
   // TODO: 本番で消す

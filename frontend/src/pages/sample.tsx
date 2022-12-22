@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import AppErrorBoundary from 'components/common/AppErrorBoundary';
+import { AppErrorBoundary } from 'components/common/AppErrorBoundary';
 import { useLogIn } from 'fetchers';
 import { LogInMutationVariables } from 'generated/graphql';
 import Link from 'next/link';
