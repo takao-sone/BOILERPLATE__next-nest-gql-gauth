@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { InternalServerErrorException, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { RoleName } from '@prisma/client';
 import { CurrentAccessToken } from 'src/common/decorators/current-access-token.decorator';
@@ -71,8 +71,8 @@ export class GoogleAuthenticationResolver {
       return new Promise((r) => setTimeout(r, ms));
     };
     await sleep(2000);
-    // throw new InternalServerErrorException('@@@');
-    return 'OKKKKKKKKKK';
+    throw new InternalServerErrorException('@@@');
+    // return 'OKKKKKKKKKK';
   }
 
   // TODO: 本番で消す

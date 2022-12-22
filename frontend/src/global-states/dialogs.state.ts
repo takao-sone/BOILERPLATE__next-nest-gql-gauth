@@ -5,8 +5,8 @@ export type Dialog = {
   title: string;
   contentText: string;
   closeText: string;
-  confirmText: string;
-  onConfirm: () => void;
+  confirmText?: string;
+  onConfirm?: () => void;
 };
 
 export type DialogInContext = Dialog & {

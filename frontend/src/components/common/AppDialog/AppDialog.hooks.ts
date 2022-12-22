@@ -1,9 +1,12 @@
 import { useCallback } from 'react';
 import { Props } from './AppDialog';
 
-export const useHandleConfirm = (dialog: Props['dialog'], onClose: Props['onClose']) => {
+export const useHandleConfirm = (
+  onClose: Props['onClose'],
+  onConfirm?: Props['dialog']['onConfirm'],
+) => {
   return useCallback(() => {
-    dialog.onConfirm();
+    if (onConfirm) onConfirm();
     onClose();
-  }, [dialog, onClose]);
+  }, [onClose, onConfirm]);
 };

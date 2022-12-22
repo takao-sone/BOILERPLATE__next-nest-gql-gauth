@@ -15,7 +15,7 @@ export type Props = {
 };
 
 const AppDialog: FC<Props> = ({ dialog, onClose }) => {
-  const handleConfirm = useHandleConfirm(dialog, onClose);
+  const handleConfirm = useHandleConfirm(onClose, dialog.onConfirm);
 
   return (
     <Dialog
@@ -31,9 +31,11 @@ const AppDialog: FC<Props> = ({ dialog, onClose }) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>{dialog.closeText}</Button>
-        <Button onClick={handleConfirm} autoFocus>
-          {dialog.confirmText}
-        </Button>
+        {dialog.confirmText && (
+          <Button onClick={handleConfirm} autoFocus>
+            {dialog.confirmText}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

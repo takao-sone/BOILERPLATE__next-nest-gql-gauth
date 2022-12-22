@@ -1,4 +1,5 @@
 import { CircularProgress } from '@mui/material';
+import { AppErrorBoundary } from 'components/common/AppErrorBoundary';
 import RecoilStateDebugButton from 'components/dev/RecoilStateDebugBtn';
 import { Test } from 'components/dev/Test';
 import { useDialog } from 'global-states/dialogs.state';
@@ -30,9 +31,11 @@ const Home: NextPage = () => {
       </SEO>
 
       <main className={styles.main}>
-        <Suspense fallback={<CircularProgress />}>
-          <Test />
-        </Suspense>
+        <AppErrorBoundary>
+          <Suspense fallback={<CircularProgress />}>
+            <Test />
+          </Suspense>
+        </AppErrorBoundary>
         <GoogleIdentity buttonType={GI_BUTTON_TYPE.LOGIN} />
         {/* <GoogleIdentity buttonType={GI_BUTTON_TYPE.REGISTER} /> */}
         <h1 className={styles.title}>

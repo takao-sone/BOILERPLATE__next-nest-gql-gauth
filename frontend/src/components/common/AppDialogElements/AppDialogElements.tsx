@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { useDialogElements } from './AppDialogElements.hooks';
+import { useDialogElements } from './AppDialogElements.hook';
 
 type Props = {};
 

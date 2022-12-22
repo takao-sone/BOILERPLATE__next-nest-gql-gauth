@@ -1,20 +1,12 @@
 import { ClientError } from 'graphql-request';
 import { ApiError } from 'next/dist/server/api-utils';
-import { ErrorInfo, PureComponent, ReactNode } from 'react';
+import { PureComponent, ReactNode } from 'react';
+import { DEFAULT_MESSAGES } from './AppErrorBoundary.const';
+import { convertClientErrorToAPIError } from './AppErrorBoundary.util';
 
-type StatusMessages = { [status: number]: string };
+export type StatusMessages = { [status: number]: string };
 type Props = { statusMessages?: StatusMessages; children?: ReactNode };
 type State = { hasError: boolean; error: APIError | null };
-
-const ERROR_TEXT = {
-  API_400: '入力された値が条件を満たしていません。',
-  API_401: 'ログインしてません。サイト運用者のデータを表示します。',
-  API_403: 'ユーザー登録はサイト運用者のみ可能です。',
-  API_404: '該当のデータは見つかりませんでした。',
-  API_409: '入力されたメールアドレスのユーザはすでに存在しています。',
-  API_500: 'システムエラーです。しばらく待ってからアクセスしてください。',
-} as const;
-const DEFAULT_MESSAGES: StatusMessages = { 500: ERROR_TEXT.API_500 };
 
 export class APIError extends Error {
   statusCode: number;
@@ -32,15 +24,6 @@ export type AppGraphQLErrorExtensions = {
     message: string;
     error: string;
   };
-};
-
-const convertClientErrorToAPIError = (e: ClientError) => {
-  const { errors } = e.response;
-  if (errors && errors[0]) {
-    const extensions = errors[0].extensions as AppGraphQLErrorExtensions;
-    return new ApiError(extensions.response.statusCode, extensions.response.message);
-  }
-  return new ApiError(500, 'ClientError: fail to convert to APIErrro.');
 };
 
 class AppErrorBoundary extends PureComponent<Props, State> {
@@ -70,11 +53,6 @@ class AppErrorBoundary extends PureComponent<Props, State> {
       error: null,
     };
   };
-
-  componentDidCatch(error: APIError, errorInfo: ErrorInfo) {
-    console.log('componentDidCatch=======================================');
-    console.error(error, errorInfo);
-  }
 
   render = (): ReactNode => {
     const { children, statusMessages = {} } = this.props;
