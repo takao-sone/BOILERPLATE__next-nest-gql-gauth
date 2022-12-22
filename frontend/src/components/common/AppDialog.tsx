@@ -18,6 +18,7 @@ const AppDialog: FC<Props> = ({ dialog, onClose }) => {
     dialog.onConfirm();
     onClose();
   };
+  console.log(_);
 
   return (
     <Dialog
