@@ -5,7 +5,7 @@ import { Test } from 'components/dev/Test';
 import { useDialog } from 'global-states/dialogs.state';
 import type { NextPage } from 'next';
 import { Suspense } from 'react';
-import GoogleIdentity, { GI_BUTTON_TYPE } from '../components/common/GoogleIdentity';
+import { GoogleIdentity } from '../components/common/GoogleIdentity';
 import SEO from '../components/common/SEO';
 import styles from '../styles/Home.module.css';
 
@@ -36,8 +36,8 @@ const Home: NextPage = () => {
             <Test />
           </Suspense>
         </AppErrorBoundary>
-        <GoogleIdentity buttonType={GI_BUTTON_TYPE.LOGIN} />
-        {/* <GoogleIdentity buttonType={GI_BUTTON_TYPE.REGISTER} /> */}
+        <GoogleIdentity buttonType="LOGIN" />
+        {/* <GoogleIdentity buttonType="REGISTER" /> */}
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
