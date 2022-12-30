@@ -6,13 +6,13 @@ import { FC, ReactNode } from 'react';
 
 type Props = {
   children?: ReactNode;
-  cardTitle: string;
+  title: string;
 };
 
-const AppBaseCard: FC<Props> = ({ children, cardTitle }) => {
+const AppBaseCard: FC<Props> = ({ children, title }) => {
   return (
     <Card>
-      <CardHeader title={cardTitle} />
+      <CardHeader title={title} />
       <Divider />
       <CardContent>{children}</CardContent>
     </Card>
