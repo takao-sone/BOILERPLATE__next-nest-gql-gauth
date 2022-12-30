@@ -1,31 +1,35 @@
 import { useCallback } from 'react';
-import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { PersistConfiguration, recoilPersist } from 'recoil-persist';
+import { atom, AtomEffect, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { AtomKeys } from './recoil-keys';
-
-const localStorage = typeof window !== 'undefined' ? window.localStorage : undefined;
-let persistConfiguration: PersistConfiguration = {
-  key: AtomKeys.AUTH_ACCESS_TOKEN_STATE,
-};
-if (localStorage) {
-  persistConfiguration = {
-    ...persistConfiguration,
-    storage: localStorage,
-  };
-}
-const { persistAtom } = recoilPersist(persistConfiguration);
 
 export type AuthAccessToken = string;
 
+const localStorageEffect: AtomEffect<AuthAccessToken | null> = ({ trigger, setSelf, onSet }) => {
+  if (typeof window === 'undefined') return;
+
+  const localStorageKey = 'accessToken';
+
+  if (trigger === 'get') {
+    const storedValue = localStorage.getItem(localStorageKey);
+    if (storedValue) {
+      setSelf(storedValue);
+    }
+  }
+
+  onSet((newValue, _, isReset) => {
+    if (isReset) {
+      localStorage.removeItem(localStorageKey);
+      return;
+    }
+    const storingValue = newValue ?? JSON.stringify(newValue);
+    localStorage.setItem(localStorageKey, storingValue);
+  });
+};
+
 const authAccessTokenState = atom<AuthAccessToken | null>({
   key: AtomKeys.AUTH_ACCESS_TOKEN_STATE,
-  default: (() => {
-    if (!localStorage) return null;
-    const accessToken = localStorage.getItem(AtomKeys.AUTH_ACCESS_TOKEN_STATE);
-    if (!accessToken) return null;
-    return JSON.parse(accessToken);
-  })(),
-  effects: [persistAtom],
+  default: null,
+  effects: [localStorageEffect],
 });
 
 export const useAuthAccessToken = () => {
