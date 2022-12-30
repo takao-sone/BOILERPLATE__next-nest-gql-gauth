@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { FC, ReactNode } from 'react';
+import { useDescription, useSiteTitle } from './SEO.hook';
 
 type Props = {
   children?: ReactNode;
@@ -22,11 +23,9 @@ const SEO: FC<Props> = ({
   pageImgHeight,
   children,
 }) => {
-  const defaultTitle = 'example';
-  const defaultDescription = 'example';
+  const title = useSiteTitle(pageTitle);
+  const description = useDescription(pageDescription);
 
-  const title = pageTitle ? `${pageTitle} | ${defaultTitle}` : defaultTitle;
-  const description = pageDescription ? pageDescription : defaultDescription;
   // TODO
   /* eslint-disable */
   const url = pagePath;
