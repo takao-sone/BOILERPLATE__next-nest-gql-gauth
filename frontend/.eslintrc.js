@@ -9,7 +9,9 @@ module.exports = {
   rules: {
     // TODO: '@tanstack/react-query'用
     'import/named': 'off',
-    'no-unused-vars': ['error', { ignoreRestSiblings: true }],
+    // 'no-unused-vars': ['error', { ignoreRestSiblings: true }],
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': [
       'warn',
