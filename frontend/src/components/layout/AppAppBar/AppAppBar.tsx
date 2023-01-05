@@ -12,7 +12,10 @@ type Props = {
 
 const AppAppBar: FC<Props> = ({ children }) => {
   return (
-    <AppBar sx={{ minHeight: '64px' }}>
+    <AppBar
+      position="fixed"
+      sx={{ minHeight: '64px', zIndex: (theme) => theme.zIndex.drawer + 1, boxShadow: 'none' }}
+    >
       <Toolbar>
         <Stack direction="row" alignItems="center" sx={{ flexGrow: 1 }}>
           <MenuButton />
