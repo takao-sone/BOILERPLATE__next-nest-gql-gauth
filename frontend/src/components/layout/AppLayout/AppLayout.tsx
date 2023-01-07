@@ -1,13 +1,15 @@
+import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import { useIsSideDrawerOpenValue } from 'global-states/side-drawer.state';
 import { FC, ReactNode } from 'react';
+import { APP_SIDE_DRAWER_WIDTH_DESKTOP, SX_BASE_DISPLAY } from 'styles/consts';
 import { AppAppBar } from '../AppAppBar';
 import { AppMainContent } from '../AppMainContent';
 import { AppSideDrawer } from '../AppSideDrawer';
-import { APP_SIDE_DRAWER_WIDTH_DESKTOP } from '../AppSideDrawer/AppSideDrawer.const';
+import { AppSideDrawerNonDesktop } from '../AppSideDrawerNonDesktop';
 
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
+const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
 }>(({ theme, open }) => ({
   flexGrow: 1,
@@ -24,6 +26,9 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
     }),
     marginLeft: 0,
   }),
+  [theme.breakpoints.down('md')]: {
+    marginLeft: 0,
+  },
 }));
 
 type Props = {
@@ -38,10 +43,15 @@ const AppLayout: FC<Props> = ({ children }) => {
       <Stack>
         <AppAppBar />
         <Stack direction="row">
-          <AppSideDrawer />
-          <Main open={isSideDrawerOpen}>
+          <Box sx={{ ...SX_BASE_DISPLAY }}>
+            <AppSideDrawer />
+          </Box>
+          <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+            <AppSideDrawerNonDesktop />
+          </Box>
+          <StyledBox component="main" open={isSideDrawerOpen}>
             <AppMainContent>{children}</AppMainContent>
-          </Main>
+          </StyledBox>
         </Stack>
       </Stack>
     </>

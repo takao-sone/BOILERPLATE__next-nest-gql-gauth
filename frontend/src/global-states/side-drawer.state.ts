@@ -1,26 +1,28 @@
 import { useCallback } from 'react';
 import { AtomEffect, atomFamily, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { useIsLessThanBreakpoint } from 'utils/helper';
+import { useIsDesktop } from 'utils/helper';
 import { AtomKeys } from './recoil-keys';
 
-const windowSizeEffect: (isMobile: boolean) => AtomEffect<boolean> =
-  (isMobile) =>
+const windowSizeEffect: (isDesktop: boolean) => AtomEffect<boolean> =
+  (isDesktop) =>
   ({ trigger, setSelf }) => {
     if (typeof window === 'undefined') return;
     if (trigger === 'get') {
-      isMobile ? setSelf(false) : setSelf(true);
+      isDesktop ? setSelf(true) : setSelf(false);
     }
   };
 
 const sideDrawerState = atomFamily<boolean, boolean>({
   key: AtomKeys.SIDE_DRAWER_STATE,
   default: true,
-  effects: (isMobile) => [windowSizeEffect(isMobile)],
+  effects: (isDesktop) => [windowSizeEffect(isDesktop)],
 });
 
-export const useIsSideDrawerOpen = () => {
-  const isMobile = useIsLessThanBreakpoint('sm');
-  const [isSideDrawerOpen, setIsSideDrawerOpen] = useRecoilState(sideDrawerState(isMobile));
+export const useIsSideDrawerOpen = (defaultValue?: boolean) => {
+  const [isDesktop] = useIsDesktop();
+  const [isSideDrawerOpen, setIsSideDrawerOpen] = useRecoilState(
+    sideDrawerState(defaultValue ?? isDesktop),
+  );
   const updateSideDrawerState = useCallback(
     (newIsSideDrawerOpen: boolean) => {
       setIsSideDrawerOpen(newIsSideDrawerOpen);
@@ -31,11 +33,11 @@ export const useIsSideDrawerOpen = () => {
 };
 
 export const useIsSideDrawerOpenValue = () => {
-  const isMobile = useIsLessThanBreakpoint('sm');
-  return useRecoilValue(sideDrawerState(isMobile));
+  const [isDesktop] = useIsDesktop();
+  return useRecoilValue(sideDrawerState(isDesktop));
 };
 
 export const useSetIsSideDrawerOpen = () => {
-  const isMobile = useIsLessThanBreakpoint('sm');
-  return useSetRecoilState(sideDrawerState(isMobile));
+  const [isDesktop] = useIsDesktop();
+  return useSetRecoilState(sideDrawerState(isDesktop));
 };

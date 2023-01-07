@@ -1,18 +1,16 @@
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 import { useIsSideDrawerOpenValue } from 'global-states/side-drawer.state';
 import { FC } from 'react';
-import { APP_SIDE_DRAWER_WIDTH_DESKTOP } from './AppSideDrawer.const';
+import { APP_SIDE_DRAWER_WIDTH_DESKTOP } from 'styles/consts';
+import AppDrawerItemList from './AppDrawerItemList';
 
 type Props = {};
 
 const AppSideDrawer: FC<Props> = () => {
   const isSideDrawerOpen = useIsSideDrawerOpenValue();
+  const menuItems = [{ subHeader: 'メイン', items: ['ホーム', 'スコア履歴'] }];
 
   return (
     <>
@@ -29,20 +27,7 @@ const AppSideDrawer: FC<Props> = () => {
         }}
       >
         <Toolbar />
-        <List component="nav">
-          <ListItemButton>
-            <ListItemIcon>
-              <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="ホーム" primaryTypographyProps={{ fontWeight: 'bold' }} />
-          </ListItemButton>
-          <ListItemButton>
-            <ListItemIcon>
-              <DashboardIcon />
-            </ListItemIcon>
-            <ListItemText primary="スコア履歴" primaryTypographyProps={{ fontWeight: 'bold' }} />
-          </ListItemButton>
-        </List>
+        <AppDrawerItemList Icon={DashboardIcon} menuItems={menuItems} />
       </Drawer>
     </>
   );

@@ -1,1 +1,0 @@
-export const APP_SIDE_DRAWER_WIDTH_DESKTOP = 200;

@@ -1,9 +1,10 @@
 import { AppLayout } from 'components/layout/AppLayout';
-import { FC } from 'react';
+import { NextPageWithLayout } from 'pages/_app';
+import { ReactElement } from 'react';
 
-const AppIndexPage: FC = () => {
+const AppIndexPage: NextPageWithLayout = () => {
   return (
-    <AppLayout>
+    <>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
         labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum facilisis leo
@@ -28,8 +29,12 @@ const AppIndexPage: FC = () => {
         varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
         sapien faucibus et molestie ac.
       </p>
-    </AppLayout>
+    </>
   );
+};
+
+AppIndexPage.getLayout = function getLayout(page: ReactElement) {
+  return <AppLayout>{page}</AppLayout>;
 };
 
 export default AppIndexPage;
