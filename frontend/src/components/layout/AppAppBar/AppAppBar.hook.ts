@@ -1,3 +1,4 @@
+import { useIsSideDrawerOpen } from 'global-states/side-drawer.state';
 import { MouseEvent, useCallback, useState } from 'react';
 import { tuple } from 'utils/helper';
 
@@ -13,4 +14,12 @@ export const useAccountMenuHandlers = () => {
   }, []);
 
   return tuple(anchorEl, handleClick, handleClose);
+};
+
+export const useMenuClickHandler = () => {
+  const { isSideDrawerOpen, updateSideDrawerState } = useIsSideDrawerOpen();
+  const handleClick = useCallback(() => {
+    updateSideDrawerState(!isSideDrawerOpen);
+  }, [updateSideDrawerState, isSideDrawerOpen]);
+  return { handleClick };
 };
