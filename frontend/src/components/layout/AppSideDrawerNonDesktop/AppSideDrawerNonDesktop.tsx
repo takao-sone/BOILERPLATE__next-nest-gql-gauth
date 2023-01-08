@@ -43,7 +43,10 @@ const AppSideDrawerNonDesktop: FC<Props> = () => {
             px: [1],
           }}
         >
-          <IconButton onClick={() => updateSideDrawerState(false)}>
+          <IconButton
+            onClick={() => updateSideDrawerState(false)}
+            sx={{ width: '100%', height: '100%', justifyContent: 'end' }}
+          >
             <ArrowBackIosNewIcon />
           </IconButton>
         </Toolbar>
