@@ -1,9 +1,14 @@
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
+import RecoilStateDebugButton from 'components/dev/RecoilStateDebugBtn';
 import { useIsSideDrawerOpenValue } from 'global-states/side-drawer.state';
 import { FC, ReactNode } from 'react';
-import { APP_SIDE_DRAWER_WIDTH_DESKTOP, SX_BASE_DISPLAY } from 'styles/consts';
+import {
+  APP_SIDE_DRAWER_WIDTH_DESKTOP,
+  SX_BASE_DISPLAY,
+  SX_NON_DESKTOP_DISPLAY,
+} from 'styles/consts';
 import { AppAppBar } from '../AppAppBar';
 import { AppMainContent } from '../AppMainContent';
 import { AppSideDrawer } from '../AppSideDrawer';
@@ -46,11 +51,13 @@ const AppLayout: FC<Props> = ({ children }) => {
           <Box sx={{ ...SX_BASE_DISPLAY }}>
             <AppSideDrawer />
           </Box>
-          <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+          <Box sx={{ ...SX_NON_DESKTOP_DISPLAY }}>
             <AppSideDrawerNonDesktop />
           </Box>
           <StyledBox component="main" open={isSideDrawerOpen}>
             <AppMainContent>{children}</AppMainContent>
+            {/* TODO: Debug */}
+            <RecoilStateDebugButton />
           </StyledBox>
         </Stack>
       </Stack>

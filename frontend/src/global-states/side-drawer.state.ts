@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { AtomEffect, atomFamily, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { useIsDesktop } from 'utils/helper';
 import { AtomKeys } from './recoil-keys';
 
 const windowSizeEffect: (isDesktop: boolean) => AtomEffect<boolean> =
@@ -8,7 +7,7 @@ const windowSizeEffect: (isDesktop: boolean) => AtomEffect<boolean> =
   ({ trigger, setSelf }) => {
     if (typeof window === 'undefined') return;
     if (trigger === 'get') {
-      isDesktop ? setSelf(true) : setSelf(false);
+      isDesktop || setSelf(false);
     }
   };
 
@@ -18,11 +17,8 @@ const sideDrawerState = atomFamily<boolean, boolean>({
   effects: (isDesktop) => [windowSizeEffect(isDesktop)],
 });
 
-export const useIsSideDrawerOpen = (defaultValue?: boolean) => {
-  const [isDesktop] = useIsDesktop();
-  const [isSideDrawerOpen, setIsSideDrawerOpen] = useRecoilState(
-    sideDrawerState(defaultValue ?? isDesktop),
-  );
+export const useIsSideDrawerOpen = (isDesktop: boolean = true) => {
+  const [isSideDrawerOpen, setIsSideDrawerOpen] = useRecoilState(sideDrawerState(isDesktop));
   const updateSideDrawerState = useCallback(
     (newIsSideDrawerOpen: boolean) => {
       setIsSideDrawerOpen(newIsSideDrawerOpen);
@@ -32,12 +28,10 @@ export const useIsSideDrawerOpen = (defaultValue?: boolean) => {
   return { isSideDrawerOpen, updateSideDrawerState };
 };
 
-export const useIsSideDrawerOpenValue = () => {
-  const [isDesktop] = useIsDesktop();
+export const useIsSideDrawerOpenValue = (isDesktop: boolean = true) => {
   return useRecoilValue(sideDrawerState(isDesktop));
 };
 
-export const useSetIsSideDrawerOpen = () => {
-  const [isDesktop] = useIsDesktop();
+export const useSetIsSideDrawerOpen = (isDesktop: boolean = true) => {
   return useSetRecoilState(sideDrawerState(isDesktop));
 };

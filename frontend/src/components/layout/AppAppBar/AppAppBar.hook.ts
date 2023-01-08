@@ -16,10 +16,9 @@ export const useAccountMenuHandlers = () => {
   return tuple(anchorEl, handleClick, handleClose);
 };
 
-export const useMenuClickHandler = () => {
-  const { isSideDrawerOpen, updateSideDrawerState } = useIsSideDrawerOpen();
-  const handleClick = useCallback(() => {
+export const useMenuClickHandler = (isDesktop: boolean = true) => {
+  const { isSideDrawerOpen, updateSideDrawerState } = useIsSideDrawerOpen(isDesktop);
+  return useCallback(() => {
     updateSideDrawerState(!isSideDrawerOpen);
   }, [updateSideDrawerState, isSideDrawerOpen]);
-  return { handleClick };
 };
