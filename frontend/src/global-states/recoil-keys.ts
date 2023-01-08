@@ -3,6 +3,7 @@ export const AtomKeys = {
   AUTH_USER_STATE: 'authUser',
   DIALOG_PORTAL_DOM_STATE: 'dialogPortalDOM',
   DIALOGS_STATE: 'dialogs',
+  SIDE_DRAWER_STATE: 'sideDrawer',
 } as const;
 
 export const SelectorKeys = {

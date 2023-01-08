@@ -40,7 +40,7 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
         text: isRegister ? 'signup_with' : 'signin_with',
       });
     };
-  }, []);
+  }, [buttonType, googleClientId, handleLoginCredentialResponse, handleRegisterCredentialResponse]);
 
   return (
     <div>
