@@ -1,3 +1,4 @@
+import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
 import { FC, ReactNode } from 'react';
 
@@ -8,8 +9,10 @@ type Props = {
 const AppMainContent: FC<Props> = ({ children }) => {
   return (
     <>
-      <Toolbar />
-      {children}
+      <Container>
+        <Toolbar />
+        {children}
+      </Container>
     </>
   );
 };
