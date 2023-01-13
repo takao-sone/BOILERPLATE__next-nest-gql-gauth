@@ -11,32 +11,10 @@ import {
   SX_BASE_DISPLAY,
   SX_NON_DESKTOP_DISPLAY,
 } from 'styles/consts';
+import { AppCopyright } from '../../common/AppCopyright';
 import { AppAppBar } from '../AppAppBar';
-import { AppCopyright } from '../AppCopyright';
 import { AppSideDrawer } from '../AppSideDrawer';
 import { AppSideDrawerNonDesktop } from '../AppSideDrawerNonDesktop';
-
-const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'open' })<{
-  open?: boolean;
-}>(({ theme, open }) => ({
-  flexGrow: 1,
-  padding: theme.spacing(3),
-  transition: theme.transitions.create('margin', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  marginLeft: `-${APP_SIDE_DRAWER_WIDTH_DESKTOP}px`,
-  ...(open && {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: 0,
-  }),
-  [theme.breakpoints.down('md')]: {
-    marginLeft: 0,
-  },
-}));
 
 type Props = {
   children?: ReactNode;
@@ -72,3 +50,25 @@ const AppLayout: FC<Props> = ({ children }) => {
 };
 
 export default AppLayout;
+
+const StyledBox = styled(Box, { shouldForwardProp: (prop) => prop !== 'open' })<{
+  open?: boolean;
+}>(({ theme, open }) => ({
+  flexGrow: 1,
+  padding: theme.spacing(3),
+  transition: theme.transitions.create('margin', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  marginLeft: `-${APP_SIDE_DRAWER_WIDTH_DESKTOP}px`,
+  ...(open && {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  }),
+  [theme.breakpoints.down('md')]: {
+    marginLeft: 0,
+  },
+}));
