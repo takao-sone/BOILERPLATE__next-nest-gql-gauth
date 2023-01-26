@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
@@ -11,8 +12,12 @@ const AppFooter: FC<Props> = () => {
   return (
     <Box component="footer">
       <Stack direction="row" justifyContent="center" spacing={4} sx={{ mt: 2, mb: 1 }}>
-        <StyledNextLink href="/">利用規約</StyledNextLink>
-        <StyledNextLink href="/">個人情報保護基本方針</StyledNextLink>
+        <StyledNextLink href="/app/terms-of-service">
+          <Typography variant="body2">利用規約</Typography>
+        </StyledNextLink>
+        <StyledNextLink href="/app/privacy-policy">
+          <Typography variant="body2">個人情報保護基本方針</Typography>
+        </StyledNextLink>
       </Stack>
       <AppCopyright />
     </Box>
