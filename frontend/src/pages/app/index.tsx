@@ -1,3 +1,4 @@
+import { SEO } from 'components/common/SEO';
 import { AppLayout } from 'components/layout/AppLayout';
 import { NextPageWithLayout } from 'pages/_app';
 import { ReactElement } from 'react';
@@ -5,6 +6,7 @@ import { ReactElement } from 'react';
 const AppIndexPage: NextPageWithLayout = () => {
   return (
     <>
+      <SEO pageTitle="トップ" pageDescription="トップページ説明" />
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
         labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum facilisis leo

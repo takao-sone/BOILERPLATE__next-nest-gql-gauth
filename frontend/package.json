@@ -25,10 +25,13 @@
     "@tanstack/react-query": "^4.14.5",
     "@tanstack/react-query-devtools": "^4.14.5",
     "graphql-request": "^4.2.0",
+    "gray-matter": "^4.0.3",
     "next": "^13.0.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "recoil": "^0.7.6"
+    "recoil": "^0.7.6",
+    "remark": "^14.0.2",
+    "remark-html": "^15.0.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.13.11",

@@ -3,6 +3,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
+import { styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import { useIsSideDrawerOpen } from 'global-states/side-drawer.state';
 import { FC } from 'react';
@@ -20,41 +21,42 @@ const AppSideDrawerNonDesktop: FC<Props> = () => {
 
   return (
     <>
-      <Drawer
+      <StyledDrawer
         variant="temporary"
         open={isSideDrawerOpen}
         onClose={() => updateSideDrawerState(false)}
-        sx={{
-          zIndex: 99999,
-          width: `${APP_SIDE_DRAWER_WIDTH_DESKTOP}px`,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: {
-            width: `${APP_SIDE_DRAWER_WIDTH_DESKTOP}px`,
-            boxSizing: 'border-box',
-          },
-        }}
       >
-        <Toolbar
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            height: `${APP_APP_BAR_HEIGHT}px`,
-            px: [1],
-          }}
-        >
+        <StyledToolbar>
           <IconButton
             onClick={() => updateSideDrawerState(false)}
             sx={{ width: '100%', height: '100%', justifyContent: 'end' }}
           >
             <ArrowBackIosNewIcon />
           </IconButton>
-        </Toolbar>
+        </StyledToolbar>
         <Divider />
         <AppDrawerItemList Icon={DashboardIcon} menuItems={menuItems} />
-      </Drawer>
+      </StyledDrawer>
     </>
   );
 };
 
 export default AppSideDrawerNonDesktop;
+
+const StyledDrawer = styled(Drawer)({
+  zIndex: 99999,
+  width: `${APP_SIDE_DRAWER_WIDTH_DESKTOP}px`,
+  flexShrink: 0,
+  [`& .MuiDrawer-paper`]: {
+    width: `${APP_SIDE_DRAWER_WIDTH_DESKTOP}px`,
+    boxSizing: 'border-box',
+  },
+});
+
+const StyledToolbar = styled(Toolbar)({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  height: `${APP_APP_BAR_HEIGHT}px`,
+  px: [1],
+});
