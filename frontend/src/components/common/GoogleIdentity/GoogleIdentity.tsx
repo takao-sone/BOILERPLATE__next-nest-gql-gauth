@@ -1,3 +1,4 @@
+import Box from '@mui/material/Box';
 import { useAuthUserValue } from 'global-states/auth-user.state';
 import { FC, useEffect } from 'react';
 import { GI_BUTTON_TYPE, RENDERED_BUTTON_ID } from './GoogleIdentity.const';
@@ -43,21 +44,17 @@ const GoogleIdentity: FC<Props> = ({ buttonType }) => {
   }, [buttonType, googleClientId, handleLoginCredentialResponse, handleRegisterCredentialResponse]);
 
   return (
-    <div>
-      {authUser ? (
+    <>
+      {authUser && (
         <div>
           <div>{authUser.displayedId}</div>
           <div>
             <button onClick={handleLogout}>ログアウト</button>
           </div>
         </div>
-      ) : (
-        <div>
-          <div>Not Logged in</div>
-        </div>
       )}
-      <div id={RENDERED_BUTTON_ID} hidden={!!authUser}></div>
-    </div>
+      <Box id={RENDERED_BUTTON_ID} hidden={!!authUser} mt={3} sx={{ height: '50px' }} />
+    </>
   );
 };
 

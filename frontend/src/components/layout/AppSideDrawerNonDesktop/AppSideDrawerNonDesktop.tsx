@@ -14,10 +14,6 @@ type Props = {};
 
 const AppSideDrawerNonDesktop: FC<Props> = () => {
   const { isSideDrawerOpen, updateSideDrawerState } = useIsSideDrawerOpen(false);
-  const menuItems = [
-    { subHeader: 'メイン', items: ['ホーム', 'スコア履歴'] },
-    { subHeader: 'アカウント', items: ['プロフィール', '契約プラン'] },
-  ];
 
   return (
     <>
@@ -35,7 +31,7 @@ const AppSideDrawerNonDesktop: FC<Props> = () => {
           </IconButton>
         </StyledToolbar>
         <Divider />
-        <AppDrawerItemList Icon={DashboardIcon} menuItems={menuItems} />
+        <AppDrawerItemList Icon={DashboardIcon} />
       </StyledDrawer>
     </>
   );

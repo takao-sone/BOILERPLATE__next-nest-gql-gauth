@@ -10,7 +10,6 @@ type Props = {};
 
 const AppSideDrawer: FC<Props> = () => {
   const isSideDrawerOpen = useIsSideDrawerOpenValue();
-  const menuItems = [{ subHeader: 'メイン', items: ['ホーム', 'スコア履歴'] }];
 
   return (
     <>
@@ -27,7 +26,7 @@ const AppSideDrawer: FC<Props> = () => {
         }}
       >
         <Toolbar />
-        <AppDrawerItemList Icon={DashboardIcon} menuItems={menuItems} />
+        <AppDrawerItemList Icon={DashboardIcon} />
       </Drawer>
     </>
   );
