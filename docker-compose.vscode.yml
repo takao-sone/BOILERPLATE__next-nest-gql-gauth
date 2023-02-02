@@ -78,6 +78,12 @@ services:
       - |
         npm run codegen
         npm run dev
+    # command:
+    #   - /bin/bash
+    #   - -c
+    #   - |
+    #     npm run codegen
+    #     npm run build:start
     depends_on:
       boilerplate-backend:
         condition: service_healthy
