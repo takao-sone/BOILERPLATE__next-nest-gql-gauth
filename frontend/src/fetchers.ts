@@ -10,10 +10,7 @@ import { useAuthAccessTokenValue } from 'global-states/auth-access-token.state';
 import { GraphQLClient } from 'graphql-request';
 import { RequestInit } from 'graphql-request/dist/types.dom';
 
-const BASE_GRAPHQL_ENDPOINT =
-  process.env.NEXT_PUBLIC_APP_ENV === 'development'
-    ? process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT!
-    : process.env.NEXT_PUBLIC_PROD_GRAPHQL_ENDPOINT!;
+const BASE_GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT!;
 
 const BASE_GRAPHQL_CLIENT_OPTIONS: RequestInit = { credentials: 'include' };
 

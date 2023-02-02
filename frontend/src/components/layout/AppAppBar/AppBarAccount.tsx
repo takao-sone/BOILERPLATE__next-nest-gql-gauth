@@ -7,12 +7,11 @@ type Props = {};
 
 const AppBarAccount: FC<Props> = () => {
   const [anchorEl, handleClick, handleClose] = useAccountMenuHandlers();
-  const mainMenuItems = ['プロフィール', '契約プラン'];
 
   return (
     <>
       <AccountButton handleClick={handleClick} />
-      <AccountMenu anchorEl={anchorEl} handleClose={handleClose} mainMenuItems={mainMenuItems} />
+      <AccountMenu anchorEl={anchorEl} handleClose={handleClose} />
     </>
   );
 };
