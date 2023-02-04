@@ -1,12 +1,14 @@
-import LogoutIcon from '@mui/icons-material/Logout';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import ListSubheader from '@mui/material/ListSubheader';
-import SvgIcon from '@mui/material/SvgIcon';
+import { Logout as LogoutIcon } from '@mui/icons-material';
+import {
+  Box,
+  Divider,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  ListSubheader,
+  SvgIcon
+} from '@mui/material';
 import { useHandleLogout } from 'components/common/GoogleIdentity/GoogleIdentity.hook';
 import { useAuthUserValue } from 'global-states/auth-user.state';
 import { useSetIsSideDrawerOpen } from 'global-states/side-drawer.state';

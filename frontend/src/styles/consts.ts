@@ -1,4 +1,6 @@
-import { SxProps, Theme } from '@mui/material/styles';
+import { Theme } from '@mui/material/styles';
+
+import { SxProps } from '@mui/material';
 
 export const APP_SIDE_DRAWER_WIDTH_DESKTOP = 200;
 export const APP_APP_BAR_HEIGHT = 64;

@@ -1,7 +1,4 @@
-import AppBar from '@mui/material/AppBar';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import Toolbar from '@mui/material/Toolbar';
+import { AppBar, Button, Stack, Toolbar } from '@mui/material';
 import { useAuthUserValue } from 'global-states/auth-user.state';
 import NextLink from 'next/link';
 import { FC, ReactNode } from 'react';

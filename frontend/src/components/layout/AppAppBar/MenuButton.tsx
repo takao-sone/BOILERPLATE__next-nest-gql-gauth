@@ -1,5 +1,5 @@
-import MenuIcon from '@mui/icons-material/Menu';
-import IconButton from '@mui/material/IconButton';
+import { Menu as MenuIcon } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 import { FC } from 'react';
 import { useIsDesktop } from 'utils/hook';
 import { useMenuClickHandler } from './AppAppBar.hook';

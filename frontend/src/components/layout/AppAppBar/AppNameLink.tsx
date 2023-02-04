@@ -1,5 +1,5 @@
+import { Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
 import NextLink from 'next/link';
 import { FC, ReactNode } from 'react';
 

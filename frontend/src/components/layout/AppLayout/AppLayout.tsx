@@ -1,5 +1,4 @@
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
+import { Box, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import RecoilStateDebugButton from 'components/dev/RecoilStateDebugBtn';
 import { useIsSideDrawerOpenValue } from 'global-states/side-drawer.state';

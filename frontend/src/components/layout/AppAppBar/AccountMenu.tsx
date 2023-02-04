@@ -1,11 +1,5 @@
-import LogoutIcon from '@mui/icons-material/Logout';
-import PersonIcon from '@mui/icons-material/Person';
-import SellIcon from '@mui/icons-material/Sell';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Typography from '@mui/material/Typography';
+import { Logout as LogoutIcon, Person as PersonIcon, Sell as SellIcon } from '@mui/icons-material';
+import { Box, Divider, Menu, MenuItem, Typography } from '@mui/material';
 import { useHandleLogout } from 'components/common/GoogleIdentity/GoogleIdentity.hook';
 import { useAuthUserValue } from 'global-states/auth-user.state';
 import { FC } from 'react';

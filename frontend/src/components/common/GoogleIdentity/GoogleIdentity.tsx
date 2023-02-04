@@ -1,5 +1,4 @@
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import { Box, Button } from '@mui/material';
 import { useAuthUserValue } from 'global-states/auth-user.state';
 import { FC, useEffect } from 'react';
 import { GI_BUTTON_TYPE, RENDERED_BUTTON_ID } from './GoogleIdentity.const';

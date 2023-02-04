@@ -1,6 +1,4 @@
-import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
-import Toolbar from '@mui/material/Toolbar';
+import { Container, Divider, Toolbar } from '@mui/material';
 import { AppFooter } from 'components/common/AppFooter';
 import { FC, ReactNode } from 'react';
 

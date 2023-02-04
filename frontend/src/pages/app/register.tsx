@@ -1,6 +1,4 @@
-import Container from '@mui/material/Container';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+import { Container, Stack, Typography } from '@mui/material';
 import { GoogleIdentity } from 'components/common/GoogleIdentity';
 import { LoggedInInfo } from 'components/common/LoggedInInfo';
 import { SEO } from 'components/common/SEO';
