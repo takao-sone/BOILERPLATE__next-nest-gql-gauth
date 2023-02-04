@@ -7,7 +7,7 @@ import {
   ListItemIcon,
   ListItemText,
   ListSubheader,
-  SvgIcon
+  SvgIcon,
 } from '@mui/material';
 import { useHandleLogout } from 'components/common/GoogleIdentity/GoogleIdentity.hook';
 import { useAuthUserValue } from 'global-states/auth-user.state';

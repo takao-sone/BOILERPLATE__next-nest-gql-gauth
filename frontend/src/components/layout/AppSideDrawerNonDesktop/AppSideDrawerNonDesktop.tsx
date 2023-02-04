@@ -1,4 +1,7 @@
-import { ArrowBackIosNew as ArrowBackIosNewIcon, Dashboard as DashboardIcon } from '@mui/icons-material';
+import {
+  ArrowBackIosNew as ArrowBackIosNewIcon,
+  Dashboard as DashboardIcon,
+} from '@mui/icons-material';
 import { Divider, Drawer, IconButton, Toolbar } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useIsSideDrawerOpen } from 'global-states/side-drawer.state';
