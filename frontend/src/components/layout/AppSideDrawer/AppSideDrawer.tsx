@@ -1,6 +1,5 @@
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import Drawer from '@mui/material/Drawer';
-import Toolbar from '@mui/material/Toolbar';
+import { Dashboard as DashboardIcon } from '@mui/icons-material';
+import { Drawer, Toolbar } from '@mui/material';
 import { useIsSideDrawerOpenValue } from 'global-states/side-drawer.state';
 import { FC } from 'react';
 import { APP_SIDE_DRAWER_WIDTH_DESKTOP } from 'styles/consts';

@@ -1,7 +1,4 @@
-import AppBar from '@mui/material/AppBar';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import Toolbar from '@mui/material/Toolbar';
+import { AppBar, Button, Stack, Toolbar } from '@mui/material';
 import { useAuthUserValue } from 'global-states/auth-user.state';
 import NextLink from 'next/link';
 import { FC, ReactNode } from 'react';
@@ -33,19 +30,30 @@ const AppAppBar: FC<Props> = ({ children }) => {
           <MenuButton />
           <AppNameLink href="/app">{appName}</AppNameLink>
         </Stack>
-        <Stack direction="row" alignItems="center" sx={{ ...SX_BASE_DISPLAY }}>
+        <Stack spacing={2} direction="row" alignItems="center" sx={{ ...SX_BASE_DISPLAY }}>
           {authUser ? (
             <AppBarAccount />
           ) : (
-            <Button
-              component={NextLink}
-              variant="outlined"
-              color="secondary"
-              sx={{ fontWeight: 'bold' }}
-              href="/app/login"
-            >
-              ログイン
-            </Button>
+            <>
+              <Button
+                component={NextLink}
+                variant="outlined"
+                color="secondary"
+                sx={{ color: 'primary.contrastText', fontWeight: 'bold' }}
+                href="/app/login"
+              >
+                ログイン
+              </Button>
+              <Button
+                component={NextLink}
+                variant="outlined"
+                color="secondary"
+                sx={{ color: 'primary.contrastText', fontWeight: 'bold' }}
+                href="/app/register"
+              >
+                アカウント登録
+              </Button>
+            </>
           )}
         </Stack>
       </Toolbar>

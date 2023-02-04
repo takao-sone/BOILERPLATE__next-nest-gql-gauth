@@ -1,6 +1,6 @@
-import Typography from '@mui/material/Typography';
 import { FC } from 'react';
 import { useCompanyName } from 'utils/hook';
+import { Typography } from '@mui/material';
 
 type Props = {};
 

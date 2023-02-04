@@ -9,19 +9,21 @@ import { ReactElement } from 'react';
 
 type Props = {};
 
-const AppLoginPage: NextPageWithLayout<Props> = () => {
+const AppRegisterPage: NextPageWithLayout<Props> = () => {
   const authUser = useAuthUserValue();
 
   return (
-    <Container sx={{ height: '300px', display: 'grid', placeContent: 'center' }}>
-      <SEO pageTitle="ログイン" pageDescription="ログインページ" />
+    <Container
+      sx={{ height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+    >
+      <SEO pageTitle="アカウント登録" pageDescription="アカウント登録ページ" />
       <Stack justifyContent="center" alignItems="center" spacing={2}>
         {authUser ? (
           <LoggedInInfo authUser={authUser} />
         ) : (
           <>
-            <Typography>Googleアカウントを使用してログインしてください</Typography>
-            <GoogleIdentity buttonType="LOGIN" />
+            <Typography>Googleアカウントを使用してアカウント登録してください</Typography>
+            <GoogleIdentity buttonType="REGISTER" />
           </>
         )}
       </Stack>
@@ -29,8 +31,8 @@ const AppLoginPage: NextPageWithLayout<Props> = () => {
   );
 };
 
-AppLoginPage.getLayout = function getLayout(page: ReactElement) {
+AppRegisterPage.getLayout = function getLayout(page: ReactElement) {
   return <AppLayout>{page}</AppLayout>;
 };
 
-export default AppLoginPage;
+export default AppRegisterPage;

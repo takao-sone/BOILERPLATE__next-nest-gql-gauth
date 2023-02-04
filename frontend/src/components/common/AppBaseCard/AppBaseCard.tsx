@@ -1,7 +1,4 @@
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import Divider from '@mui/material/Divider';
+import { Card, CardContent, CardHeader, Divider } from '@mui/material';
 import { FC, ReactNode } from 'react';
 
 type Props = {

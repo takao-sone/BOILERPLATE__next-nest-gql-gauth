@@ -5,14 +5,14 @@ import { useCallback } from 'react';
 import { atom, SetterOrUpdater, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { AtomKeys } from './recoil-keys';
 
-export type AuthUser = SessionUser;
+export type AuthUser = Omit<SessionUser, '__typename'>;
 
 const authUserState = atom<AuthUser | null>({
   key: AtomKeys.AUTH_USER_STATE,
   default: null,
 });
 
-const useUpdateAuthUserCallback = (setAuthUser: SetterOrUpdater<SessionUser | null>) =>
+const useUpdateAuthUserCallback = (setAuthUser: SetterOrUpdater<AuthUser | null>) =>
   useCallback(
     async (newAccessToken: string) => {
       const resp = await getAuthenticatedUser(newAccessToken).catch((err) => {

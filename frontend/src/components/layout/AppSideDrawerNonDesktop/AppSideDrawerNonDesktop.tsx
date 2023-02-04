@@ -1,10 +1,9 @@
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
+import {
+  ArrowBackIosNew as ArrowBackIosNewIcon,
+  Dashboard as DashboardIcon,
+} from '@mui/icons-material';
+import { Divider, Drawer, IconButton, Toolbar } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import Toolbar from '@mui/material/Toolbar';
 import { useIsSideDrawerOpen } from 'global-states/side-drawer.state';
 import { FC } from 'react';
 import { APP_APP_BAR_HEIGHT, APP_SIDE_DRAWER_WIDTH_DESKTOP } from 'styles/consts';

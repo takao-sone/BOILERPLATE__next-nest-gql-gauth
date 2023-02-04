@@ -12,10 +12,12 @@ const queryClient = new QueryClient({
     queries: {
       retry: 0,
       refetchOnWindowFocus: false,
-      suspense: true,
+      // suspense: true,
+      // useErrorBoundary: true,
     },
     mutations: {
       retry: 0,
+      // useErrorBoundary: true,
     },
   },
 });

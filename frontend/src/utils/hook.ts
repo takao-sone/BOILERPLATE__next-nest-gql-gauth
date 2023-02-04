@@ -1,5 +1,5 @@
+import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 export const useCompanyName = () => {
   return process.env.NEXT_PUBLIC_APP_COMPANY_NAME!;

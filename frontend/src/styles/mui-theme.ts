@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
 
 const muiTheme = createTheme({
   palette: {
@@ -33,6 +33,9 @@ const muiTheme = createTheme({
     },
     h3: {
       fontSize: '2.0rem',
+    },
+    h4: {
+      fontSize: '1.6rem',
     },
   },
 });

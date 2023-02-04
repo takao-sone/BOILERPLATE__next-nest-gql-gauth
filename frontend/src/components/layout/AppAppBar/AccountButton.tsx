@@ -1,6 +1,8 @@
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import IconButton from '@mui/material/IconButton';
+import {
+  AccountCircleOutlined as AccountCircleOutlinedIcon,
+  ArrowDropDown as ArrowDropDownIcon,
+} from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 import { FC, MouseEvent } from 'react';
 
 type Props = {
