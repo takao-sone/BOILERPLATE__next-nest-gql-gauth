@@ -39,7 +39,11 @@ export const useAuthUserValue = () => {
   return useRecoilValue(authUserState);
 };
 
-export const useAuthUserUpdate = () => {
+export const useSetAuthUser = () => {
+  return useSetRecoilState(authUserState);
+};
+
+export const useUpdateAuthUser = () => {
   const setAuthUser = useSetRecoilState(authUserState);
   const updateAuthUser = useUpdateAuthUserCallback(setAuthUser);
   return updateAuthUser;
