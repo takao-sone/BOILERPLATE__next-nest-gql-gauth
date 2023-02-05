@@ -13,7 +13,11 @@ export const useAppSnackbarElement = () => {
   const { severity, message, onClose } = appSnackbar;
 
   return createPortal(
-    <AppSnackbar severity={severity} message={message} onClose={onClose} />,
+    onClose ? (
+      <AppSnackbar severity={severity} message={message} onClose={onClose} />
+    ) : (
+      <AppSnackbar severity={severity} message={message} />
+    ),
     snackbarContainer,
   );
 };

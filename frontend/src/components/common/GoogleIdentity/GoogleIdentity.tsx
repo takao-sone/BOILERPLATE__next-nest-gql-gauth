@@ -5,7 +5,7 @@ import { GI_BUTTON_TYPE, RENDERED_BUTTON_ID } from './GoogleIdentity.const';
 import {
   useHandleLoginCredentialResponse,
   useHandleLogout,
-  useHandleRegisterCredentialResponse,
+  useHandleRegisterCredentialResponse
 } from './GoogleIdentity.hook';
 
 type Props = {

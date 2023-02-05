@@ -21,6 +21,6 @@ export const useAppSnackbarValue = () => {
   return useRecoilValue(snackbarState);
 };
 
-export const useAppSnackbarUpdate = () => {
+export const useSetAppSnackbar = () => {
   return useSetRecoilState(snackbarState);
 };

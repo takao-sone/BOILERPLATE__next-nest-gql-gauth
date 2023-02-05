@@ -1,10 +1,8 @@
 import { ClientError } from 'graphql-request';
 import { ApiError } from 'next/dist/server/api-utils';
 import { PureComponent, ReactNode } from 'react';
-import { DEFAULT_MESSAGES } from './AppErrorBoundary.const';
-import { convertClientErrorToAPIError } from './AppErrorBoundary.util';
+import { convertClientErrorToAPIError, DEFAULT_MESSAGES, StatusMessages } from 'utils/error';
 
-export type StatusMessages = { [status: number]: string };
 type Props = { statusMessages?: StatusMessages; children?: ReactNode };
 type State = { hasError: boolean; error: APIError | null };
 
@@ -16,15 +14,6 @@ export class APIError extends Error {
     this.name = 'API Error';
   }
 }
-
-export type AppGraphQLErrorExtensions = {
-  code: string;
-  response: {
-    statusCode: number;
-    message: string;
-    error: string;
-  };
-};
 
 class AppErrorBoundary extends PureComponent<Props, State> {
   constructor(props: Props) {

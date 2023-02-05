@@ -1,24 +1,24 @@
 import { Close } from '@mui/icons-material';
 import { Alert, AlertColor, IconButton, Snackbar } from '@mui/material';
-import { useAppSnackbarUpdate } from 'global-states/snackbar.state';
+import { useSetAppSnackbar } from 'global-states/snackbar.state';
 import { FC, SyntheticEvent } from 'react';
 import { useSnackbarOpen } from './AppSnackbar.hook';
 
 type Props = {
   severity: AlertColor;
   message: string;
-  onClose: (() => void) | undefined;
+  onClose?: () => void;
 };
 
 const AppSnackbar: FC<Props> = ({ message, severity, onClose }) => {
   const { snackbarOpen, handleClose } = useSnackbarOpen(true);
-  const updateSnackbar = useAppSnackbarUpdate();
+  const setAppSnackbar = useSetAppSnackbar();
   const customOnClose = (event: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
     onClose && onClose();
-    updateSnackbar(null);
+    setAppSnackbar(null);
     handleClose(event);
   };
 
