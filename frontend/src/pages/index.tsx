@@ -4,6 +4,7 @@ import { SEO } from 'components/common/SEO';
 import RecoilStateDebugButton from 'components/dev/RecoilStateDebugBtn';
 import { Test } from 'components/dev/Test';
 import { useDialog } from 'global-states/dialogs.state';
+import { useAppSnackbarUpdate } from 'global-states/snackbar.state';
 import type { NextPage } from 'next';
 import { Suspense } from 'react';
 import { GoogleIdentity } from '../components/common/GoogleIdentity';
@@ -11,6 +12,7 @@ import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
   const { showDialog } = useDialog();
+  const updateSnackbar = useAppSnackbarUpdate();
 
   const handleOpen = () => {
     showDialog({
@@ -21,6 +23,10 @@ const Home: NextPage = () => {
       onConfirm: () => {
         alert('onConfirm');
       },
+    });
+    updateSnackbar({
+      severity: 'error',
+      message: 'エラーです',
     });
   };
 

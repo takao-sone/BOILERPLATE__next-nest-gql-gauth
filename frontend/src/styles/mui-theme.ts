@@ -4,9 +4,9 @@ const muiTheme = createTheme({
   palette: {
     // type: 'dark',
     primary: {
-      light: '#4f555e',
+      light: '#52565c',
       main: '#272c34',
-      dark: '#00000d',
+      dark: '#1b1e24',
       contrastText: '#ffffff',
     },
     secondary: {
@@ -14,6 +14,18 @@ const muiTheme = createTheme({
       main: '#dddddd',
       dark: '#ababab',
       contrastText: '#000000',
+    },
+    success: {
+      light: '#f73378',
+      main: '#0197F6',
+      dark: '#ab003c',
+      contrastText: '#ffffff',
+    },
+    error: {
+      light: '#f73378',
+      main: '#f50057',
+      dark: '#ab003c',
+      contrastText: '#ffffff',
     },
   },
   typography: {
