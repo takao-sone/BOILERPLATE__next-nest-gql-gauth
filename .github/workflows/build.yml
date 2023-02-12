@@ -15,6 +15,7 @@ permissions:
 jobs:
   build:
     name: Build & Push images for AppRunner & Migration & Seed
+    environment: staging # TODO
     runs-on: ubuntu-latest
     steps:
       -
