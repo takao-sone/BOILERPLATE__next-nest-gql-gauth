@@ -16,7 +16,7 @@ terraform get
 terraform plan
 terraform apply
 # Docker Image Build
-docker build . -t apprunner -f Dockerfile.apprunner
+docker build . -t apprunner -f Dockerfile.aws.app
 docker tag apprunner:latest 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-apprunner
 aws ecr get-login-password --profile serialize | docker login --username AWS --password-stdin 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com
 docker push 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-apprunner

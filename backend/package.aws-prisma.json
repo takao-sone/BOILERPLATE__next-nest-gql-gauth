@@ -1,0 +1,14 @@
+{
+  "name": "boilerplate-backend-prisma",
+  "version": "0.0.1",
+  "description": "package.json for prisma task container image",
+  "author": "takao-sone",
+  "private": true,
+  "license": "UNLICENSED",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
+  "dependencies": {
+    "prisma": "^4.0.0"
+  }
+}

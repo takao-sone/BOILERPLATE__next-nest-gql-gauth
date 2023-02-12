@@ -1,3 +1,5 @@
+ARG PORT
+
 FROM node:16.17.1 AS builder
 ENV NODE_ENV=development
 WORKDIR /opt/project
@@ -15,7 +17,7 @@ COPY . .
 # COPY --from=builder /opt/project/dist ./dist
 # COPY --from=builder /opt/project/node_modules/.prisma/client ./node_modules/.prisma/client
 
-EXPOSE 23000
+EXPOSE ${PORT}
 
 # CMD [ "node", "./dist/src/main" ]
 CMD [ "npm", "run", "start:aws" ]
