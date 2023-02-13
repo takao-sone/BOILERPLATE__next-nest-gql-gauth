@@ -36,7 +36,7 @@ resource "aws_apprunner_service" "app" {
     }
 
     image_repository {
-      image_identifier      = "${var.ecr_repository_url_apprunner}:latest"
+      image_identifier      = "${var.ecr_repository_url_apprunner}:app"
       image_repository_type = "ECR"
 
       image_configuration {
@@ -101,10 +101,10 @@ resource "aws_route53_record" "api" {
 
 resource "aws_route53_record" "certificate_validations" {
   for_each = var.STEP_3 ? {
-  for record in aws_apprunner_custom_domain_association.api.certificate_validation_records : record.name => {
-    name   = record.name
-    record = record.value
-  }
+    for record in aws_apprunner_custom_domain_association.api.certificate_validation_records : record.name => {
+      name   = record.name
+      record = record.value
+    }
   } : {}
 
   zone_id = data.aws_route53_zone.apprunner_domain.zone_id

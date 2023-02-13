@@ -12,10 +12,13 @@ permissions:
   id-token: write
   contents: read
 
+env:
+  ACTIONS_ENVIRONMENT: staging
+
 jobs:
   build:
     name: Build & Push images for AppRunner & Migration & Seed
-    environment: staging # TODO
+    environment: ${{ env.ACTIONS_ENVIRONMENT }} # TODO
     runs-on: ubuntu-latest
     steps:
       -
@@ -63,8 +66,8 @@ jobs:
           cache-to: type=gha,mode=max
       -
         name: Build and push staring prisma seed image
-        uses: docker/build-push-action@v4
         if: github.ref_name != 'main'
+        uses: docker/build-push-action@v4
         with:
           push: true
           provenance: false

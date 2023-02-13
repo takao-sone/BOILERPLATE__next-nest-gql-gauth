@@ -16,10 +16,10 @@ terraform get
 terraform plan
 terraform apply
 # Docker Image Build
-docker build . -t apprunner -f Dockerfile.aws.app
-docker tag apprunner:latest 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-apprunner
+docker build . -t app -f Dockerfile.aws.app
+docker tag app:latest 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-backend:app
 aws ecr get-login-password --profile serialize | docker login --username AWS --password-stdin 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com
-docker push 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-apprunner
+docker push 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-backend:app
 # STEP_2: STEP_2 = true, STEP_3 = false
 terraform apply
 # STEP_3: STEP_2 = true, STEP_3 = true
@@ -35,6 +35,7 @@ terraform destroy
 ```
 
 **Amplify**
+
 1. AWSコンソールのAmplifyへアクセス
 2. 作成したappにアクセス
 3. `Run Build` をクリックしてデプロイ
@@ -57,13 +58,17 @@ terraform plan -target=module.rds.aws_rds_cluster.rds_cluster
 ### Main Resources
 
 #### Other
+
 1. Resource Groups
 
 #### Amplify
+
 1. Amplify Hosting (develop branch)
 
 #### Networking
+
 1. VPC
+
 <!-- 2. Internet Gateway
 3. 4 VPC endpoints  
    (ecr_api, ecr_dkr, s3, ecs_awslogs)
