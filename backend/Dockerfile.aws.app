@@ -9,7 +9,7 @@ COPY . .
 RUN npm run build && npm prune --production
 
 FROM node:16.17.1
-ENV NODE_ENV=production
+ENV NODE_ENV=development
 WORKDIR /opt/project
 COPY ./package*.json ./
 RUN npm ci
