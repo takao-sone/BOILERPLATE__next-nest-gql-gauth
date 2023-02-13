@@ -12,13 +12,10 @@ permissions:
   id-token: write
   contents: read
 
-env:
-  ACTIONS_ENVIRONMENT: staging
-
 jobs:
   build:
     name: Build & Push images for AppRunner & Migration & Seed
-    environment: '${{ env.ACTIONS_ENVIRONMENT }}' # TODO
+    environment: staging # TODO
     runs-on: ubuntu-latest
     steps:
       -
