@@ -4,7 +4,7 @@ FROM node:16.17.1 AS builder
 ENV NODE_ENV=development
 WORKDIR /opt/project
 COPY ./package*.json ./
-RUN npm i
+RUN npm ci
 COPY . .
 RUN npm run build
 
@@ -12,7 +12,7 @@ FROM node:16.17.1
 ENV NODE_ENV=development
 WORKDIR /opt/project
 COPY ./package*.json ./
-RUN npm i
+RUN npm ci
 COPY . .
 # COPY --from=builder /opt/project/dist ./dist
 # COPY --from=builder /opt/project/node_modules/.prisma/client ./node_modules/.prisma/client
