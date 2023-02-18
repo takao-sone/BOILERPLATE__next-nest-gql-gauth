@@ -23,8 +23,7 @@ jobs:
         uses: actions/checkout@v3
       -
         name: Set up Docker Buildx
-        #        uses: docker/setup-buildx-action@v2
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
       -
         name: Configure AWS credentials
         if: github.ref_name != 'main'
@@ -39,15 +38,14 @@ jobs:
       -
         name: Build & Push application image
         if: github.ref_name != 'main'
-        #        uses: docker/build-push-action@v4
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           push: true
-          #          provenance: false
+          provenance: false
           context: ./backend
           file: ./backend/Dockerfile.aws.app
           tags: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.PROJECT_NAME }}-${{ vars.STAGE }}-backend:app
-          build-args: PORT=${{ secrets.BACKEND_APP_PORT }}
+          build-args: PORT=23000
           cache-from: type=gha
           cache-to: type=gha,mode=max
       -
