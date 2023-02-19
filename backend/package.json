@@ -9,7 +9,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "start": "nest start",
-    "start:dev": "prisma generate && nest start --debug=0.0.0.0:23001 --watch",
+    "start:dev": "prisma generate && nest start --debug=0.0.0.0:63001 --watch",
     "start:prod": "NODE_ENV=production APP_ENV=production node dist/src/main",
     "start:aws": "NODE_ENV=development APP_ENV=development prisma migrate reset --force && npm run start:dev",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
