@@ -42,24 +42,26 @@ resource "aws_apprunner_service" "app" {
       image_configuration {
         port                          = var.ar_app_port
         runtime_environment_variables = {
-          "NODE_ENV"                 = var.ar_node_env
-          "APP_ENV"                  = var.ar_app_env
-          "ACCESS_TOKEN_EXPIRES_IN"  = var.ar_access_token_expires_in
-          "ACCESS_TOKEN_SECRET"      = var.ar_access_token_secret
-          "APP_HOST"                 = var.ar_app_host
-          "APP_PORT"                 = var.ar_app_port
-          "APP_FRONTEND_ORIGIN"      = var.ar_app_frontend_origin
-          "DATABASE_URL"             = local.database_url
-          "JWT_AUDIENCE_WEB"         = var.ar_jwt_audience_web
-          "JWT_HASH_ALGORITHM"       = var.ar_jwt_hash_algorithm
-          "JWT_ISSUER"               = var.ar_jwt_issuer
-          "REDIS_HOST"               = var.ar_redis_host
-          "REDIS_PORT"               = var.ar_redis_port
-          "REFRESH_TOKEN_EXPIRES_IN" = var.ar_refresh_token_expires_in
-          "REFRESH_TOKEN_SECRET"     = var.ar_refresh_token_secret
-          "SESSION_MAX_AGE"          = var.ar_session_max_age
-          "SESSION_NAME"             = var.ar_session_name
-          "SESSION_SECRET"           = var.ar_session_secret
+          "NODE_ENV"                      = var.ar_node_env
+          "APP_ENV"                       = var.ar_app_env
+          "ACCESS_TOKEN_EXPIRES_IN"       = var.ar_access_token_expires_in
+          "ACCESS_TOKEN_SECRET"           = var.ar_access_token_secret
+          "APP_HOST"                      = var.ar_app_host
+          "APP_PORT"                      = var.ar_app_port
+          "APP_FRONTEND_ORIGIN"           = var.ar_app_frontend_origin
+          "DATABASE_URL"                  = local.database_url
+          "JWT_AUDIENCE_WEB"              = var.ar_jwt_audience_web
+          "JWT_HASH_ALGORITHM"            = var.ar_jwt_hash_algorithm
+          "JWT_ISSUER"                    = var.ar_jwt_issuer
+          "REDIS_HOST"                    = var.ar_redis_host
+          "REDIS_PORT"                    = var.ar_redis_port
+          "REDIS_SESSION_KEY_PREFIX"      = var.ar_redis_session_key_prefix
+          "REDIS_EXISTING_SESSION_PREFIX" = var.ar_redis_existing_session_prefix
+          "REFRESH_TOKEN_EXPIRES_IN"      = var.ar_refresh_token_expires_in
+          "REFRESH_TOKEN_SECRET"          = var.ar_refresh_token_secret
+          "SESSION_MAX_AGE"               = var.ar_session_max_age
+          "SESSION_NAME"                  = var.ar_session_name
+          "SESSION_SECRET"                = var.ar_session_secret
         }
       }
     }

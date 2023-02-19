@@ -46,6 +46,7 @@ jobs:
           file: ./backend/Dockerfile.aws.app
           tags: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.PROJECT_NAME }}-${{ vars.STAGE }}-backend:app
           build-args: PORT=${{ secrets.BACKEND_APP_PORT }}
+          target: staging
       -
         name: Build & Push migration image
         if: github.ref_name != 'main'

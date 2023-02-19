@@ -159,6 +159,14 @@ variable "ar_session_secret" {
   type = string
 }
 
+variable "ar_redis_session_key_prefix" {
+  type = string
+}
+
+variable "ar_redis_existing_session_prefix" {
+  type = string
+}
+
 # RDS ===========================
 variable "rds_cluster_parameter_group_name" {
   type = string

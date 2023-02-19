@@ -82,6 +82,14 @@ variable "ar_redis_port" {
   type = number
 }
 
+variable "ar_redis_session_key_prefix" {
+  type = string
+}
+
+variable "ar_redis_existing_session_prefix" {
+  type = string
+}
+
 variable "ar_refresh_token_expires_in" {
   type = string
 }
