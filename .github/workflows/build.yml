@@ -49,7 +49,7 @@ jobs:
       -
         name: Build & Push migration image
         if: github.ref_name != 'main'
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v3
         with:
           push: true
           provenance: false
@@ -60,7 +60,7 @@ jobs:
       -
         name: Build and push staring prisma seed image
         if: github.ref_name != 'main'
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v3
         with:
           push: true
           provenance: false
