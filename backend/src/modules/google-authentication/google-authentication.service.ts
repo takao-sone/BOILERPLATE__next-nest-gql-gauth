@@ -378,16 +378,34 @@ export class GoogleAuthenticationService {
       this.envService.getRedisSessionKeyPrefix() + ':' + this.redisService.generateRandomRedisKey();
     const existingSessionKeysKey =
       this.envService.getRedisExistingSessionPrefix() + ':' + sessionUser.displayedId;
-    await this.redisClient
-      .multi()
-      .set(newSessionKey, JSON.stringify(sessionUser), 'EX', sessionMaxAgeInSeconds)
-      .sadd(existingSessionKeysKey, newSessionKey)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .exec((err, _results) => {
-        if (!err) return;
-        Logger.error(`googleRegisterUser: ${err.message}`);
-        throw new InternalServerErrorException();
-      });
+    console.log('======================================');
+    console.log('newSessionKey: ', newSessionKey);
+    console.log('existingSessionKeysKey : ', newSessionKey);
+    try {
+      await this.redisClient
+        .multi()
+        .set(newSessionKey, JSON.stringify(sessionUser), 'EX', sessionMaxAgeInSeconds)
+        .sadd(existingSessionKeysKey, newSessionKey)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .exec((err, _results) => {
+          if (!err) return;
+          Logger.error(`googleRegisterUser: ${err.message}`);
+          throw new InternalServerErrorException();
+        });
+    } catch (err) {
+      console.log('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm');
+      console.log(err);
+    }
+    // await this.redisClient
+    //   .multi()
+    //   .set(newSessionKey, JSON.stringify(sessionUser), 'EX', sessionMaxAgeInSeconds)
+    //   .sadd(existingSessionKeysKey, newSessionKey)
+    //   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    //   .exec((err, _results) => {
+    //     if (!err) return;
+    //     Logger.error(`googleRegisterUser: ${err.message}`);
+    //     throw new InternalServerErrorException();
+    //   });
     return newSessionKey;
   }
 }
