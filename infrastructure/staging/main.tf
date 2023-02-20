@@ -103,6 +103,7 @@ module "apprunner" {
   ar_rds_database_name               = module.rds.rds_database_name
   ar_rds_master_username             = module.rds.rds_master_username
   ar_rds_master_password             = module.rds.rds_master_password
+  ar_session_max_age_in_seconds      = var.ar_session_max_age_in_seconds
 }
 
 module "amplify" {

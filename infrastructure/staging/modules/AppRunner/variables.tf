@@ -126,6 +126,10 @@ variable "ar_rds_master_password" {
   type = string
 }
 
+variable "ar_session_max_age_in_seconds" {
+  type = string
+}
+
 # locals ===========================
 locals {
   resource_prefix = "${var.project_name}-${var.project_stg}"
