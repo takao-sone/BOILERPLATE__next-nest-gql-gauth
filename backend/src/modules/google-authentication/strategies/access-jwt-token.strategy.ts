@@ -25,9 +25,6 @@ export class AccessJwtTokenStrategy extends PassportStrategy(Strategy) {
     // Redisからセッションユーザーを取得
     const { session: sessionKey } = payload;
     const stringSessionUser = await this.redisClient.get(sessionKey);
-    const keys = await this.redisClient.keys('*');
-    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-    console.log('keys', keys);
 
     if (!stringSessionUser) {
       Logger.error('validate: No session user');
