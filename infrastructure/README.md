@@ -20,6 +20,7 @@ docker build . -t app -f Dockerfile.aws.app
 docker tag app:latest 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-backend:app
 aws ecr get-login-password --profile serialize | docker login --username AWS --password-stdin 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com
 docker push 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-backend:app
+Github Actionsのjobでimage生成
 # STEP_2: STEP_2 = true, STEP_3 = false
 terraform apply
 # STEP_3: STEP_2 = true, STEP_3 = true
@@ -70,9 +71,9 @@ terraform plan -target=module.rds.aws_rds_cluster.rds_cluster
 1. VPC
 
 <!-- 2. Internet Gateway
-3. 4 VPC endpoints  
+3. 4 VPC endpoints
    (ecr_api, ecr_dkr, s3, ecs_awslogs)
-4. 4 Subnets  
+4. 4 Subnets
    (public, private_container, private_db, private_endpoint)
 5. 2 Route Tables
    (for public subnets, for private containers)
