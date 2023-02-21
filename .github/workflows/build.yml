@@ -70,10 +70,12 @@ jobs:
           tags: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.PROJECT_NAME }}-${{ vars.STAGE }}-backend:prisma-seed
           target: seed
 
-# vars
+# Github側での必要な設定 ======================================================
+
+# vars ===========================
 # STAGE
 
-# secrets
+# secrets ===========================
 # PROJECT_NAME
 # BACKEND_APP_PORT
 # AWS_ACCOUNT_ID

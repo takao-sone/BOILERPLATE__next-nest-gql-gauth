@@ -10,7 +10,6 @@
 cd infrastructure/{environment}
 cp terraform.tfvars.example terraform.tfvars # tfvarsの各項目入力
 terraform init
-terraform get
 # tfvarsの置き換え => repository, branch_name, example.com, github_accesstokenなど
 # STEP_1: STEP_2 = false, STEP_3 = false
 terraform plan
