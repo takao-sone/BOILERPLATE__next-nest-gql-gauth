@@ -32,6 +32,15 @@ module "networking" {
   count_of_public_nats = var.count_of_public_nats
 }
 
+module "github" {
+  source                     = "./modules/Github"
+  project_name               = var.project_name
+  project_stg                = var.project_stg
+  github_account_name        = var.github_account_name
+  github_repository_name     = var.github_repository_name
+  ecr_repository_backend_arn = module.ecs.ecr_repository_arn_backend
+}
+
 module "ecs" {
   source       = "./modules/ECS"
   project_name = var.project_name
@@ -83,6 +92,8 @@ module "apprunner" {
   ar_jwt_issuer                      = var.ar_jwt_issuer
   ar_redis_host                      = module.elasticcache.redis_host
   ar_redis_port                      = module.elasticcache.redis_port
+  ar_redis_session_key_prefix        = var.ar_redis_session_key_prefix
+  ar_redis_existing_session_prefix   = var.ar_redis_existing_session_prefix
   ar_refresh_token_expires_in        = var.ar_refresh_token_expires_in
   ar_refresh_token_secret            = var.ar_refresh_token_secret
   ar_session_max_age                 = var.ar_session_max_age
@@ -92,6 +103,7 @@ module "apprunner" {
   ar_rds_database_name               = module.rds.rds_database_name
   ar_rds_master_username             = module.rds.rds_master_username
   ar_rds_master_password             = module.rds.rds_master_password
+  ar_session_max_age_in_seconds      = var.ar_session_max_age_in_seconds
 }
 
 module "amplify" {

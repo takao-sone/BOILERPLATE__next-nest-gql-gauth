@@ -35,6 +35,10 @@ variable "github_account_name" {
   type = string
 }
 
+variable "github_repository_name" {
+  type = string
+}
+
 variable "github_repository_name_amplify" {
   type = string
 }
@@ -152,6 +156,18 @@ variable "ar_session_name" {
 }
 
 variable "ar_session_secret" {
+  type = string
+}
+
+variable "ar_redis_session_key_prefix" {
+  type = string
+}
+
+variable "ar_redis_existing_session_prefix" {
+  type = string
+}
+
+variable "ar_session_max_age_in_seconds" {
   type = string
 }
 

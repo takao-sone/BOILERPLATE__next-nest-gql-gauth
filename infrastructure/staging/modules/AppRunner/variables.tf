@@ -82,6 +82,14 @@ variable "ar_redis_port" {
   type = number
 }
 
+variable "ar_redis_session_key_prefix" {
+  type = string
+}
+
+variable "ar_redis_existing_session_prefix" {
+  type = string
+}
+
 variable "ar_refresh_token_expires_in" {
   type = string
 }
@@ -115,6 +123,10 @@ variable "ar_rds_master_username" {
 }
 
 variable "ar_rds_master_password" {
+  type = string
+}
+
+variable "ar_session_max_age_in_seconds" {
   type = string
 }
 

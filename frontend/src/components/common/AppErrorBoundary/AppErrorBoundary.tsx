@@ -17,13 +17,11 @@ export class APIError extends Error {
 
 class AppErrorBoundary extends PureComponent<Props, State> {
   constructor(props: Props) {
-    console.log('constructor======================================');
     super(props);
     this.state = { hasError: false, error: null };
   }
 
   static getDerivedStateFromError = (e: unknown): State => {
-    console.log('getDerivedStateFromError=======================================');
     if (e instanceof ClientError) {
       return {
         hasError: true,
@@ -55,16 +53,13 @@ class AppErrorBoundary extends PureComponent<Props, State> {
         return <div>{messages[statusCode]}</div>;
       }
 
-      console.log('1=======================================');
       if (error?.message) {
         return <div>{error.message}</div>;
       }
 
-      console.log('2=======================================');
       return <div>{messages[0]}</div>;
     }
 
-    console.log('3=======================================');
     return children;
   };
 }

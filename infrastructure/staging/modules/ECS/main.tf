@@ -1,5 +1,5 @@
-resource "aws_ecr_repository" "apprunner" {
-  name                 = "${local.resource_prefix}-apprunner"
+resource "aws_ecr_repository" "backend" {
+  name                 = "${local.resource_prefix}-backend"
   image_tag_mutability = "MUTABLE"
   force_delete         = true
 
@@ -8,6 +8,6 @@ resource "aws_ecr_repository" "apprunner" {
   }
 
   tags = {
-    "Name" = "${local.resource_prefix}-apprunner"
+    "Name" = "${local.resource_prefix}-backend"
   }
 }

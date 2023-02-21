@@ -36,30 +36,38 @@ resource "aws_apprunner_service" "app" {
     }
 
     image_repository {
-      image_identifier      = "${var.ecr_repository_url_apprunner}:latest"
+      image_identifier      = "${var.ecr_repository_url_apprunner}:app"
       image_repository_type = "ECR"
 
       image_configuration {
         port                          = var.ar_app_port
         runtime_environment_variables = {
-          "NODE_ENV"                 = var.ar_node_env
-          "APP_ENV"                  = var.ar_app_env
-          "ACCESS_TOKEN_EXPIRES_IN"  = var.ar_access_token_expires_in
+          "NODE_ENV" = var.ar_node_env
+          "APP_ENV"  = var.ar_app_env
+
+          "APP_HOST"            = var.ar_app_host
+          "APP_PORT"            = var.ar_app_port
+          "APP_FRONTEND_ORIGIN" = var.ar_app_frontend_origin
+
           "ACCESS_TOKEN_SECRET"      = var.ar_access_token_secret
-          "APP_HOST"                 = var.ar_app_host
-          "APP_PORT"                 = var.ar_app_port
-          "APP_FRONTEND_ORIGIN"      = var.ar_app_frontend_origin
-          "DATABASE_URL"             = local.database_url
+          "REFRESH_TOKEN_SECRET"     = var.ar_refresh_token_secret
+          "JWT_ISSUER"               = var.ar_jwt_issuer
           "JWT_AUDIENCE_WEB"         = var.ar_jwt_audience_web
           "JWT_HASH_ALGORITHM"       = var.ar_jwt_hash_algorithm
-          "JWT_ISSUER"               = var.ar_jwt_issuer
-          "REDIS_HOST"               = var.ar_redis_host
-          "REDIS_PORT"               = var.ar_redis_port
+          "ACCESS_TOKEN_EXPIRES_IN"  = var.ar_access_token_expires_in
           "REFRESH_TOKEN_EXPIRES_IN" = var.ar_refresh_token_expires_in
-          "REFRESH_TOKEN_SECRET"     = var.ar_refresh_token_secret
-          "SESSION_MAX_AGE"          = var.ar_session_max_age
-          "SESSION_NAME"             = var.ar_session_name
-          "SESSION_SECRET"           = var.ar_session_secret
+
+          "DATABASE_URL" = local.database_url
+
+          "REDIS_HOST"                    = var.ar_redis_host
+          "REDIS_PORT"                    = var.ar_redis_port
+          "REDIS_SESSION_KEY_PREFIX"      = var.ar_redis_session_key_prefix
+          "REDIS_EXISTING_SESSION_PREFIX" = var.ar_redis_existing_session_prefix
+
+          "SESSION_SECRET"             = var.ar_session_secret
+          "SESSION_NAME"               = var.ar_session_name
+          "SESSION_MAX_AGE"            = var.ar_session_max_age
+          "SESSION_MAX_AGE_IN_SECONDS" = var.ar_session_max_age_in_seconds
         }
       }
     }
@@ -101,10 +109,10 @@ resource "aws_route53_record" "api" {
 
 resource "aws_route53_record" "certificate_validations" {
   for_each = var.STEP_3 ? {
-  for record in aws_apprunner_custom_domain_association.api.certificate_validation_records : record.name => {
-    name   = record.name
-    record = record.value
-  }
+    for record in aws_apprunner_custom_domain_association.api.certificate_validation_records : record.name => {
+      name   = record.name
+      record = record.value
+    }
   } : {}
 
   zone_id = data.aws_route53_zone.apprunner_domain.zone_id
