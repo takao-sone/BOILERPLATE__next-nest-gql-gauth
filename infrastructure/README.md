@@ -14,12 +14,13 @@ terraform init
 # STEP_1: STEP_2 = false, STEP_3 = false
 terraform plan
 terraform apply
-# Docker Image Build
+# Githubのsettings
+build.ymlの下部コメントの設定を該当リポジトリに追加
+# Docker Image Build（Github Actionsのjobでimage生成）
 docker build . -t app -f Dockerfile.aws.app
 docker tag app:latest 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-backend:app
 aws ecr get-login-password --profile serialize | docker login --username AWS --password-stdin 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com
 docker push 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-backend:app
-Github Actionsのjobでimage生成
 # STEP_2: STEP_2 = true, STEP_3 = false
 terraform apply
 # STEP_3: STEP_2 = true, STEP_3 = true
