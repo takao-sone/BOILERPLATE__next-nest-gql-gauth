@@ -39,7 +39,6 @@ export const useHandleRegisterCredentialResponse = () => {
         throw err;
       }
 
-      // TODO: 保存失敗した際の挙動が決めきれていない
       try {
         setAuthAccessToken(accessToken);
         await updateAuthUser(accessToken);
@@ -91,7 +90,6 @@ export const useHandleLoginCredentialResponse = () => {
         throw err;
       }
 
-      // TODO: 保存失敗した際の挙動が決めきれていない
       try {
         setAuthAccessToken(accessToken);
         await updateAuthUser(accessToken);

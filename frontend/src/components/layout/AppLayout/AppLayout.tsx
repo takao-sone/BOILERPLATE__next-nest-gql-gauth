@@ -8,6 +8,7 @@ import {
   SX_BASE_DISPLAY,
   SX_NON_DESKTOP_DISPLAY,
 } from 'styles/consts';
+import { isDevelopment } from 'utils/env';
 import { AppAppBar } from '../AppAppBar';
 import { AppMainContent } from '../AppMainContent';
 import { AppSideDrawer } from '../AppSideDrawer';
@@ -34,7 +35,7 @@ const AppLayout: FC<Props> = ({ children }) => {
           <StyledBox component="main" open={isSideDrawerOpen}>
             <AppMainContent>{children}</AppMainContent>
             {/* TODO: Debug */}
-            <RecoilStateDebugButton />
+            {isDevelopment() && <RecoilStateDebugButton />}
           </StyledBox>
         </Stack>
       </Stack>

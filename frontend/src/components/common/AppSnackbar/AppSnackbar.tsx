@@ -38,6 +38,7 @@ const AppSnackbar: FC<Props> = ({ message, severity, onClose }) => {
       <Alert
         variant="filled"
         severity={severity}
+        elevation={15}
         onClose={customOnClose}
         sx={{ fontWeight: 'bold' }}
       >
