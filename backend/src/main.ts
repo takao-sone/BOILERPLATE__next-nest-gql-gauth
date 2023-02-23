@@ -8,7 +8,7 @@ import { EnvService } from './modules/app-config/env.service';
 import { PrismaService } from './modules/prisma/prisma.service';
 
 /**
- * 本番用bootstrap関数（？）
+ * 本番用bootstrap関数
  */
 // async function bootstrap() {
 //   const app = await NestFactory.create(AppModule);
