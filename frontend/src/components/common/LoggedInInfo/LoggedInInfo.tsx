@@ -29,7 +29,7 @@ const LoggedInInfo: FC<Props> = ({ authUser }) => {
           <Typography>{authUser.userProfile.name}</Typography>
         </Grid>
       </Grid>
-      <GoogleIdentity buttonType="REGISTER" />
+      <GoogleIdentity buttonType="LOGIN" />
     </Stack>
   );
 };

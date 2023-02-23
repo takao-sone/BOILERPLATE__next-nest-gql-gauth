@@ -29,7 +29,7 @@ import { UsersModule } from './modules/users/users.module';
     TokenAuthenticationModule,
     GoogleAuthenticationModule,
     RedisModule,
-    // MEMO: cookieで認証する場合は以下2つをコメントイン
+    // TODO: cookieで認証する場合は以下2つをコメントイン
     // CookieAuthenticationModule,
     // SessionModule,
   ],

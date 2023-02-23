@@ -7,6 +7,7 @@ import { useDialog } from 'global-states/dialogs.state';
 import { useSetAppSnackbar } from 'global-states/snackbar.state';
 import type { NextPage } from 'next';
 import { Suspense } from 'react';
+import { isDevelopment } from 'utils/env';
 import { GoogleIdentity } from '../components/common/GoogleIdentity';
 import styles from '../styles/Home.module.css';
 
@@ -54,7 +55,7 @@ const Home: NextPage = () => {
             </button>
           </p>
         </div>
-        {process.env.NODE_ENV === 'development' && <RecoilStateDebugButton />}
+        {isDevelopment() && <RecoilStateDebugButton />}
       </main>
     </div>
   );
