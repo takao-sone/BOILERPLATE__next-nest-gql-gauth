@@ -11,6 +11,8 @@ cd infrastructure/{environment}
 cp terraform.tfvars.example terraform.tfvars # tfvarsの各項目入力
 terraform init
 # tfvarsの置き換え => repository, branch_name, example.com, github_accesstokenなど
+# build.ymlのブランチ書き換え
+# Github Actionsのsecrets,vars設定
 # STEP_1: STEP_2 = false, STEP_3 = false
 terraform plan
 terraform apply
@@ -23,6 +25,7 @@ aws ecr get-login-password --profile serialize | docker login --username AWS --p
 docker push 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-backend:app
 # STEP_2: STEP_2 = true, STEP_3 = false
 terraform apply
+# ApmplifyのRepository Connectする
 # STEP_3: STEP_2 = true, STEP_3 = true
 terraform apply
 ```
