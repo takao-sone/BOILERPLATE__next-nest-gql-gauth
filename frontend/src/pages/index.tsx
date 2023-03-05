@@ -1,12 +1,8 @@
-import { CircularProgress } from '@mui/material';
-import { AppErrorBoundary } from 'components/common/AppErrorBoundary';
 import { SEO } from 'components/common/SEO';
 import RecoilStateDebugButton from 'components/dev/RecoilStateDebugBtn';
-import { Test } from 'components/dev/Test';
 import { useDialog } from 'global-states/dialogs.state';
 import { useSetAppSnackbar } from 'global-states/snackbar.state';
 import type { NextPage } from 'next';
-import { Suspense } from 'react';
 import { isDevelopment } from 'utils/env';
 import { GoogleIdentity } from '../components/common/GoogleIdentity';
 import styles from '../styles/Home.module.css';
@@ -38,11 +34,11 @@ const Home: NextPage = () => {
       </SEO>
 
       <main className={styles.main}>
-        <AppErrorBoundary>
-          <Suspense fallback={<CircularProgress />}>
-            <Test />
-          </Suspense>
-        </AppErrorBoundary>
+        {/*<AppErrorBoundary>*/}
+        {/*  <Suspense fallback={<CircularProgress />}>*/}
+        {/*    <Test />*/}
+        {/*  </Suspense>*/}
+        {/*</AppErrorBoundary>*/}
         <GoogleIdentity buttonType="LOGIN" />
         {/* <GoogleIdentity buttonType="REGISTER" /> */}
         <h1 className={styles.title}>
