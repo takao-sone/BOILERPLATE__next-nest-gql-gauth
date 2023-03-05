@@ -46,7 +46,7 @@ resource "aws_rds_cluster_instance" "rds_cluster_instance_1" {
   instance_class               = "db.serverless"
   auto_minor_version_upgrade   = true
   copy_tags_to_snapshot        = false
-  monitoring_role_arn          = "arn:aws:iam::648099517491:role/rds-monitoring-role"
+  monitoring_role_arn          = aws_iam_role.rds_monitoring_role.arn
   monitoring_interval          = 60
   performance_insights_enabled = false
   promotion_tier               = 1
@@ -64,5 +64,27 @@ resource "aws_db_subnet_group" "rds_subnet_group" {
 
   tags = {
     Name = "${local.resource_prefix}-rds-subnet-group"
+  }
+}
+
+# IAM ==============================================
+resource "aws_iam_role" "rds_monitoring_role" {
+  name                = "${local.resource_prefix}-rds-enhanced-monitoring"
+  assume_role_policy  = data.aws_iam_policy_document.rds_monitoring_role.json
+  managed_policy_arns = [
+    "arn:aws:iam::aws:policy/service-role/AWSAppRunnerServicePolicyForECRAccess"
+  ]
+  tags = {
+    "Name" = "${local.resource_prefix}-rds-enhanced-monitoring"
+  }
+}
+
+data "aws_iam_policy_document" "rds_monitoring_role" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["monitoring.rds.amazonaws.com"]
+    }
   }
 }
