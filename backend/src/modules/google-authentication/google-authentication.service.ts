@@ -166,24 +166,15 @@ export class GoogleAuthenticationService {
     const { session: sessionKey } = decodedAccessTokenPayload;
     const sessionKeysKey =
       this.envService.getRedisExistingSessionPrefix() + ':' + currentSessionUser.displayedId;
-    try {
-      await this.redisClient
-        .multi()
-        .del(sessionKey)
-        .srem(sessionKeysKey, sessionKey)
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        .exec((err, _results) => {
-          if (!err) return;
-          Logger.error(`logout: ${err.message}`);
-          throw new InternalServerErrorException();
-        });
-    } catch (err) {
-      if (err instanceof Error) {
-        Logger.error(err.message);
+    await this.redisClient
+      .multi()
+      .del(sessionKey)
+      .srem(sessionKeysKey, sessionKey)
+      .exec((err) => {
+        if (!err) return;
+        Logger.error(`logout: ${err.message}`);
         throw new InternalServerErrorException();
-      }
-      throw err;
-    }
+      });
   }
 
   /**
