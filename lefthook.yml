@@ -1,11 +1,15 @@
 pre-push:
-  parallel: false
+  parallel: true
   commands:
     frontend-eslint:
-      run: docker compose -f docker-compose.lefthook.yml run --rm boilerplate-frontend-lefthook npm run lint:fix
+      root: "frontend/"
+      run: npm run lint:fix
     frontend-prettier:
-      run: docker compose -f docker-compose.lefthook.yml run --rm boilerplate-frontend-lefthook npm run format
+      root: "frontend/"
+      run: npm run format
     backend-eslint:
-      run: docker compose -f docker-compose.lefthook.yml run --rm boilerplate-backend-lefthook npm run lint:fix
+      root: "backend/"
+      run: npm run lint:fix
     backend-prettier:
-      run: docker compose -f docker-compose.lefthook.yml run --rm boilerplate-backend-lefthook npm run format
+      root: "backend/"
+      run: npm run format
