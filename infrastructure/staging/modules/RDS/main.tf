@@ -10,7 +10,7 @@ resource "aws_rds_cluster" "rds_cluster" {
   master_password                 = var.rds_master_password
 
   engine                       = "aurora-mysql"
-  engine_version               = "8.0.mysql_aurora.3.02.0"
+  engine_version               = "8.0.mysql_aurora.3.02.2"
   engine_mode                  = "provisioned"
   port                         = 3306
   preferred_backup_window      = "17:00-17:30"
@@ -38,6 +38,8 @@ resource "aws_rds_cluster" "rds_cluster" {
 
 # RDS Cluster Instance ==============================================
 resource "aws_rds_cluster_instance" "rds_cluster_instance_1" {
+  apply_immediately = true
+
   identifier         = "${local.resource_prefix}-rds-cluster-instance-1"
   cluster_identifier = aws_rds_cluster.rds_cluster.id
   engine             = aws_rds_cluster.rds_cluster.engine
@@ -72,10 +74,10 @@ resource "aws_iam_role" "rds_monitoring_role" {
   name                = "${local.resource_prefix}-rds-enhanced-monitoring"
   assume_role_policy  = data.aws_iam_policy_document.rds_monitoring_role.json
   managed_policy_arns = [
-    "arn:aws:iam::aws:policy/service-role/AWSAppRunnerServicePolicyForECRAccess"
+    "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
   ]
   tags = {
-    "Name" = "${local.resource_prefix}-rds-enhanced-monitoring"
+    Name = "${local.resource_prefix}-rds-enhanced-monitoring"
   }
 }
 

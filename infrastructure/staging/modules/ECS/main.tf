@@ -1,3 +1,7 @@
+# Data ===============================
+data "aws_region" "current" {}
+
+# ECR ===============================
 resource "aws_ecr_repository" "backend" {
   name                 = "${local.resource_prefix}-backend"
   image_tag_mutability = "MUTABLE"
@@ -10,6 +14,7 @@ resource "aws_ecr_repository" "backend" {
   }
 }
 
+# ECS ===============================
 resource "aws_ecs_cluster" "backend" {
   name = "${local.resource_prefix}-backend-ecs-cluster"
   tags = {
@@ -39,7 +44,7 @@ resource "aws_ecs_task_definition" "prisma_migration" {
         logConfiguration = {
           logDriver = "awslogs"
           options   = {
-            awslogs-region        = var.aws_region
+            awslogs-region        = data.aws_region.current.name
             awslogs-group         = aws_cloudwatch_log_group.ecs_task_prisma.name
             awslogs-stream-prefix = "task"
           }
@@ -47,7 +52,6 @@ resource "aws_ecs_task_definition" "prisma_migration" {
       }
     ]
   )
-
   tags = {
     Name = "${local.resource_prefix}-backend-prisma-migration-ecs-task-definition"
   }
@@ -77,7 +81,7 @@ resource "aws_ecs_task_definition" "prisma_seed" {
         logConfiguration = {
           logDriver = "awslogs"
           options   = {
-            awslogs-region        = var.aws_region
+            awslogs-region        = data.aws_region.current.name
             awslogs-group         = aws_cloudwatch_log_group.ecs_task_prisma.name
             awslogs-stream-prefix = "task"
           }

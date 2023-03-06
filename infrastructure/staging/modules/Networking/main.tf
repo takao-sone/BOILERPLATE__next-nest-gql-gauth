@@ -55,7 +55,7 @@ resource "aws_route_table_association" "igw_rt_association" {
   subnet_id      = aws_subnet.public_subnets[count.index].id
 }
 
-resource "aws_route_table" "nat_rts" {
+resource "aws_route_table" "private_rts" {
   count  = length(aws_subnet.private_subnets)
   vpc_id = aws_vpc.vpc.id
   route {
@@ -63,12 +63,13 @@ resource "aws_route_table" "nat_rts" {
     cidr_block     = "0.0.0.0/0"
   }
   tags = {
-    Name = "${local.resource_prefix}-nat-route-${count.index}"
+    Name = "${local.resource_prefix}-private-route-${count.index}"
   }
 }
+
 resource "aws_route_table_association" "nat_rt_association" {
   count          = length(aws_subnet.private_subnets)
-  route_table_id = aws_route_table.nat_rts[count.index].id
+  route_table_id = aws_route_table.private_rts[count.index].id
   subnet_id      = aws_subnet.private_subnets[count.index].id
 }
 
@@ -90,6 +91,59 @@ resource "aws_nat_gateway" "public_nats" {
     Name = "${local.resource_prefix}-public-nat-${count.index}"
   }
   depends_on = [aws_internet_gateway.igw]
+}
+
+# VPC Endpoint ===============================
+resource "aws_vpc_endpoint" "s3" {
+  vpc_id            = aws_vpc.vpc.id
+  service_name      = "com.amazonaws.${data.aws_region.current.name}.s3"
+  vpc_endpoint_type = "Gateway"
+  route_table_ids   = aws_route_table.private_rts[*].id
+  tags              = {
+    Name = "${local.resource_prefix}-s3-vpc-endpoint"
+  }
+}
+
+resource "aws_vpc_endpoint" "ecr_dkr" {
+  vpc_id              = aws_vpc.vpc.id
+  service_name        = "com.amazonaws.${data.aws_region.current.name}.ecr.dkr"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+  subnet_ids          = aws_subnet.private_subnets[*].id
+  security_group_ids  = [
+    aws_security_group.vpc_endpoint_prisma.id
+  ]
+  tags = {
+    Name = "${local.resource_prefix}-ecr-dkr-vpc-endpoint"
+  }
+}
+
+resource "aws_vpc_endpoint" "ecr_api" {
+  vpc_id              = aws_vpc.vpc.id
+  service_name        = "com.amazonaws.${data.aws_region.current.name}.ecr.api"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+  subnet_ids          = aws_subnet.private_subnets[*].id
+  security_group_ids  = [
+    aws_security_group.vpc_endpoint_prisma.id
+  ]
+  tags = {
+    Name = "${local.resource_prefix}-ecr-api-vpc-endpoint"
+  }
+}
+
+resource "aws_vpc_endpoint" "ecs_task_prisma_logs" {
+  vpc_id              = aws_vpc.vpc.id
+  service_name        = "com.amazonaws.${data.aws_region.current.name}.logs"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+  subnet_ids          = aws_subnet.private_subnets[*].id
+  security_group_ids  = [
+    aws_security_group.vpc_endpoint_prisma.id
+  ]
+  tags = {
+    Name = "${local.resource_prefix}-logs-vpc-endpoint"
+  }
 }
 
 # Elastic IP ===============================
@@ -124,7 +178,10 @@ resource "aws_security_group" "rds_sg" {
     protocol        = "tcp"
     from_port       = 3306
     to_port         = 3306
-    security_groups = [aws_security_group.app_runner_vpc_connector_sg.id]
+    security_groups = [
+      aws_security_group.app_runner_vpc_connector_sg.id,
+      aws_security_group.ecs_task_prisma.id
+    ]
   }
   tags = {
     Name = "${local.resource_prefix}-rds-sg"
@@ -142,5 +199,39 @@ resource "aws_security_group" "redis_sg" {
   }
   tags = {
     Name = "${local.resource_prefix}-redis-sg"
+  }
+}
+
+resource "aws_security_group" "vpc_endpoint_prisma" {
+  name   = "${local.resource_prefix}-ecs-task-prisma-vpc-endpoint-sg"
+  vpc_id = aws_vpc.vpc.id
+  ingress {
+    protocol        = "tcp"
+    from_port       = 443
+    to_port         = 443
+    security_groups = [aws_security_group.ecs_task_prisma.id]
+  }
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "${local.resource_prefix}-ecs-task-prisma-vpc-endpoint-sg"
+  }
+}
+
+resource "aws_security_group" "ecs_task_prisma" {
+  name   = "${local.resource_prefix}-ecs-task-prisma-sg"
+  vpc_id = aws_vpc.vpc.id
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "${local.resource_prefix}-ecs-task-prisma-sg"
   }
 }

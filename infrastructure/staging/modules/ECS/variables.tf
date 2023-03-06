@@ -7,10 +7,6 @@ variable "project_stg" {
   type = string
 }
 
-variable "aws_region" {
-  type = string
-}
-
 # ECS Task ===========================
 variable "prisma_container_cpu" {
   type = number
