@@ -42,9 +42,15 @@ module "github" {
 }
 
 module "ecs" {
-  source       = "./modules/ECS"
-  project_name = var.project_name
-  project_stg  = var.project_stg
+  source                           = "./modules/ECS"
+  project_name                     = var.project_name
+  project_stg                      = var.project_stg
+  prisma_container_cpu             = 256
+  prisma_container_memory          = 512
+  app_rds_master_username          = module.rds.rds_master_username
+  app_rds_master_password          = module.rds.rds_master_password
+  app_rds_writer_instance_endpoint = module.rds.rds_writer_instance_endpoint
+  app_rds_database_name            = module.rds.rds_database_name
 }
 
 module "rds" {
