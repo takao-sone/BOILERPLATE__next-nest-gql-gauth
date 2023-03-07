@@ -6,7 +6,10 @@ on:
     branches:
       # TODO
       # - develop
-      - feature/issue-29-63
+      - feature/issue-62
+  #  pull_request:
+  #    branches:
+  #      - develop # TODO
 
 permissions:
   id-token: write

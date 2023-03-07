@@ -18,11 +18,13 @@ terraform plan
 terraform apply
 # Githubのsettings
 build.ymlの下部コメントの設定を該当リポジトリに追加
+buildを動かしてECRにイメージ追加
+ECSのTask (migration, seed) を動かしてDBセットアップ
 # Docker Image Build（Github Actionsのjobでimage生成）
-docker build . -t app -f Dockerfile.aws.app
-docker tag app:latest 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-backend:app
-aws ecr get-login-password --profile serialize | docker login --username AWS --password-stdin 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com
-docker push 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-backend:app
+#docker build . -t app -f Dockerfile.aws.app
+#docker tag app:latest 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-backend:app
+#aws ecr get-login-password --profile serialize | docker login --username AWS --password-stdin 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com
+#docker push 648099517491.dkr.ecr.ap-northeast-1.amazonaws.com/boilerplate-staging-backend:app
 # STEP_2: STEP_2 = true, STEP_3 = false
 terraform apply
 # ApmplifyのRepository Connectする

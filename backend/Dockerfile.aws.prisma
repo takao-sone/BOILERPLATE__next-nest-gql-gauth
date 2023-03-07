@@ -6,6 +6,7 @@ RUN npm install
 RUN mkdir -p ./prisma
 COPY ./prisma/schema.prisma ./prisma
 COPY ./tsconfig.json ./
+RUN ["npx", "prisma", "generate"]
 
 FROM base as migration
 ENV NODE_ENV=production
