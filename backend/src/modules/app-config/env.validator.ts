@@ -17,7 +17,7 @@ export const Env = {
 } as const;
 
 const envTypes = Object.values(Env);
-export type EnvType = typeof envTypes[number];
+export type EnvType = (typeof envTypes)[number];
 
 export class EnvValidator {
   @IsIn(envTypes)

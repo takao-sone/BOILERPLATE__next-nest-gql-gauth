@@ -7,13 +7,18 @@ export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K]
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 
-function fetcher<TData, TVariables>(
+function fetcher<TData, TVariables extends { [key: string]: any }>(
   client: GraphQLClient,
   query: string,
   variables?: TVariables,
-  headers?: RequestInit['headers'],
+  requestHeaders?: RequestInit['headers'],
 ) {
-  return async (): Promise<TData> => client.request<TData, TVariables>(query, variables, headers);
+  return async (): Promise<TData> =>
+    client.request({
+      document: query,
+      variables,
+      requestHeaders,
+    });
 }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -285,7 +290,7 @@ export const RoleSortField = {
   ID: 'ID',
 } as const;
 
-export type RoleSortField = typeof RoleSortField[keyof typeof RoleSortField];
+export type RoleSortField = (typeof RoleSortField)[keyof typeof RoleSortField];
 export type RoleSortInput = {
   /** ソートする方向 */
   direction?: InputMaybe<SortDirection>;
@@ -331,7 +336,7 @@ export const SortDirection = {
   DESC: 'DESC',
 } as const;
 
-export type SortDirection = typeof SortDirection[keyof typeof SortDirection];
+export type SortDirection = (typeof SortDirection)[keyof typeof SortDirection];
 export type TokenAuth = {
   __typename?: 'TokenAuth';
   /** アクセストークン */
@@ -378,7 +383,7 @@ export const UserSortField = {
   ID: 'ID',
 } as const;
 
-export type UserSortField = typeof UserSortField[keyof typeof UserSortField];
+export type UserSortField = (typeof UserSortField)[keyof typeof UserSortField];
 export type UserSortInput = {
   /** ソートする方向 */
   direction?: InputMaybe<SortDirection>;
