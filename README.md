@@ -6,8 +6,9 @@
 # rootディレクトリにいることを確認
 pwd
 
-# lefthook自体のインストール
+# lefthook自体のインストールと設定
 brew install lefthook
+lefthook install
 
 # git-secretsの設定
 git secrets --install
