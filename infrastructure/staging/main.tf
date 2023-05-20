@@ -117,7 +117,7 @@ module "amplify" {
   project_name                        = var.project_name
   project_stg                         = var.project_stg
   github_account_name                 = var.github_account_name
-  github_repository_name_amplify      = var.github_repository_name_amplify
+  github_repository_name_amplify      = var.github_repository_name
   github_access_token_amplify         = var.github_access_token_amplify
   amplify_github_branch_name_dev      = var.amplify_github_branch_name_dev
   amplify_domain_name                 = var.amplify_domain_name

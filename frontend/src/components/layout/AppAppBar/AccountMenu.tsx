@@ -56,7 +56,7 @@ const AccountMenu: FC<Props> = ({ anchorEl, handleClose }) => {
       {mainMenuItems.map((mainMenuItem) => (
         <MenuItem key={mainMenuItem.label} onClick={handleClose}>
           <mainMenuItem.Icon />
-          {mainMenuItem.label}
+          <Typography variant="button">{mainMenuItem.label}</Typography>
         </MenuItem>
       ))}
       <Divider />
@@ -67,7 +67,7 @@ const AccountMenu: FC<Props> = ({ anchorEl, handleClose }) => {
         }}
       >
         <LogoutIcon />
-        ログアウト
+        <Typography variant="button">ログアウト</Typography>
       </MenuItem>
     </Menu>
   );

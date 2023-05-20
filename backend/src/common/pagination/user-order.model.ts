@@ -1,4 +1,4 @@
-import { Field, InputType, registerEnumType } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { SortDirection } from './order-direction.model';
 import { SortInput } from './order.model';
 
@@ -6,11 +6,6 @@ export enum UserSortField {
   ID = 'id',
   CREATED_AT = 'createdAt',
 }
-
-registerEnumType(UserSortField, {
-  name: 'UserSortField',
-  description: 'Properties by which user connections can be ordered.',
-});
 
 @InputType()
 export class UserSortInput extends SortInput {

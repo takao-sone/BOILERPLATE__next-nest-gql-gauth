@@ -112,7 +112,7 @@ input PaginationInput {
   last: Int
 
   """カーソルを含めた取得する値のスキップ数"""
-  skip: Int
+  skip: Int = 0
 }
 
 type Query {

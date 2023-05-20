@@ -4,11 +4,7 @@ import { User } from '@prisma/client';
 import Redis from 'ioredis';
 import { PaginationInput } from 'src/common/pagination/pagination.input';
 import { UserSortInput } from 'src/common/pagination/user-order.model';
-import {
-  AppCursor,
-  appFindManyCursorConnectionOptions,
-  createFindManyArgs,
-} from 'src/common/pagination/utils';
+import { AppCursor, appFindManyCursorConnectionOptions } from 'src/common/pagination/utils';
 import { PrismaService } from '../prisma/prisma.service';
 import { IORedisKey } from '../redis/redis.module';
 
@@ -64,14 +60,13 @@ export class GoogleUsersService {
     sortInput: UserSortInput,
   ): Promise<Connection<User>> {
     const { skip, ...connectionArguments } = paginationInput;
+    const { field, direction } = sortInput;
 
     return findManyCursorConnection<User, AppCursor>(
-      () => {
-        const findManyArgs = createFindManyArgs(paginationInput);
-        const { field, direction } = sortInput;
-
+      (args) => {
         return this.prismaService.user.findMany({
-          ...findManyArgs,
+          ...args,
+          skip,
           orderBy: {
             [field]: direction,
           },

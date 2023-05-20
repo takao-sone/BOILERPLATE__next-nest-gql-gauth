@@ -3,6 +3,7 @@ import { IsNumber, IsPositive, IsUUID, Max, Min, ValidateIf } from 'class-valida
 
 const MAX_TAKE = 100;
 const MAX_SKIP = 100;
+const MIN_SKIP = 0;
 const DEFAULT_FIRST = 1;
 const DEFAULT_SKIP = 1;
 
@@ -25,9 +26,9 @@ export class PaginationInput {
   })
   @ValidateIf((object, value) => value !== undefined)
   @IsNumber()
-  @Min(0)
+  @Min(MIN_SKIP)
   @Max(MAX_SKIP)
-  skip?: number;
+  skip = 0;
 
   @Field(() => String, {
     nullable: true,

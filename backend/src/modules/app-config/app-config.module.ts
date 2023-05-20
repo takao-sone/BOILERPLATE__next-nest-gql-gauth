@@ -1,5 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { EnumConfigService } from 'src/modules/app-config/enum-config.service';
 import { ApolloLoggingPlugin } from './apollo-logging.plugin';
 import { EnvService } from './env.service';
 import { customValidate } from './env.validator';
@@ -15,7 +16,13 @@ import { PrismaConfigService } from './prisma-config.service';
       validate: customValidate,
     }),
   ],
-  providers: [EnvService, GraphqlConfigService, PrismaConfigService, ApolloLoggingPlugin],
+  providers: [
+    EnvService,
+    GraphqlConfigService,
+    PrismaConfigService,
+    ApolloLoggingPlugin,
+    EnumConfigService,
+  ],
   exports: [EnvService],
 })
 export class AppConfigModule {}

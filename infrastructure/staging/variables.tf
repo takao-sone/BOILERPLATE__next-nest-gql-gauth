@@ -37,10 +37,11 @@ variable "github_account_name" {
 
 variable "github_repository_name" {
   type = string
-}
 
-variable "github_repository_name_amplify" {
-  type = string
+  validation {
+    condition     = length(var.github_repository_name) > 2
+    error_message = "For the github_repository_name value, it must be 3 characters or more."
+  }
 }
 
 variable "github_access_token_amplify" {

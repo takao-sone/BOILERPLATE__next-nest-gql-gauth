@@ -12,11 +12,7 @@ import { hash } from 'bcrypt';
 import { Request } from 'express';
 import { PaginationInput } from 'src/common/pagination/pagination.input';
 import { UserSortInput } from 'src/common/pagination/user-order.model';
-import {
-  AppCursor,
-  appFindManyCursorConnectionOptions,
-  createFindManyArgs,
-} from 'src/common/pagination/utils';
+import { AppCursor, appFindManyCursorConnectionOptions } from 'src/common/pagination/utils';
 import { isUserWithRolesAndCredential } from '../prisma/custom-type-guards';
 import { UserWithRolesAndNullableCredential } from '../prisma/custom-types';
 import { PrismaService } from '../prisma/prisma.service';
@@ -267,14 +263,13 @@ export class CookieUsersService {
     sortInput: UserSortInput,
   ): Promise<Connection<User>> {
     const { skip, ...connectionArguments } = paginationInput;
+    const { field, direction } = sortInput;
 
     return findManyCursorConnection<User, AppCursor>(
-      () => {
-        const findManyArgs = createFindManyArgs(paginationInput);
-        const { field, direction } = sortInput;
-
+      (args) => {
         return this.prismaService.user.findMany({
-          ...findManyArgs,
+          ...args,
+          skip,
           orderBy: {
             [field]: direction,
           },

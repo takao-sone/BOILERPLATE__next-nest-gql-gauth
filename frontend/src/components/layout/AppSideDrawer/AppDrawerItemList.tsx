@@ -9,6 +9,7 @@ import {
   ListSubheader,
   SvgIcon,
 } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { useHandleLogout } from 'components/common/GoogleIdentity/GoogleIdentity.hook';
 import { useAuthUserValue } from 'global-states/auth-user.state';
 import { useSetIsSideDrawerOpen } from 'global-states/side-drawer.state';
@@ -45,7 +46,7 @@ const AppDrawerItemList: FC<Props> = ({ Icon: Icon }) => {
                 <ListItemIcon>
                   <Icon />
                 </ListItemIcon>
-                <ListItemText primary={item} />
+                <StyledListItemTextButton primary={item} />
               </ListItemButton>
             ))}
             <Divider sx={{ my: 1, mx: 3 }} />
@@ -62,7 +63,7 @@ const AppDrawerItemList: FC<Props> = ({ Icon: Icon }) => {
             <ListItemIcon>
               <LogoutIcon />
             </ListItemIcon>
-            <ListItemText>ログアウト</ListItemText>
+            <StyledListItemTextButton>ログアウト</StyledListItemTextButton>
           </ListItemButton>
         ) : (
           <ListItemButton
@@ -76,7 +77,7 @@ const AppDrawerItemList: FC<Props> = ({ Icon: Icon }) => {
             <ListItemIcon>
               <LogoutIcon />
             </ListItemIcon>
-            <ListItemText>ログイン</ListItemText>
+            <StyledListItemTextButton>ログイン</StyledListItemTextButton>
           </ListItemButton>
         )}
       </Box>
@@ -85,3 +86,7 @@ const AppDrawerItemList: FC<Props> = ({ Icon: Icon }) => {
 };
 
 export default AppDrawerItemList;
+
+const StyledListItemTextButton = styled((props: ListItemTextProps) => (
+  <ListItemText primaryTypographyProps={{ variant: 'button' }} {...props} />
+))({});

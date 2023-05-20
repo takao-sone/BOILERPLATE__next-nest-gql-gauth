@@ -47,7 +47,7 @@ services:
       - /bin/bash
       - -c
       - |
-        npm prisma generate
+        prisma generate
         npm run prisma:migrate:dev
         npm run start:dev
     healthcheck:

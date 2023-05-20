@@ -1,15 +1,10 @@
-import { Field, InputType, registerEnumType } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { SortDirection } from './order-direction.model';
 import { SortInput } from './order.model';
 
 export enum RoleSortField {
   ID = 'id',
 }
-
-registerEnumType(RoleSortField, {
-  name: 'RoleSortField',
-  description: 'Properties by which role connections can be ordered.',
-});
 
 @InputType()
 export class RoleSortInput extends SortInput {

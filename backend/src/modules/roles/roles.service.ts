@@ -3,11 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Role } from '@prisma/client';
 import { PaginationInput } from 'src/common/pagination/pagination.input';
 import { RoleSortInput } from 'src/common/pagination/role-order.model';
-import {
-  AppCursor,
-  appFindManyCursorConnectionOptions,
-  createFindManyArgs,
-} from 'src/common/pagination/utils';
+import { AppCursor, appFindManyCursorConnectionOptions } from 'src/common/pagination/utils';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -25,14 +21,13 @@ export class RolesService {
     sortInput: RoleSortInput,
   ): Promise<Connection<Role>> {
     const { skip, ...connectionArguments } = paginationInput;
+    const { field, direction } = sortInput;
 
     return findManyCursorConnection<Role, AppCursor>(
-      () => {
-        const findManyArgs = createFindManyArgs(paginationInput);
-        const { field, direction } = sortInput;
-
+      (args) => {
         return this.prismaService.role.findMany({
-          ...findManyArgs,
+          ...args,
+          skip,
           orderBy: {
             [field]: direction,
           },
