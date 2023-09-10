@@ -5,7 +5,6 @@ import * as express from 'express';
 import * as passport from 'passport';
 import { AppModule } from './app.module';
 import { EnvService } from './modules/app-config/env.service';
-import { PrismaService } from './modules/prisma/prisma.service';
 
 /**
  * 本番用bootstrap関数
@@ -15,10 +14,9 @@ import { PrismaService } from './modules/prisma/prisma.service';
 
 //   const envService = app.get(EnvService);
 
-//   // Prisma
-//   // PrismaがNestJSのshutdown hooksが発火される前にprocess.exit()を呼び出すのでPrismaのbeforeExitイベントのリスナーを設定
-//   const prismaService = app.get(PrismaService);
-//   await prismaService.enableShutdownHooks(app);
+// // Prisma
+// // https://www.prisma.io/docs/guides/upgrade-guides/upgrading-versions/upgrading-to-prisma-5#removal-of-the-beforeexit-hook-from-the-library-engine
+// app.enableShutdownHooks();
 
 //   // Redis
 //   const RedisStore = createRedisStore(session);
@@ -78,10 +76,9 @@ import { PrismaService } from './modules/prisma/prisma.service';
 
 //   const envService = app.get(EnvService);
 
-//   // Prisma
-//   // PrismaがNestJSのshutdown hooksが発火される前にprocess.exit()を呼び出すのでPrismaのbeforeExitイベントのリスナーを設定
-//   const prismaService = app.get(PrismaService);
-//   await prismaService.enableShutdownHooks(app);
+// // Prisma
+// // https://www.prisma.io/docs/guides/upgrade-guides/upgrading-versions/upgrading-to-prisma-5#removal-of-the-beforeexit-hook-from-the-library-engine
+// app.enableShutdownHooks();
 
 //   // Redis
 //   const RedisStore = createRedisStore(session);
@@ -149,9 +146,8 @@ async function bootstrapForDev() {
   const envService = app.get(EnvService);
 
   // Prisma
-  // PrismaがNestJSのshutdown hooksが発火される前にprocess.exit()を呼び出すのでPrismaのbeforeExitイベントのリスナーを設定
-  const prismaService = app.get(PrismaService);
-  await prismaService.enableShutdownHooks(app);
+  // https://www.prisma.io/docs/guides/upgrade-guides/upgrading-versions/upgrading-to-prisma-5#removal-of-the-beforeexit-hook-from-the-library-engine
+  app.enableShutdownHooks();
 
   // Passport
   app.use(passport.initialize());

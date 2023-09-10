@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { INestApplication, Inject, Injectable, OnModuleInit, Optional } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit, Optional } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { PRISMA_SERVICE_OPTIONS, PrismaServiceOptions } from './prisma.interface';
 
@@ -44,11 +44,5 @@ export class PrismaService
 
   async onModuleInit() {
     await this.$connect();
-  }
-
-  async enableShutdownHooks(app: INestApplication) {
-    this.$on('beforeExit', async () => {
-      await app.close();
-    });
   }
 }
