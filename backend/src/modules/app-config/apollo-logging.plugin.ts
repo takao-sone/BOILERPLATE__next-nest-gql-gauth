@@ -1,18 +1,18 @@
-import { Plugin } from '@nestjs/apollo';
-import { Logger } from '@nestjs/common';
 import {
   ApolloServerPlugin,
   BaseContext,
   GraphQLRequestContext,
   GraphQLRequestContextDidEncounterErrors,
-} from 'apollo-server-plugin-base';
+} from '@apollo/server';
+import { Plugin } from '@nestjs/apollo';
+import { Logger } from '@nestjs/common';
 import { EnvService } from './env.service';
 
 @Plugin()
 export class ApolloLoggingPlugin implements ApolloServerPlugin {
   constructor(private readonly envService: EnvService) {}
 
-  async requestDidStart(requestContext: GraphQLRequestContext) {
+  async requestDidStart(requestContext: GraphQLRequestContext<BaseContext>) {
     // Production / Staging ではログ出力なし
     if (!this.envService.isDevelopment()) return;
 

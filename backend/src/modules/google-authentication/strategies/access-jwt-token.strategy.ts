@@ -9,7 +9,10 @@ import { SessionUser } from '../dtos/session-user.dto';
 
 @Injectable()
 export class AccessJwtTokenStrategy extends PassportStrategy(Strategy) {
-  constructor(private envService: EnvService, @Inject(IORedisKey) private redisClient: Redis) {
+  constructor(
+    private envService: EnvService,
+    @Inject(IORedisKey) private redisClient: Redis,
+  ) {
     const strategyOptions: StrategyOptions = {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: envService.getAccessTokenSecret(),

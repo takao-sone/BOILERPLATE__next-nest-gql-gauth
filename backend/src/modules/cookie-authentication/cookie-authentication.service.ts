@@ -8,7 +8,10 @@ import { SessionService } from '../session/session.service';
 
 @Injectable()
 export class CookieAuthenticationService {
-  constructor(private prismaService: PrismaService, private sessionService: SessionService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private sessionService: SessionService,
+  ) {}
 
   /**
    * ログアウト処理

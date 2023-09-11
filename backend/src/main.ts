@@ -145,6 +145,11 @@ async function bootstrapForDev() {
 
   const envService = app.get(EnvService);
 
+  // CORS
+  app.enableCors({
+    origin: [envService.getAppFrontendOrigin(), 'https://studio.apollographql.com'],
+  });
+
   // Prisma
   // https://www.prisma.io/docs/guides/upgrade-guides/upgrading-versions/upgrading-to-prisma-5#removal-of-the-beforeexit-hook-from-the-library-engine
   app.enableShutdownHooks();
