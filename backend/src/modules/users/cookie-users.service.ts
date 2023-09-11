@@ -24,7 +24,10 @@ import { UserCredential } from './models/user-credential.model';
 export class CookieUsersService {
   private ENCRYPTION_SALT_ROUNDS = 10;
 
-  constructor(private prismaService: PrismaService, private sessionService: SessionService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private sessionService: SessionService,
+  ) {}
 
   /**
    * 新規ユーザーの作成

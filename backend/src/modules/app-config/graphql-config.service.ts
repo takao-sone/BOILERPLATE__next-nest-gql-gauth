@@ -24,7 +24,7 @@ export class GraphqlConfigService implements GqlOptionsFactory {
       apolloDriverConfig = {
         autoSchemaFile: true,
         sortSchema: true,
-        includeStacktraceInErrorResponses: true,
+        includeStacktraceInErrorResponses: false,
         playground: false,
       };
     }
@@ -34,7 +34,7 @@ export class GraphqlConfigService implements GqlOptionsFactory {
       apolloDriverConfig = {
         autoSchemaFile: true,
         sortSchema: true,
-        includeStacktraceInErrorResponses: true,
+        includeStacktraceInErrorResponses: false,
         playground: false,
       };
     }
