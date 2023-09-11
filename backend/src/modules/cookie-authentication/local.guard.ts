@@ -1,7 +1,6 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard } from '@nestjs/passport';
-import { ExpressContext } from 'apollo-server-express';
 
 @Injectable()
 export class LocalGuard extends AuthGuard('local') {
@@ -10,7 +9,7 @@ export class LocalGuard extends AuthGuard('local') {
     await super.canActivate(context);
 
     const gqlCtx = GqlExecutionContext.create(context);
-    const gqlReq = gqlCtx.getContext<ExpressContext>().req;
+    const gqlReq = gqlCtx.getContext().req;
 
     // Initialize session
     await super.logIn(gqlReq);
@@ -21,7 +20,7 @@ export class LocalGuard extends AuthGuard('local') {
 
   getRequest(context: ExecutionContext) {
     const gqlCtx = GqlExecutionContext.create(context);
-    const gqlReq = gqlCtx.getContext<ExpressContext>().req;
+    const gqlReq = gqlCtx.getContext().req;
 
     if (gqlReq) {
       gqlReq.body = gqlCtx.getArgs().data;

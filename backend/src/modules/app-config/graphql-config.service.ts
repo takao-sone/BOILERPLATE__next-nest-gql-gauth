@@ -15,17 +15,8 @@ export class GraphqlConfigService implements GqlOptionsFactory {
     apolloDriverConfig = {
       autoSchemaFile: path.join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
-      debug: true,
+      includeStacktraceInErrorResponses: true,
       playground: true,
-      // CORS
-      cors: {
-        origin: [
-          this.envService.getAppFrontendOrigin(),
-          // TODO: Apollo StudioでCookieを用いるためのCORS設定
-          'https://studio.apollographql.com',
-        ],
-        credentials: true,
-      },
     };
 
     // For Staging
@@ -33,7 +24,7 @@ export class GraphqlConfigService implements GqlOptionsFactory {
       apolloDriverConfig = {
         autoSchemaFile: true,
         sortSchema: true,
-        debug: false,
+        includeStacktraceInErrorResponses: true,
         playground: false,
       };
     }
@@ -43,7 +34,7 @@ export class GraphqlConfigService implements GqlOptionsFactory {
       apolloDriverConfig = {
         autoSchemaFile: true,
         sortSchema: true,
-        debug: false,
+        includeStacktraceInErrorResponses: true,
         playground: false,
       };
     }
