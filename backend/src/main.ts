@@ -148,6 +148,7 @@ async function bootstrapForDev() {
   // CORS
   app.enableCors({
     origin: [envService.getAppFrontendOrigin(), 'https://studio.apollographql.com'],
+    credentials: true,
   });
 
   // Prisma
