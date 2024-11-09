@@ -7,18 +7,17 @@ type RequiredNonNullable<T> = {
 type Ensure<T, K extends keyof T> = T & RequiredNonNullable<Pick<T, K>>;
 
 // Prisma.validatorによって生成する型
-const userWithRolesAndNullableCredential = Prisma.validator<Prisma.UserArgs>()({
+const userWithRolesAndNullableCredential = Prisma.validator<Prisma.UserDefaultArgs>()({
   include: { userCredential: true, userRoles: { include: { role: true } } },
 });
-const userWithRolesAndNullableContactDetailAndNullableProfile = Prisma.validator<Prisma.UserArgs>()(
-  {
+const userWithRolesAndNullableContactDetailAndNullableProfile =
+  Prisma.validator<Prisma.UserDefaultArgs>()({
     include: {
       userContactDetail: true,
       userProfile: true,
       userRoles: { include: { role: true } },
     },
-  },
-);
+  });
 
 // exportして他ファイルで使用する型
 export type UserWithRolesAndNullableCredential = Prisma.UserGetPayload<
