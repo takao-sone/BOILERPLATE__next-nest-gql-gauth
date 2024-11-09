@@ -1,19 +1,8 @@
 ## BOILERPLATE__next-nest-gql-gauth
 
-### Set Up
+以下画像のAWSアーキテクチャ、および、つづく技術セットでアプリの大枠を作成するボイラープレート
 
-```
-# rootディレクトリにいることを確認
-pwd
-
-# lefthook自体のインストールと設定
-brew install lefthook
-lefthook install
-
-# git-secretsの設定
-git secrets --install
-git secrets --register-aws
-```
+![AWSアーキテクチャ図](./infrastructure/AWS__Architecture.png)
 
 ### Backend
 
@@ -36,3 +25,18 @@ git secrets --register-aws
 - Redis (for Session)
 - Google Identity
 - lefthook
+
+### Set Up
+
+```
+# rootディレクトリにいることを確認
+pwd
+
+# lefthook自体のインストールと設定
+brew install lefthook
+lefthook install
+
+# git-secretsの設定
+git secrets --install
+git secrets --register-aws
+```
